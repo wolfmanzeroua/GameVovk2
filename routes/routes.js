@@ -4,9 +4,9 @@ var myGame = require('../index.js');
 
 module.exports=function(app){
 
-    app.get("/in*", function(req,res,next){
+    app.get('/in*', function(req,res,next){
         res.status(200).send("Hello World!");
-        console.log("Hello World!");
+        console.log('Hello World!');
        next(); // тест..
     });
 
@@ -43,7 +43,7 @@ module.exports=function(app){
     app.get('/createHero/:name/default/:clan/:x/:y', function (req, res, next) {
         myGame.heroCreate(req.params.name, req.params.clan, +req.params.x, +req.params.y);
         console.log(req.params.name, req.params.clan, req.params.x, req.params.y);
-        res.status(200).send(req.params.name + 'is created, and number of heroes: ' + myGame.numberOfHero(0) );
+        res.status(200).send(req.params.name + ' is created, and number of heroes: ' + myGame.numberOfHero(0) );
 
         // res.redirect(301, 'http://google.com');
         // console.log(req.params.xx);
@@ -57,8 +57,8 @@ module.exports=function(app){
         // console.log(req.params.xx);
 
     });
-    app.get('/:heroName/toFreeze/:type', function (req, res, next) {
-        res.status(200).send('Hero  ' + myGame.freezeHero(req.params.heroName,req.params.command));
+    app.get('/:heroName/setFreeze/:status', function (req, res, next) {
+        res.status(200).send(myGame.freezeHero(req.params.heroName,req.params.status));
     });
 
 

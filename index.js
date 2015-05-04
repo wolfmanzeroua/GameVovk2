@@ -52,7 +52,7 @@ function XMen(clan, name, level, features, hairСolor, beard, tits, sex, health,
     this.canFreeze = canFreeze;
     this.isFreeze = false;
     this.isFly = false;
-    this.FreezeStepLeft = 0;
+    this.freezeStepLeft = 0;
 
 
     // Спеціальний навик деяких істот відновлюватися
@@ -78,41 +78,47 @@ function XMen(clan, name, level, features, hairСolor, beard, tits, sex, health,
 
 }
 XMen.prototype = {
+
     figth: function (hero) {
-        var _totalDamage = 0;
-        var _specFeature = false;
+        if (this.isFreeze) {
 
-        _totalDamage = this.power + this.damage + _totalDamage + (_specFeature = (Math.random() * 100 < this.chanceSpecDamage) ? this.specDamage : 0);
-        hero.health = hero.health - _totalDamage;
-        console.log(this.name, '(', this.health, ') атакував ', hero.name, '(', hero.health, '), нанесено шкоди', _totalDamage, ' пункти');
+        }
+        else {
+            var _totalDamage = 0;
+            var _specFeature = false;
 
-        // логування в історії двох героїв
-        this.history.push(this.name + '('+ this.health + ') атакував ' + hero.name + '(', hero.health, '), нанесено шкоди'+ _totalDamage + ' пункти');
-        hero.history.push(this.name + '('+ this.health + ') атакував ' + hero.name + '(', hero.health, '), нанесено шкоди'+ _totalDamage + ' пункти');
-
-        //якщо відбувся суперудар і це був вампір
-        if (_specFeature && this.hasVampBite) {
-
-            this.health = this.health + _totalDamage + ((hero.health < 0) ? hero.health : 0);
-            console.log(this.name, '(', this.health, ') напився крові і відновив ', _totalDamage + ((hero.health < 0) ? hero.health : 0), ' пунктів здоровя');
+            _totalDamage = this.power + this.damage + _totalDamage + (_specFeature = (Math.random() * 100 < this.chanceSpecDamage) ? this.specDamage : 0);
+            hero.health = hero.health - _totalDamage;
+            console.log(this.showHeroInfo() +' атакував ' + hero.showHeroInfo() +'), нанесено шкоди '+ _totalDamage + ' пункти');
 
             // логування в історії двох героїв
-            this.history.push(this.name + '('+ this.health + ') напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
-            hero.history.push(this.name + '('+ this.health + ') напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
-        };
+            this.history.push(this.showHeroInfo() +' атакував ' + hero.showHeroInfo() +'), нанесено шкоди '+ _totalDamage + ' пункти');
+            hero.history.push(this.name + '('+ this.health + ') атакував ' + hero.name + '(', hero.health, '), нанесено шкоди'+ _totalDamage + ' пункти');
 
-        if (hero.health <= 0) {
-            console.log(this.name, '(', this.health, ')знищив ', hero.name);
+            //якщо відбувся суперудар і це був вампір
+            if (_specFeature && this.hasVampBite) {
 
-            // логування в історії двох героїв
-            this.history.push(this.name + '(' + this.health + ')знищив ' + hero.name);
-            hero.history.push(this.name + '(' + this.health + ')знищив ' + hero.name);
+                this.health = this.health + _totalDamage + ((hero.health < 0) ? hero.health : 0);
+                console.log(this.showHeroInfo() + ' напився крові і відновив ' + _totalDamage + ((hero.health < 0) ? hero.health : 0) + ' пунктів здоровя');
 
-            // тут зменшуємо кількість героїв
-            numberOfLivingHero--;
+                // логування в історії двох героїв
+                this.history.push(this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
+                hero.history.push(this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
+            };
 
-            // ініціюємо підвищення рівня
-            this.levelUp();
+            if (hero.health <= 0) {
+                console.log(this.showHeroInfo() +' знищив ' + hero.name);
+
+                // логування в історії двох героїв
+                this.history.push(this.showHeroInfo() +' знищив ' + hero.name);
+                hero.history.push(this.name + '(' + this.health + ')знищив ' + hero.name);
+
+                // тут зменшуємо кількість героїв
+                numberOfLivingHero--;
+
+                // ініціюємо підвищення рівня
+                this.levelUp();
+            }
         }
     },
 
@@ -157,7 +163,7 @@ XMen.prototype = {
                         // по дорозі напали на персонажа !!
 
                         if ((heroes[i].health > 0) && (this.health > 0)) {
-                            console.log(this.name,'попав в зону атаки', heroes[i].name);
+                            console.log(this.showHeroInfo() +'попав в зону атаки', heroes[i].showHeroInfo());
                             heroes[i].figth(this);
                             // return true;    // не передається, герой отримав пілюлі і продовжує  рух.
                         }
@@ -169,6 +175,10 @@ XMen.prototype = {
         return false;  // Ворогів не знайдено, спрацює метод moveTo
     },
 
+    showHeroInfo: function() {
+        return this.name + '\u2764' + this.health + ' (' + this.x+ ',' +this.y + ')';
+    },
+
 
 
 
@@ -178,7 +188,7 @@ XMen.prototype = {
         var _y, y1, y2, y3 = 0;
         var x2 =0;
         var y2 = 0;
-        var minD = 1000;
+        var minD = 1001;
         var minI = -1;
         var _dirX = 0;
         var _dirY = 0;
@@ -204,6 +214,7 @@ XMen.prototype = {
             if (minI >= 0) {
                 _x = heroes[minI].x;
                 _y = heroes[minI].y;
+         //   console.log('Персонаж',this.name,' взяв курс на,',heroes[minI].name);
             }
         }
 
@@ -227,7 +238,7 @@ XMen.prototype = {
                 this.walkedAllWay = _point.isLast;
                // console.log('this.walkedAllWay',this.walkedAllWay);
 
-                console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
+            //    console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
             }
             else {
                 _x = this.nextDestinationPoint.x;
@@ -295,16 +306,17 @@ XMen.prototype = {
         while (!( Math.round(_x) == x2 &&  Math.round(_y) == y2)&&!barrierOrEnemyDeteced) {
             _x = _x + _dirX / this.speed;
             _y = _y + _dirY / this.speed;
-
+//console.log(_x,_y,x3,y3);
             // координата змінилася
             //console.log('Кінцева ',x2,y2,' розкадровка шляху:',Math.round(_x),Math.round(_y),_x,_y)
             if ((x3 != Math.round(_x)) || (y3 != Math.round(_y))) {
 
                 //якщо ячейка карти != 0  тобто є перешкода - запускаємо алгоритм обходу перешкод.
 
+
                 if (myLocation.map[Math.round(_x)][Math.round(_y)] != 0) {
                     barrierOrEnemyDeteced = true;
-                    console.log( this.name,this.x, this.y,' натрапив на перешкоду',[Math.round(_x)], [Math.round(_y)],' типу:', myLocation.map[Math.round(_x)][Math.round(_y)]);
+                    console.log( this.showHeroInfo() + ' натрапив на перешкоду',[Math.round(_x)], [Math.round(_y)],' типу:', myLocation.map[Math.round(_x)][Math.round(_y)]);
 
 
                     // Алгоритм не працює... покишо..
@@ -343,8 +355,8 @@ XMen.prototype = {
         //this.y = (this.y >= myLocation.mapMaxY) ? myLocation.mapMaxY : ((this.y <= 0) ? 0 : this.y);
 
 
-        console.log(this.name, ' перемістився до [', this.x, ',', this.y, ']');
-        this.history.push(this.name + ' перемістився до [' + this.x + ',' + this.y + '] зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
+        console.log(this.showHeroInfo() +') перемістився');
+        this.history.push(this.showHeroInfo() +' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
         //console.log(this.name, ' координати [', _x, ',', _y,'] ');
 
 
@@ -357,7 +369,7 @@ XMen.prototype = {
         this.damage = Math.round(this.damage * this.level);
         this.specDamage = Math.round(this.specDamage * this.level);
         this.chanceSpecDamage = Math.round(this.chanceSpecDamage * this.level);
-        console.log(this.name, '(', this.health, ')досяг нового рівня, покращивши свої характеристики макс.здаровя:', this.maxHealth,', сила:', this.power,', атака:', this.damage,', спец. атака:', this.specDamage);
+        console.log(this.showHeroInfo() +'досяг нового рівня, покращивши свої характеристики макс.здаровя:', this.maxHealth,', сила:', this.power,', атака:', this.damage,', спец. атака:', this.specDamage);
         //console.log(this.name, '(', this.health, ')досяг нового рівня, покращивши свої характеристики макс.здаровя:', this.maxHealth,', сила:', this.power,', атака:', this.damage,', спец. атака:', this.specDamage);
 
     },
@@ -371,9 +383,9 @@ XMen.prototype = {
             if (_regerHp > 0) {
                 this.health += _regerHp;
                 this.health = (this.health < this.maxHealth) ? this.health : this.maxHealth;
-                console.log(this.name, '(', this.health, ') зцілився на ', _regerHp, ' пунктів здоровя');
+                console.log(this.showHeroInfo() + ' зцілився на '+ _regerHp + ' пунктів здоровя');
 
-                this.history.push(this.name + '('+ this.health + ') зцілився на ' + _regerHp + ' пунктів здоровя');
+                this.history.push(this.showHeroInfo() + 'зцілився на ' + _regerHp + ' пунктів здоровя');
             }
         }
     },
@@ -486,43 +498,48 @@ module.exports.start = function () {
 
 // Головна умова гри... поки не лишиться 1-го героя.
 // Звичайно планується щоб билися не між собою а Клан на клан, але навряд чи встигну.. ще роути
-                    console.log(numberOfHero);
-                    if (numberOfLivingHero >= 2) {
+                   // console.log(numberOfHero);
+                    if (numberOfLivingHero >= 1) {
 
                         for (var i = numberOfHero-1; i >= 0; i--) {
-                            //console.log(i);
-                            //console.dir(heroes[i]);
+                            if (heroes[i].health > 0) {
+                                //console.log(i);
+                                //console.dir(heroes[i]);
 
-                            heroes[i].regeneration();
+                                heroes[i].regeneration();
 
-                            if (heroes[i].isFreeze && heroes[i].FreezeStepLeft == 0) {
-                                heroes[i].isFreeze = false;
-                                console.log(heroes[i].name, ' розаморозився');
-                            }
+                                if (heroes[i].isFreeze && heroes[i].freezeStepLeft == 0) {
+                                    heroes[i].isFreeze = false;
+                                    console.log(heroes[i].showHeroInfo(),') розморозився');
+                                }
 
-                            if (heroes[i].isFreeze && heroes[i].FreezeStepLeft > 0) {
-                                heroes[i].FreezeStepLeft--;
-                                console.log(heroes[i].name, ' заморожений і пропускає хід');
-                            }
-                            else {
+                                if (heroes[i].isFreeze && heroes[i].freezeStepLeft > 0) {
+                                    heroes[i].freezeStepLeft--;
+                                   // console.log(heroes[i].name, ' \u2764',heroes[i].helth,'(',heroes[i].x,heroes[i].y,') заморожений і пропускає хід');
+                                   console.log(heroes[i].showHeroInfo() + 'заморожений і пропускає хід');
 
-                                // Якщо живий і ні на кого не напав
-                                if (heroes[i].health > 0 && !heroes[i].areaCheck()) {
+                                }
+                                else {
 
-                                    // Якщо живий після перевірки локації, і не дайшов до кінцевої точки
-                                    if (heroes[i].health > 0 && !heroes[i].walkedAllWay) {
-                                        heroes[i].moveTo();
-                                        //console.log(heroes[i].walkedAllWay)
+                                    // Якщо живий і ні на кого не напав
+                                    if (heroes[i].health > 0 && !heroes[i].areaCheck()) {
 
-                                        // Якщо живий після пройденого шляху робить перевірку локації
-                                        if (heroes[i].health > 0) heroes[i].areaCheck();
+                                        // Якщо живий після перевірки локації, і не дайшов до кінцевої точки
+                                        if (heroes[i].health > 0 && !heroes[i].walkedAllWay) {
+                                            heroes[i].moveTo();
+                                            //console.log(heroes[i].walkedAllWay)
+
+                                            // Якщо живий після пройденого шляху робить перевірку локації
+                                            if (heroes[i].health > 0) heroes[i].areaCheck();
+                                        }
                                     }
                                 }
                             }
                         }
-                     //   console.log('Крок:', numberOfSteps);
+
                         console.log('Крок:', numberOfSteps);
                     }   //ocation.environmentChange();
+
 
 
                     else {
@@ -551,7 +568,7 @@ module.exports.numberOfLivingHero = function(antiCaching) {
 }
 
 module.exports.gameMode = function(mode){
-    console.log('Змынено режим гри на:',mode);
+    console.log('Змінено режим гри на:',mode);
     return (gameMode = mode);
 }
 
@@ -562,16 +579,25 @@ module.exports.freezeHero = function(heroName,command) {
         return 'Sorry but there is no hero that has name:' + heroName;
     }
     else {
-        isFind.isFreeze = command;
-        iconsole.log(isFind.name, ', було заморожено:',command);
-        return 'Hero: ' + isFind.name + command;
+        if (command == 'toFreeze') {
+            isFind.isFreeze = true;
+            isFind.freezeStepLeft = 1000;
+            console.log(isFind.name, ', було заморожено___________________________________!!!!');
+            return ' Hero: ' + isFind.name + ' було заморожено';
+        }
+        else {
+            isFind.isFreeze = false;
+            console.log(isFind.name, ', було розможено________________________');
+            return 'Hero: ' + isFind.name + ' було розморожено'+ command;
+        }
     }
+
 }
         module.exports.setMoveTo = function(heroName,x,y) {
     var isFind = checkHero(heroName);
 
     if (!isFind) {
-        console.log('Була спроба змінити маршрут неіснуючого героя з іменем',heroName);
+        console.log('Була спроба змінити маршрут неіснуючого героя з іменем ',heroName);
         return 'Sorry but there is no hero that has name:' + heroName;
     }
     else {
@@ -585,15 +611,16 @@ module.exports.freezeHero = function(heroName,command) {
 module.exports.setToFly = function(heroName,type) {
     var isFind = checkHero(heroName);
     if (!isFind) {
-        console.log('Була спроба змінити можливості неіснуючого героя з імене', heroName);
-        return 'Sorry but there is no hero that has name:' + heroName;
+        console.log('Була спроба змінити можливості неіснуючого героя з іменем ', heroName);
+        return 'Sorry but there is no hero that has name: ' + heroName;
     }
     else {
 
         if (isFind.canFly) {
             isFind.isFly = type;
+
             console.log(heroName, ' змінив режим польоту на: ', type);
-            return heroName + 'change type of Fly status to : ' + type;
+            return heroName + ' change type of Fly status to : ' + type;
             console.dir(isFind);
         }
         else
