@@ -1,0 +1,406 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+
+        body {
+            background:
+            url("img/lback.jpg") right top no-repeat,
+            url("img/rback.jpg") left top no-repeat,
+            url("img/bgdesert.jpg") repeat;
+            background-attachment: fixed;
+        }
+
+
+        header {
+            width:1024px;
+            margin: auto;
+            text-align:center;
+            padding:0px;
+            position: relative;
+        }
+
+        section {
+            width:1024px;
+            margin: auto;
+
+        }
+
+
+        footer {
+            width:1024px;
+            height: 70px;
+            margin: auto;
+
+            color:white;
+            clear:both;
+            opacity: 0.8;
+            position: fixed;
+            bottom: 0px;
+            border: 0px;
+
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body onload="myTimer1()">
+
+
+
+
+<header>
+    <img src="img/shapka.jpg" align="middle" >
+    <div style="position: absolute; width:100px;height: 100px;   margin: auto;   overflow:visible; z-index:101;
+ top: 310px; left: 45%; bottom: auto; right: auto;">
+       <img onclick=" postToIframe({startBloodyBattle: true}, 'http://localhost:3030/startGame/', 'myIframe');" src="img/start.png" onmouseover="this.style.cursor='pointer'" >
+    </div>
+
+    <div id ="vs" style="position: absolute; width:200px;height: 200px;   margin: auto;   overflow:visible; z-index:98;
+ top: 100px; left: 41%; bottom: auto; right: auto; visibility: hidden">
+        <a href=""><img src="img/vs.png"></a>
+    </div>
+
+    <div id ="dethmatch" style="position: absolute; width:180px;height: 180px;   margin: auto;   overflow:visible; z-index:98;
+ top: 90px; left: 43%; bottom: auto; right: auto; visibility: visible">
+        <a href=""><img src="img/dethmatch.png"></a>
+    </div>
+
+    <div style="position:absolute;  z-index:100; top: 325px; left: 2px; text-align:left; border:2px solid red;
+    border-radius:6px; -moz-border-radius:5px; -khtml-border-radius:10px;">
+        <span style="font-family:Arial;font-size:22px;font-weight:bold;color:red; text-shadow: 2px 2px black;">
+
+        TYPE of GAME:
+        <br>
+        <input type="radio" name="typeOfGame" id="typeOfGameDm" onchange="changeTypeOfGame()" value="X-Men" checked="checked"> Deathmatch
+        <input type="radio" name="typeOfGame" id="typeOfGameVs" onchange="changeTypeOfGame()" value="Vampires" >X-Men versus Vampires
+    </span>
+    </div>
+
+</header>
+
+<section>
+    <div style="width:505px;height: 300px;  float: left;  background-color: #FAF5F5;
+    padding: 5px; opacity: 0.8;">
+        <div style="width: 100%;background-color: lightsteelblue; text-align: center ; margin: 3px">
+            <span style="font-size: 25px; "><b>Here you can CREATE a hero</b></span>
+        </div>
+        <form action="">
+            <input id = "selectHeroName1" type="text" name="browser" list="createHeroesList" value="Wolverine" />
+            <datalist id="createHeroesList">
+
+            </datalist>
+
+            <b>Start point: </b>
+            X:
+            <input type="number" name="x1" id="x1" min="0" max="800" onKeyDown="" onchange="" value="200" step="10" size ="4" style="width: 50px">
+            Y: <input type="number" name="x1" id="y1" min="0" max="600"  onKeyDown="" onchange="" value="200" step="10" width="80" size ="4" style="width: 50px">
+
+            <br>
+            <b>Select Class (for correct choice hero settings)</b>
+            <input type="radio" name="className" id="className1" onchange="" value="X-Men" checked="checked"> X-Men
+            <input type="radio" name="className" id="className2" onchange="" value="Vampires" >Vampires
+            <br>
+            <b>Default Class (hero settings) or own? </b>
+            <input type="radio" name="classSettings" id="setDefaultS" onchange="" value="Default" checked="checked"> Default
+            <input type="radio" name="classSettings" id="setOwnS" onchange="" value="Own" >Own
+
+        </form>
+
+
+        <br>
+
+            <div  onclick="createHero()"  style=" text-align:center; border:2px solid #000000;width: 300px;  height: 45px; left:100px; position: relative;
+    border-radius:6px; -moz-border-radius:5px; -khtml-border-radius:10px; background-color:greenyellow;">
+                <div onmouseover="this.style.cursor='pointer'">
+        <span style="font-family:Arial;font-size:32px;font-weight:bold;color:#000000; text-shadow: 1px 1px white;">
+        Create the Heroes 
+        </span>
+                </div>
+            </div>
+
+
+    </div>
+    <div style="width:505px; height: 400px; margin-left:512px; background-color:#eeeeee;
+    padding: 5px; opacity: 0.8; ">
+        <div style="width: 100%;background-color: lightsteelblue; text-align: center; margin: 3px">
+            <span style="font-size: 25px; "><b>Here you can SET the settings of the hero</b></span>
+        </div>
+
+        <b>Choose a hero to set properties </b>
+        <input id = "selectHeroName2" onchange="changeSeting()" type="text" name="browser" list="setHeroesList" value="Wolverine" />
+        <datalist id="setHeroesList">
+            <option value="Wolverine" />
+            <option value="Iceman" />
+            <option value="Storm" />
+            <option value="Cyclops"/>
+            <option value="Sweetdeath" />
+            <option value="Dracula" />
+            <option value="MegaVamp" />
+        </datalist>
+        </select>
+
+
+
+        <form action="">
+            <b>Move Hero to: </b>
+            X:
+            <input type="number" name="x11" id="x11" min="0" max="800" onKeyDown="changeSeting()" onchange="changeSeting()" value="200" step="10" size ="4" style="width: 50px">
+            Y: <input type="number" name="y11" id="y11" min="0" max="600"  onKeyDown="changeSeting()" onchange="changeSeting()" value="200" step="10" width="80" size ="4" style="width: 50px">
+            <div style="text-align: left; text-indent: 150px;" onmouseover="changeSeting()"   ><b><span onmouseover="this.style.cursor='pointer'" onclick="click1({ name: setHeroSettings.name,  nextDestinationPointX: setHeroSettings.nextDestinationPointX, nextDestinationPointY: setHeroSettings.nextDestinationPointY})" id ="heroMoveToLink" style="color: blue ">SEND POST:</span></b></div>
+                <b>Set to fly: </b>
+            <input type="radio" name="stoFly" id="isFly1" onchange="changeSeting()" value="true"> True
+            <input type="radio" name="stoFly" id="toFly2" onchange="changeSeting()" value="false" checked="checked"> False
+            <br>
+            <div style="text-align: left; text-indent: 150px;" onmouseover="changeSeting()"  ><b><span onmouseover="this.style.cursor='pointer'" id ="toFlyLink" style=" color: blue " onclick="click1({ name: setHeroSettings.name, isFly: setHeroSettings.isFly})" >SEND POST:</span></b></div>
+            <b>lookForTrouble: </b>
+            <input type="radio" name="lookForTrouble" id="lookForTrouble1" onchange="changeSeting()" value="true"> True
+            <input type="radio" name="lookForTrouble" id="lookForTrouble2" onchange="changeSeting()" value="false" checked="checked"> False
+            <br>
+            <div style="text-align: left; text-indent: 150px;" onmouseover="changeSeting()"  ><b><span onmouseover="this.style.cursor='pointer'" id ="lookForTroubleLink" style=" color: blue" onclick="click1({ name: setHeroSettings.name, lookForTrouble: setHeroSettings.lookForTrouble})">SEND POST:</span></b></div>
+            <br>
+            <b>Set hero: </b>
+            <input type="radio" name="setFreeze" id="setFreeze1" onchange="changeSeting()" value="freeze"> Freeze
+            <input type="radio" name="setFreeze" id="setFreeze2" onchange="changeSeting()" value="unfreeze" checked="checked"> Unfreeze
+            <br>
+            <div style="text-align: left; text-indent: 150px;" oonmouseover="changeSeting()" ><b><span  onmouseover="this.style.cursor='pointer'" id ="setFreezeLink" style=" color: blue" onclick="click1({ name: setHeroSettings.name, isFreeze: setHeroSettings.isFreeze})">SEND POST:</span></b></div>
+
+        </form>
+        <form action="" oninput="x.value=parseInt(a.value)">
+            <b> Set the speed for the hero: </b> 0
+            <input type="range" onchange="changeSeting()" onmouseover="changeSeting()" id="setHeroSpeed" name="a" value="15" min="0" max="50"> 50
+            <output name="x" for="a" style="font-weight: bold;"></output>
+            <div style="text-align: left; text-indent: 150px;"  onmouseover="changeSeting()" ><b><span onmouseover="this.style.cursor='pointer'" id ="setHeroSpeedLink" style=" color: blue" onclick="click1({ name: setHeroSettings.name, speed: setHeroSettings.speed})">SEND POST:</span></b></div></div>
+
+        </form>
+
+
+
+    </div></section>
+
+<script>
+    var myHeroes = ['Wolverine', 'Iceman', 'Storm', 'Cyclops', 'Sweetdeath', 'Dracula', 'MegaVamp'];
+    var setHeroSettings = {};
+    var options = '';
+
+    for(var i = myHeroes.length-1; i >= 0; i--) {
+        options += '<option value="' + myHeroes[i] + '" />';
+    }
+
+    document.getElementById('createHeroesList').innerHTML = options;
+    function changeLog(aClicked)
+    {
+        document.getElementById("lastRequest").innerHTML = aClicked.href;
+    }
+
+    function changeTypeOfGame(){
+
+        var typeG = "Deathmatch";
+        if (document.getElementById('typeOfGameVs').checked) {
+            document.getElementById('vs').style.visibility = 'visible';
+            document.getElementById('dethmatch').style.visibility = 'hidden';
+            typeG = "clanVsClan";
+        }
+
+        if (document.getElementById('typeOfGameDm').checked) {
+            document.getElementById('vs').style.visibility = 'hidden';
+            document.getElementById('dethmatch').style.visibility = 'visible';
+        }
+//        var getCommand = "http://localhost:3030/setGameMode/"+type;
+//        document.getElementById('lastRequest').innerHTML = getCommand;
+//        open(getCommand,"myIframe");
+
+        postToIframe({typeOfGame: typeG}, 'http://localhost:3030/setGameMode/', 'myIframe');
+    }
+
+
+
+
+
+
+    function myTimer1() {
+
+
+        var gameSpedTimer2 = setInterval(function () {
+
+            document.getElementById("myiframe1").contentWindow.location.replace("http://localhost:3030/get/numberOfLivingHero/");
+        }, 3000);
+    }
+
+    function createHero(){
+        //var myHeroes = ['Wolverine', 'Iceman', 'Storm', 'Cyclops', 'Sweetdeath', 'Dracula', 'MegaVamp'];
+        if (!myHeroes.some(function(x){return x === document.getElementById("selectHeroName1").value})) {
+            console.log('Такого ще нема');
+            myHeroes.push(document.getElementById("selectHeroName1").value);
+
+            var options = '';
+            for (var i = myHeroes.length - 1; i > -1; i--) {
+                options += '<option value="' + myHeroes[i] + '" />';
+            }
+
+            document.getElementById('createHeroesList').innerHTML = options;
+            document.getElementById('setHeroesList').innerHTML = options;
+        }
+        //'/createHero/:name/default/:clan/:x/:y'
+        var sett = {};
+        if (document.getElementById('className1').checked) sett.clan = 'X-Men';
+        if (document.getElementById('className2').checked) sett.clan = 'Vampires';
+
+        var setUrl = "http://localhost:3030/createHero/";
+        sett.name = document.getElementById("selectHeroName1").value;
+        if (document.getElementById('setDefaultS').checked) sett.type = 'X-Men';
+        if (document.getElementById('setOwnS').checked) sett.type = 'Vampires';
+        sett.x = document.getElementById('x1').value;
+        sett.y = document.getElementById('y1').value;
+
+        //        alert(getCommand);
+
+        //POST
+        // напр. postToIframe({a:5,b:6}, '/count.php', 'frame1')
+        postToIframe(sett, setUrl, 'myIframe');
+
+//        // GET
+//        // document.getElementById("myIframe").contentWindow.location.replace(getCommand);
+//        document.getElementById("lastRequest").innerHTML = getCommand;
+
+
+    }
+    function changeSeting() {
+        var getCommand = '';
+        setHeroSettings.name = document.getElementById("selectHeroName2").value;
+        setHeroSettings.nextDestinationPointX = document.getElementById("x11").value;
+        setHeroSettings.nextDestinationPointY = document.getElementById("y11").value;
+        setHeroSettings.isFly = '';
+        setHeroSettings.lookForTrouble = '';
+        setHeroSettings.speed='';
+        setHeroSettings.isFreeze = '';
+
+
+        //hero move
+        getCommand = "SEND POST: { __:" +  setHeroSettings.name + ", __:" + setHeroSettings.nextDestinationPointX + ", __:" + setHeroSettings.nextDestinationPointY+'}';
+        document.getElementById("heroMoveToLink").innerHTML = getCommand;
+        //console.log(getCommand);
+
+        // isFly
+
+        if (document.getElementById("isFly1").checked) {
+            setHeroSettings.isFly = 1;
+        }
+
+        getCommand = "SEND POST: { __:" +  setHeroSettings.name + ", __:" + setHeroSettings.isFly +'}';
+        document.getElementById("toFlyLink").innerHTML = getCommand;
+
+        //lookForTrouble1 lookForTrouble2
+
+
+        if (document.getElementById("lookForTrouble1").checked) {
+            setHeroSettings.lookForTrouble = 1;
+        }
+
+        getCommand = "SEND POST: { __:" +  setHeroSettings.name + ", __:" +  setHeroSettings.lookForTrouble +'}';
+        document.getElementById("lookForTroubleLink").innerHTML = getCommand;
+
+        //setFreeze1
+        setHeroSettings.isFreeze  ='';
+        if (document.getElementById("setFreeze1").checked) {
+            setHeroSettings.isFreeze= 1;
+        }
+
+
+        getCommand = "SEND POST: { __:" +  setHeroSettings.name + ", __:" + setHeroSettings.isFreeze +'}';
+        document.getElementById("setFreezeLink").innerHTML = getCommand;
+       // console.log(document.getElementById("setFreezeLink").innerHTML)
+
+        // setHeroSpeed
+        setHeroSettings.speed = document.getElementById("setHeroSpeed").value;
+        getCommand = "SEND POST: { __:" +  setHeroSettings.name + ", __:" + setHeroSettings.speed +'}';
+        document.getElementById("setHeroSpeedLink").innerHTML = getCommand;
+
+
+    }
+    function click1(obj) {
+        console.log(obj);
+
+        var setUrl = "http://localhost:3030/setHero/";
+        postToIframe(obj, setUrl, 'myIframe');
+      //  document.getElementById('lastRequest').innerHTML = x.href;
+    }
+
+
+    function postToIframe(content, action, target){
+        console.log('Відправив');
+        if(typeof phonyForm == 'undefined'){
+// временную форму создаем, если нет
+            phonyForm = document.createElement("form");
+            phonyForm.style.display = "none";
+            phonyForm.enctype = "application/raw;charset=UTF-8";
+            phonyForm.method = "POST";
+            document.body.appendChild(phonyForm)
+        }
+        phonyForm.action = action;
+        phonyForm.target = target;
+        phonyForm.setAttribute("target", target);
+// убить все содержание из временной формы
+        while(phonyForm.firstChild){
+            phonyForm.removeChild(phonyForm.firstChild);
+        }
+
+// заполнить форму данными из объекта
+        for(var x in content){
+            var tn;
+//            if(browser.isIE){
+//                tn = document.createElement("<input type='hidden' name='"+x+"' value='"+content[x]+"'>");
+//                phonyForm.appendChild(tn);
+//            }else{
+            tn = document.createElement("input");
+            phonyForm.appendChild(tn);
+            tn.type = "hidden";
+            tn.name = x;
+            tn.value = content[x];
+            console.log(x,content[x]);
+            //}
+        }
+
+        console.log('Відправив');
+        phonyForm.submit();
+    }
+//    }
+   
+
+
+
+</script>
+
+
+<footer>
+    <div style=" text-align:left; border:2px solid red;width: 260px; float: left; height: 35px; position: absolute; bottom: 0;
+    border-radius:6px; -moz-border-radius:5px; -khtml-border-radius:10px; background-color:whitesmoke;">
+        <span style="font-family:Arial;font-size:22px;font-weight:bold;color:red; text-shadow: 1px 1px black;">
+        NUMBER of Heroes:
+        </span>
+        <iframe name="myiframe1" id="myiframe1" src="http://localhost:3030/get/numberOfLivingHero/"  width="30" height="25"  frameborder="no" ></iframe>
+
+
+    </div>
+    <div style=" background-color:gray;width: 750px;left:500px; float: right;padding: 3px">
+        <form action="" oninput="x.value=parseInt(a.value)">
+            <b> Set the GAME speed: </b> 100 ms
+            <input type="range" id="gameSped" name="a" value="100" min="100" max="3000" onchange="postToIframe({timeBetweenSteps: this.value}, 'http://localhost:3030/setGame/', 'myIframe');"> 3000
+            <output name="x" for="a" style="font-weight: bold;"></output>
+           </form>
+        <iframe name="myIframe" id="myIframe"src="" width="744" height="40" style=" background-color: whitesmoke;left: 0; right: 0;"></iframe> <br>
+
+
+    </div>
+
+
+
+</footer>
+
+
+</body>
+</html>
+
+
