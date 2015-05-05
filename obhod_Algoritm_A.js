@@ -66,7 +66,7 @@ XMen.prototype = {
             // логування в історії двох героїв
             this.history.push(this.name + '('+ this.health + ') напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
             hero.history.push(this.name + '('+ this.health + ') напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
-        };
+        }
 
         if (hero.health <= 0) {
             console.log(this.name, '(', this.health, ')знищив ', hero.name);
@@ -826,7 +826,6 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
                     console.log('Шлях знайдено');
                     myLocation.mustFindPath = false;
                     pathIsFind = true;
-
                     j = 0;
                     // йдемо по цепочці коорлдмнат і записуемо координати їх паттерна в масив Path
 

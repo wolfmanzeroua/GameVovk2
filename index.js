@@ -2,6 +2,7 @@
 var heroMovePath = require('./modules/classPathmap.js');
 var defSet = require('./modules/defaultClassSettings.js');
 var Location = require('./modules/location.js');
+var gameSpedTimer=0;
 
 var numberOfLivingHero = 0;
 var numberOfHero = 0;
@@ -72,8 +73,8 @@ function XMen(clan, name, level, features, hairСolor, beard, tits, sex, health,
     this.y = y;
     this.PathMapStep = 0;
     this.walkedAllWay = false;
-    this.nextDestinationPoint = { 'x': x,
-        'y' : y};
+    this.nextDestinationPointX = x;
+    this.nextDestinationPointY = y;
 
 
 }
@@ -195,15 +196,18 @@ XMen.prototype = {
         var distanceTo = 0;
         var cosineAngle = 0;
         var _point = {};
+        var logic = (gameMode == 'Deathmatch') ? true : false;
 
         // генерування довільного вектора напряму
 
-        if (this.lookForTrouble == true && numberOfLivingHero>1) { // Логан або інші мачо має цю властивість, тому хоче переслідувати противника
+        if (this.lookForTrouble == true && numberOfLivingHero > 1 ) { // Логан або інші мачо має цю властивість, тому хоче переслідувати противника
 
             // цикл пошуку противників, має шукати найближчого противника і брати на нього напрямок
 
             for (var i = numberOfHero - 1; i >= 0; i--) {
-                if (this != heroes[i] && heroes[i].health > 0) {
+                logic = logic ? true :this.clan != heroes[i].clan;
+
+                if (this != heroes[i] && heroes[i].health > 0 && logic) {
                     distanceTo = Math.pow((heroes[i].x - this.x) * (heroes[i].x - this.x) + (heroes[i].y - this.y) * (_y = heroes[i].y - this.y), 0.5);
                     if (minD > distanceTo) {
                         minD = distanceTo;
@@ -223,26 +227,26 @@ XMen.prototype = {
             //console.log('Персонаж', this.name,' номер точки маршруту',this.PathMapStep);
             // _point = heroMovePath.call(this, this.PathMapStep);
             //
-            //this.nextDestinationPoint.x = _x = _point.x;
-            //this.nextDestinationPoint.y = _y = _point.y;
+            //this.nextDestinationPointX = _x = _point.x;
+            //this.nextDestinationPointY = _y = _point.y;
             //this.walkedAllWay = _point.isLast;
 
 
-            if (this.nextDestinationPoint.x == this.x && this.nextDestinationPoint.y == this.y) {
+            if (this.nextDestinationPointX == this.x && this.nextDestinationPointY == this.y) {
                 this.PathMapStep++;
 
                 _point = heroMovePath.call(this, this.PathMapStep);
                 //console.dir(_point);
-                this.nextDestinationPoint.x = _x = _point.x;
-                this.nextDestinationPoint.y = _y = _point.y;
+                this.nextDestinationPointX = _x = _point.x;
+                this.nextDestinationPointY = _y = _point.y;
                 this.walkedAllWay = _point.isLast;
                // console.log('this.walkedAllWay',this.walkedAllWay);
 
             //    console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
             }
             else {
-                _x = this.nextDestinationPoint.x;
-                _y =this.nextDestinationPoint.y;
+                _x = this.nextDestinationPointX;
+                _y =this.nextDestinationPointY;
             }
         }
 
@@ -297,13 +301,13 @@ XMen.prototype = {
         _x = this.x; _y = this.y;
         x3 = this.x; y3 = this.y;
 
-        var barrierOrEnemyDeteced = false;
+        var barrierOrEnemyDetected = false;
         var path =[];
 
         // берем кожну цілу координату і здійснюємо перевірку на ворога і на перешкоду.
 
 
-        while (!( Math.round(_x) == x2 &&  Math.round(_y) == y2)&&!barrierOrEnemyDeteced) {
+        while (!( Math.round(_x) == x2 &&  Math.round(_y) == y2)&&!barrierOrEnemyDetected) {
             _x = _x + _dirX / this.speed;
             _y = _y + _dirY / this.speed;
 //console.log(_x,_y,x3,y3);
@@ -315,36 +319,47 @@ XMen.prototype = {
 
 
                 if (myLocation.map[Math.round(_x)][Math.round(_y)] != 0) {
-                    barrierOrEnemyDeteced = true;
+                    barrierOrEnemyDetected = true;
                     console.log( this.showHeroInfo() + ' натрапив на перешкоду',[Math.round(_x)], [Math.round(_y)],' типу:', myLocation.map[Math.round(_x)][Math.round(_y)]);
 
 
                     // Алгоритм не працює... покишо..
-
-                    //if (path = myLocation.findPath(this.x, this.y, x2, y2, this.speed)){
-                    if (null) {
-                        for (var i = path.lengthh-1; i>=0;i--) {
+// Глюк найдено.. наступна точка  маршруту попадала у перешкоду ........ :))
+                    if (path = myLocation.findPath(this.x, this.y, this.nextDestinationPointX,this.nextDestinationPointY, this.speed)){
+                       // console.log('Урра--- отримав масив', path.length-1, path[10].x,path[10].y )
+                        //          if (null)
+                        barrierOrEnemyDetected =true;
+// були граблі неправильної роботи коду коли довжина шляху залишалась меншою кроку
+                        for (var i = path.length-1, j =0; i >= 0 && j < this.speed; i--, j++) {
                             this.x = path[i].x;
-                            this.y= path[i].y;
+                            this.y = path[i].y;
                             // на кожній координаті робимо перевірку...
-
-                            if (this.areaCheck()){ //вороги знайдено далы йти нема змсісту
-                                console.log('був бій ');
+                            console.log(this.showHeroInfo() +' перемістився в обході');
+                            if (this.areaCheck()){ //вороги знайдено далі йти нема змсісту
+                                console.log('при обході перешкоди відбувся бій');
 
                                 return false;
                             }  // герой зупиняэться, щоб не робив ще раз чек ареа
                         }
+                        // якщо шляху не знайдено.. тепік
                     }
+                    return false;
+                    // якщо шлях не знайдено завершуэмо ходьбу потребуэ доробки логыки !!!!!!!!!!!!!!!!!!!!!
 
                 }
-                x3 = Math.round(_x);
-                y3 = Math.round(_y);
+                //x3 = Math.round(_x);
+                //y3 = Math.round(_y);
 
             }
         }
-        this.x = x2;
-        this.y = y2;
+        // якщо барэрыв не було в не було ворога = пролітаємо відрізок
+        if (!barrierOrEnemyDetected) {
+            this.x = x2;
+            this.y = y2;
+            console.log(this.showHeroInfo() +' перемістився');
+            this.history.push(this.showHeroInfo() +' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
 
+        }
 
 
 
@@ -355,8 +370,6 @@ XMen.prototype = {
         //this.y = (this.y >= myLocation.mapMaxY) ? myLocation.mapMaxY : ((this.y <= 0) ? 0 : this.y);
 
 
-        console.log(this.showHeroInfo() +') перемістився');
-        this.history.push(this.showHeroInfo() +' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
         //console.log(this.name, ' координати [', _x, ',', _y,'] ');
 
 
@@ -482,77 +495,95 @@ Vampires.prototype.constructor = Vampires;
         return isFind;
     }
 
-module.exports.start = function () {
+function start (mode) {
 
-    console.log('гра почалась')
 
-    if (!startGame) {
-       // var myLocation = new Location(800, 600, 0, 0, 10, 20, 0.2, 1, 0.2, 100, 4000);
+    function gameStep(){
+       // console.log('*********************** ',gameSpedTimer);
+        if (startGame) {
 
-        startGame = true;
-        //console.log(" Гра почалася ", startGame);
-        var gameSpedTimer = setInterval(function () {
-                if (startGame) {
-
-                    numberOfSteps++;
+            numberOfSteps++;
 
 // Головна умова гри... поки не лишиться 1-го героя.
 // Звичайно планується щоб билися не між собою а Клан на клан, але навряд чи встигну.. ще роути
-                   // console.log(numberOfHero);
-                    if (numberOfLivingHero >= 1) {
+            // console.log(numberOfHero);
+            if (numberOfLivingHero >= 1) {
 
-                        for (var i = numberOfHero-1; i >= 0; i--) {
-                            if (heroes[i].health > 0) {
-                                //console.log(i);
-                                //console.dir(heroes[i]);
+                for (var i = numberOfHero-1; i >= 0; i--) {
+                    if (heroes[i].health > 0) {
+                        //console.log(i);
+                        //console.dir(heroes[i]);
 
-                                heroes[i].regeneration();
+                        heroes[i].regeneration();
 
-                                if (heroes[i].isFreeze && heroes[i].freezeStepLeft == 0) {
-                                    heroes[i].isFreeze = false;
-                                    console.log(heroes[i].showHeroInfo(),') розморозився');
-                                }
+                        if (heroes[i].isFreeze && heroes[i].freezeStepLeft == 0) {
+                            heroes[i].isFreeze = false;
+                            console.log(heroes[i].showHeroInfo(),') розморозився');
+                        }
 
-                                if (heroes[i].isFreeze && heroes[i].freezeStepLeft > 0) {
-                                    heroes[i].freezeStepLeft--;
-                                   // console.log(heroes[i].name, ' \u2764',heroes[i].helth,'(',heroes[i].x,heroes[i].y,') заморожений і пропускає хід');
-                                   console.log(heroes[i].showHeroInfo() + 'заморожений і пропускає хід');
+                        if (heroes[i].isFreeze && heroes[i].freezeStepLeft > 0) {
+                            heroes[i].freezeStepLeft--;
+                            // console.log(heroes[i].name, ' \u2764',heroes[i].helth,'(',heroes[i].x,heroes[i].y,') заморожений і пропускає хід');
+                            console.log(heroes[i].showHeroInfo() + 'заморожений і пропускає хід');
 
-                                }
-                                else {
+                        }
+                        else {
 
-                                    // Якщо живий і ні на кого не напав
-                                    if (heroes[i].health > 0 && !heroes[i].areaCheck()) {
+                            // Якщо живий і ні на кого не напав
+                            if (heroes[i].health > 0 && !heroes[i].areaCheck()) {
 
-                                        // Якщо живий після перевірки локації, і не дайшов до кінцевої точки
-                                        if (heroes[i].health > 0 && !heroes[i].walkedAllWay) {
-                                            heroes[i].moveTo();
-                                            //console.log(heroes[i].walkedAllWay)
+                                // Якщо живий після перевірки локації, і не дайшов до кінцевої точки
+                                if (heroes[i].health > 0 && !heroes[i].walkedAllWay) {
+                                    heroes[i].moveTo();
+                                    //console.log(heroes[i].walkedAllWay)
 
-                                            // Якщо живий після пройденого шляху робить перевірку локації
-                                            if (heroes[i].health > 0) heroes[i].areaCheck();
-                                        }
-                                    }
+                                    // Якщо живий після пройденого шляху робить перевірку локації
+                                    if (heroes[i].health > 0) heroes[i].areaCheck();
                                 }
                             }
                         }
-
-                        console.log('Крок:', numberOfSteps);
-                    }   //ocation.environmentChange();
-
-
-
-                    else {
-                        clearInterval(gameSpedTimer); // якщо героїв менше двох - зупинити
-                       // якщо героїв менше двох - зупинити
-                        gameSpedTimer = 0;
                     }
                 }
-               console.log('Персонажів: ',numberOfHero,' з них живі',numberOfLivingHero );
-            }, myLocation.timeBetweenSteps);
 
+                console.log('Крок:', numberOfSteps);
+            }   //ocation.environmentChange();
+
+
+
+            else {
+               // clearInterval(gameSpedTimer); // якщо героїв менше двох - зупинити
+                // якщо героїв менше двох - зупинити
+               // gameSpedTimer = 0;
+            }
         }
+        console.log('Персонажів: ',numberOfHero,' з них живі',numberOfLivingHero );
+
     }
+
+    if ( mode == 2) {
+        console.log('Встановлено нову швидкість гри: ',myLocation.timeBetweenSteps);
+        clearInterval(gameSpedTimer);
+        gameSpedTimer = setInterval(function () {
+            gameStep();
+         //   console.log('Таймер2:',gameSpedTimer._idleTimeout);
+         //   console.log(' тик так',myLocation.timeBetweenSteps);
+
+        }, myLocation.timeBetweenSteps);
+        // var myLocation = new Location(800, 600, 0, 0, 10, 20, 0.2, 1, 0.2, 100, 4000);
+    } else {
+        startGame = true;
+        //console.log(" Гра почалася ", startGame);
+
+         gameSpedTimer = setInterval(function () {
+            gameStep();
+          //   console.log('Таймер1:',gameSpedTimer._idleTimeout);
+         //   console.log(' тик так', myLocation.timeBetweenSteps);
+        }, myLocation.timeBetweenSteps);
+
+    }
+
+
+}
 
 
 //module.exports.hello = function() {
@@ -561,16 +592,27 @@ module.exports.start = function () {
 
 module.exports.numberOfHero =  function(antiCaching) {
     return numberOfHero;
-}
+};
 
 module.exports.numberOfLivingHero = function(antiCaching) {
     return numberOfLivingHero;
-}
+};
 
 module.exports.gameMode = function(mode){
     console.log('Змінено режим гри на:',mode);
     return (gameMode = mode);
-}
+};
+
+module.exports. setTimeBetweenSteps = function(timeBetweenSteps){
+    myLocation.timeBetweenSteps = timeBetweenSteps;
+
+    if (startGame) { start(2);
+        return 'Змінено швидкість гри на: ' + myLocation.timeBetweenSteps;
+    }
+    return   'Змінено швидкість гри на:'+ myLocation.timeBetweenSteps;
+
+
+};
 
 module.exports.freezeHero = function(heroName,command) {
     var isFind = checkHero(heroName);
@@ -587,12 +629,13 @@ module.exports.freezeHero = function(heroName,command) {
         }
         else {
             isFind.isFreeze = false;
+            isFind.freezeStepLeft = 0;
             console.log(isFind.name, ', було розможено________________________');
             return 'Hero: ' + isFind.name + ' було розморожено'+ command;
         }
     }
 
-}
+};
         module.exports.setMoveTo = function(heroName,x,y) {
     var isFind = checkHero(heroName);
 
@@ -601,12 +644,12 @@ module.exports.freezeHero = function(heroName,command) {
         return 'Sorry but there is no hero that has name:' + heroName;
     }
     else {
-        isFind.nextDestinationPoint.x = x;
-        isFind.nextDestinationPoint.y = y;
-        console.log('Змінено точку призначення',isFind.name,' тепер він прямує в :',isFind.nextDestinationPoint.x, isFind.nextDestinationPoint.y);
+        isFind.nextDestinationPointX = x;
+        isFind.nextDestinationPointY = y;
+        console.log('Змінено точку призначення',isFind.name,' тепер він прямує в :',isFind.nextDestinationPointX, isFind.nextDestinationPointY);
         return 'Hero: ' + isFind.name + ' recived new point of destenition';
     }
-}
+};
 
 module.exports.setToFly = function(heroName,type) {
     var isFind = checkHero(heroName);
@@ -621,13 +664,44 @@ module.exports.setToFly = function(heroName,type) {
 
             console.log(heroName, ' змінив режим польоту на: ', type);
             return heroName + ' change type of Fly status to : ' + type;
-            console.dir(isFind);
+            //console.dir(isFind);
         }
         else
             console.log(heroName, ' народжений повзати літати не буде...');
         return 'Sorry but hero ' + heroName + ' dont has ability for fly';
     }
-}
+};
+
+module.exports.newSettings = function(newSettingsOfHero) {
+    var heroName = newSettingsOfHero.name;
+    var isFind = checkHero(heroName);
+    var logChanges='';
+    if (!isFind) {
+        console.log('Була спроба змінити маршрут неіснуючого героя з іменем', heroName);
+        return 'Sorry but there is no hero that has name:' + heroName;
+    }
+    else {
+
+var logic=0;
+        for (var k in newSettingsOfHero) {
+
+            // преобразуватор типів відповідно до типу паттерна . на ці граблі сьогодні не наступимо :)
+
+            if  ( typeof (isFind[k]) == 'number')  { isFind[k] = +newSettingsOfHero[k]; logic=1;}
+            if  ( typeof (isFind[k]) == 'boolean')  {isFind[k] = !!newSettingsOfHero[k]; logic=1;}
+            if (logic==0) isFind[k] = newSettingsOfHero[k];
+
+        // тру або фалсе - розморозити...
+            if  ( k == 'isFreeze')  isFind.freezeStepLeft = isFind[k] ? 1000: 0;
+
+
+            logChanges +=' ' + k + ' = ' + isFind[k] + typeof (isFind[k]);
+       }
+
+console.dir(isFind);
+        return heroName + ' received next changes : ' + logChanges + ' '+isFind.freezeStepLeft;
+        }
+};
 
 module.exports.heroCreate = function(name, clan, x, y) {
 
@@ -647,12 +721,12 @@ module.exports.heroCreate = function(name, clan, x, y) {
     }
 
     if (name == 'Dracula') {
-        heroes.push(new Vampires('Vampires', 'Sweetdeath', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 180, 3, 6, 17, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
+        heroes.push(new Vampires('Vampires', 'Dracula', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 180, 3, 6, 17, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
         created = true;
     }
 
     if (name == 'MegaVamp') {
-        heroes.push(new Vampires('Vampires', 'Sweetdeath', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 200, 3, 6, 20, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
+        heroes.push(new Vampires('Vampires', 'MegaVamp', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 200, 3, 6, 20, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
         created = true;
     }
 
@@ -681,4 +755,5 @@ module.exports.heroCreate = function(name, clan, x, y) {
     }
     console.dir(heroes[heroes.length - 1]);
 
-    }
+    };
+module.exports.start= start;

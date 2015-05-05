@@ -3,7 +3,7 @@
  */
 var express = require('express');
 var app = express();
-var bodyparser = require('body-parser');
+
 var myGame = require('./index.js');
 var router = require('./routes/routes.js')(app);
 

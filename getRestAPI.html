@@ -117,7 +117,7 @@
     border-radius:6px; -moz-border-radius:5px; -khtml-border-radius:10px; background-color:greenyellow;">
                 <div onmouseover="this.style.cursor='pointer'">
         <span style="font-family:Arial;font-size:32px;font-weight:bold;color:#000000; text-shadow: 1px 1px white;">
-        Create the Heroes
+        Create the Heroes 
         </span>
                 </div>
             </div>
@@ -141,7 +141,7 @@
             <option value="Dracula" />
             <option value="MegaVamp" />
         </datalist>
-        </select>
+
 
 
 
@@ -252,9 +252,10 @@
         var getCommand = "http://localhost:3030/createHero/" + document.getElementById("selectHeroName1").value + "/default/" + clan + "/" +
                 document.getElementById('x1').value + "/" + document.getElementById('y1').value;
 
-        //        alert(getCommand);
 
-        document.getElementById("myIframe").contentWindow.location.replace(getCommand);
+
+        // GET
+         document.getElementById("myIframe").contentWindow.location.replace(getCommand);
         document.getElementById("lastRequest").innerHTML = getCommand;
 
 
@@ -318,6 +319,8 @@
 
 
 
+
+
 </script>
 
 
@@ -335,7 +338,7 @@
         <b>
             <span>Last GET Request: </span> <span id = "lastRequest"></span>
         </b>
-        <iframe name="myIframe" id="myIframe"src="" width="744" height="40" style=" background-color: whitesmoke;left: 0; right: 0;"></iframe> <br>
+        <iframe name="myIframe" id="myIframe" src="" width="744" height="40" style=" background-color: whitesmoke;left: 0; right: 0;"></iframe> <br>
 
 
     </div>
@@ -347,4 +350,5 @@
 
 </body>
 </html>
+
 
