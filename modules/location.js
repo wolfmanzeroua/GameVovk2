@@ -1,8 +1,8 @@
 // клас локації
-//var heroMovePath = require('./modules/classPathmap.js');
 var myLocation = new Location(800, 600, 0, 0, 10, 20, 0.2, 1, 0.2, 3000, 4000);
+var heroMovePath = require('./classPathmap.js');
 myLocation.barriersInit();
-//myLocation.classPathPointValidation();
+myLocation.classPathPointValidation();
 
 function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, gravity, airResistance, timeBetweenSteps, maxTimeOfEnvirChange) {
     this.mapMaxX = mapMaxX;
@@ -28,6 +28,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
         }
         // console.log(this.map[i].join())
     }
+    console.log(this.mapMaxX, this.mapMaxY, this.map[800][600])
 
     this.triangle = [];
     this.rectangle = [];
@@ -77,12 +78,42 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
 
     };
 
-    // перевірити карту героїв на точки що попадають на площину перешкод.
-    //this.classPathPointValidation = function() {
-    //    heroMovePath
-    //
-    //
-    //};
+    //перевірити карту героїв на точки що попадають на площину перешкод.
+
+    this.validatePoint = function(x1,y1) {
+           return    (this.map[x1][y1] >= 1 ? this.map[x1][y1] : 0);
+    };
+
+
+
+    this.classPathPointValidation = function() {
+        console.log('Валідація точок маршруту персонажів... ');
+        var class1 = {
+            clan: 'X-Men'
+        };
+        var _point= {isLast: false};
+
+        var class2 = {
+            clan: 'Vampires'
+        };
+
+
+        var i = 0;
+        while (!_point.isLast) {
+            _point = heroMovePath.call(class1,i);
+            if (this.validatePoint(_point.x, _point.y)>0) {
+                console.log('Точка маршруту клана', class1.clan, _point.x, _point.y, ' знаходиться у перешкоді типу', this.validatePoint(_point.x, _point.y),' треба виправити');
+                process.exit(1);
+            }
+            _point = heroMovePath.call(class2,i);
+            if (this.validatePoint(_point.x, _point.y)>0) {
+                console.log('Точка маршруту клана', class2.clan, _point.x, _point.y, ' знаходиться у перешкоді типу', this.validatePoint(_point.x, _point.y),' треба виправити');
+                process.exit(1);
+            }
+            i++;
+        }
+        console.log('Валідацію пройдено!');
+    };
 
 
     // ініціалізація карти з барєрами
@@ -125,6 +156,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
             this.rY = rY;
         }
 
+
         var maxX = 0;
         var minX = 0;
         var maxY = 0;
@@ -155,7 +187,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
 
         this.triangle[0] = new Triangles('Ліс', 1, 3, 10, 15, 70, 20, 50, 30);
         this.triangle[1] = new Triangles('Болото', 2, 2, 120, 200, 20, 30, 60, 60);
-        this.triangle[2] = new Triangles('Гора', 3, 1, 600, 600, 50, 700, 750, 750);
+        //this.triangle[2] = new Triangles('Гора', 3, 1, 600, 600, 50, 800, 750, 750);
         //this.triangle[3]= new Triangles('Озеро',4, 1,2,2,0,10,20,70);
 
         triangleCount = this.triangle.length;
@@ -257,9 +289,15 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
 
 // вивід нової карти
       //  console.log('_________________________________________________________________________________');
+var _s = ' ';
+        var _mLength =this.mapMaxX;
+        for (var j = 600; j >= 0; j--) {
+            for (var i = 0; i < 800; i++) {
 
-        for (var i = this.mapMaxX; i >= 0; i--) {
-           console.log(this.map[i].join(''));
+             _s+=this.map[i][j];
+            }
+            console.log(_s);
+            _s=' ';
         }
 
 //console.log(this.map[51][30]);
@@ -401,7 +439,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
                     pathFinder.countOfOpenPoin++;
 
 
-                    //console.log(i, 'addOpen: ', posX, posY, 'F :',   pathFinder.openPointArray[posX][posY].F); ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+                    console.log(i, 'addOpen: ', posX, posY, 'F :',   pathFinder.openPointArray[posX][posY].F); ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
                     //console.dir(pathFinder.openPointArray[posX][posY]);
 
                     // перевірка чи не це не кінцева точка в білому списку
@@ -425,7 +463,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
                 var minX = (pathFinder.currPoint.x - 1)<0 ? 0: pathFinder.currPoint.x - 1;
                 var minY = (pathFinder.currPoint.y - 1)<0 ? 0: pathFinder.currPoint.y - 1;
                 var maxX = (pathFinder.currPoint.x + 1)>800 ? 800: pathFinder.currPoint.x + 1;
-                var maxY = (pathFinder.currPoint.y + 1)>800 ? 800: pathFinder.currPoint.y + 1;
+                var maxY = (pathFinder.currPoint.y + 1)>600 ? 600: pathFinder.currPoint.y + 1;
 
                 //  console.log(minX,minY,maxX,maxY);
 
@@ -491,7 +529,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
                     }
                 }
                 else {
-                    // console.log('Всі точки в закритому масиві, а шлях не знайдено.... придумай щось');
+                     console.log('Всі точки в закритому масиві, а шлях не знайдено.... придумай щось' );
                     myLocation.mustFindPath = false;
                 }
 
@@ -522,7 +560,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
         pathFinder.setStart(startX, startY);
         pathFinder.setEnd(endX, endY);
         console.log(startX, startY,endX, endY);
-
+        console.log(pathFinder.
 
         var pathIsFind = false;
         var stepCount = 0;
@@ -555,7 +593,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
 
 
 // умова глубини пошуку  ... потыбно тыльки наприклад 10 кроків
-        while (myLocation.mustFindPath && stepCount <600) {
+        while (myLocation.mustFindPath && stepCount <2000) {
             // while (this.mustFindPath) {
         //console.log (stepCount);
             pathFinder.findAround(stepCount);
@@ -597,16 +635,19 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
         }
 
     if (!pathIsFind)  {
-          console.log('Печалька, але карта пошуку з картою локації, а шлях не знайдено... Вчися літати, ти приречений...  ');
+          console.log('Печалька, зроблено',stepCount,'ітерацій а шлях не знайдено... Вчися літати, ти приречений...  ');
     return false;
     }
         return pathFinder.path;
     //}
 }
 
+
+
 }
 
-module.exports = Location;
+module.exports = myLocation;
+//module.exports.myLocation = myLocation;
 
 //var myLocation = new Location(800, 600, 0, 0, 10, 20, 0.2, 1, 0.2, 100, 4000);
 //myLocation.barriersInit();

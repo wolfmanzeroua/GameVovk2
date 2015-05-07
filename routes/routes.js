@@ -70,10 +70,8 @@ module.exports = function(app) {
     app.post('/createHero/', function (req, res, next) {
         var body = req.body;
         console.log(body);
-
-        myGame.heroCreate(body.name, body.clan, +body.x, +body.y);
         console.log(body.name, body.clan, +body.x, +body.y);
-        res.status(200).send(body.name + ' is created, and number of heroes: ' + myGame.numberOfHero(0));
+        res.status(200).send(myGame.heroCreate(body.name, body.clan, +body.x, +body.y));
 
 
         //if (!body.key) {

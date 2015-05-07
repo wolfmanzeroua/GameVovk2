@@ -1,7 +1,7 @@
 
 var heroMovePath = require('./modules/classPathmap.js');
 var defSet = require('./modules/defaultClassSettings.js');
-var Location = require('./modules/location.js');
+var myLocation = require('./modules/location.js');
 var gameSpedTimer=0;
 
 var numberOfLivingHero = 0;
@@ -10,12 +10,13 @@ var numberOfSteps = 0;
 var gameMode = "Deathmatch";
 var heroes = [];
 
-var myLocation = new Location(800, 600, 0, 0, 10, 20, 0.2, 1, 0.2, 100, 4000);
-myLocation.barriersInit(0);
+//var myLocation = new Location(800, 600, 0, 0, 10, 20, 0.2, 1, 0.2, 100, 4000);
+//myLocation.barriersInit(0);
 // ініціалізація барєрів, самі барєри описані в цій же функції
 
 
 var startGame = false;
+
 
 
 // клас потомок
@@ -133,14 +134,14 @@ XMen.prototype = {
         // прогон противників на можливість дотягнутися
 
         for (var i = 0; i<numberOfHero; i++) {
-           if (gameMode == 'Deathmatch') {
-               logic = (this != heroes[i]);
-             //  console.log(logic, i);
-           }
+            if (gameMode == 'Deathmatch') {
+                logic = (this != heroes[i]);
+                //  console.log(logic, i);
+            }
             if (gameMode == 'clanVsClan')
             {
                 logic = (this.clan != heroes[i].clan);
-               // console.log(logic, i);
+                // console.log(logic, i);
             }
 
             if (logic) {
@@ -218,7 +219,7 @@ XMen.prototype = {
             if (minI >= 0) {
                 _x = heroes[minI].x;
                 _y = heroes[minI].y;
-         //   console.log('Персонаж',this.name,' взяв курс на,',heroes[minI].name);
+                //   console.log('Персонаж',this.name,' взяв курс на,',heroes[minI].name);
             }
         }
 
@@ -240,9 +241,9 @@ XMen.prototype = {
                 this.nextDestinationPointX = _x = _point.x;
                 this.nextDestinationPointY = _y = _point.y;
                 this.walkedAllWay = _point.isLast;
-               // console.log('this.walkedAllWay',this.walkedAllWay);
+                // console.log('this.walkedAllWay',this.walkedAllWay);
 
-            //    console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
+                //    console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
             }
             else {
                 _x = this.nextDestinationPointX;
@@ -276,13 +277,13 @@ XMen.prototype = {
         // для двох героїв працюэ потребує доробки і винесення в окремий метод.
 
 
-            _dirX = (_x - this.x) * this.speed / distanceTo;
-            _dirY = (_y - this.y) * this.speed / distanceTo;
-          //  console.log('проміжкові',distanceTo, _dirX , _dirY);
+        _dirX = (_x - this.x) * this.speed / distanceTo;
+        _dirY = (_y - this.y) * this.speed / distanceTo;
+        //  console.log('проміжкові',distanceTo, _dirX , _dirY);
 
-            // Визначення косинуса між векторами покищо не пригодилось.. а крові попило...
-            //cosineAngle = vector.scalar(this.x, this.y, _x,_y) / (vector.module(this.x, this.y) * vector.module(_x,_y));
-            //console.log(Math.acos(cosineAngle));
+        // Визначення косинуса між векторами покищо не пригодилось.. а крові попило...
+        //cosineAngle = vector.scalar(this.x, this.y, _x,_y) / (vector.module(this.x, this.y) * vector.module(_x,_y));
+        //console.log(Math.acos(cosineAngle));
 
         if (distanceTo > this.speed) {
             //this.x = this.x + Math.floor(_dirX);
@@ -326,7 +327,7 @@ XMen.prototype = {
                     // Алгоритм не працює... покишо..
 // Глюк найдено.. наступна точка  маршруту попадала у перешкоду ........ :))
                     if (path = myLocation.findPath(this.x, this.y, this.nextDestinationPointX,this.nextDestinationPointY, this.speed)){
-                       // console.log('Урра--- отримав масив', path.length-1, path[10].x,path[10].y )
+                        // console.log('Урра--- отримав масив', path.length-1, path[10].x,path[10].y )
                         //          if (null)
                         barrierOrEnemyDetected =true;
 // були граблі неправильної роботи коду коли довжина шляху залишалась меншою кроку
@@ -361,17 +362,10 @@ XMen.prototype = {
 
         }
 
-
-
-
 // перевірка НЕвиходу за межі локації
 
         //this.x = (this.x >= myLocation.mapMaxX) ? myLocation.mapMaxX : ((this.x <= 0) ? 0 : this.x);
         //this.y = (this.y >= myLocation.mapMaxY) ? myLocation.mapMaxY : ((this.y <= 0) ? 0 : this.y);
-
-
-        //console.log(this.name, ' координати [', _x, ',', _y,'] ');
-
 
     },
 
@@ -421,60 +415,60 @@ Vampires.prototype.constructor = Vampires;
 
 // функція по обрахуванню векторів
 
-    function vector() {
-    }
-    vector.module = function (x, y) {
-        return Math.pow(x * x + y * y, 0.5);
-    };
+function vector() {
+}
+vector.module = function (x, y) {
+    return Math.pow(x * x + y * y, 0.5);
+};
 
-    vector.scalar = function (x, y, x2, y2) {
-        return x * x2 + y * y2;
-    };
-
-
-    /*
-     vector.intersection  = function (hero1, hero2, x1, y1, x2, y2, x3, y3, x4, y4) {
-     // http://www.cyberforum.ru/cpp-beginners/thread588383.html формулу перетину запозичено, протестовано, перероблено, але все даремно , не пригодилася.. покищо
-     var	dx1 = x2 - x1;
-     var	dy1 = y2 - y1;
-     var	dx2 = x4 - x3;
-     var	dy2 = y4 - y3;
-     var	x = dy1 * dx2 - dy2 * dx1;
-     var distance = 0;
-
-     // перевірка паралельності, ділення на 0
-     if ( (!x)|| (!dx2)){
-
-     //  перевірити чи нема накладок відрізків
-
-     distance = Math.max(x1, x2, x3, x4) - Math.min(x1, x2, x3, x4) + Math.max(y1, y2, y3, y4) - Math.min(y1, y2, y3, y4);
-
-     if (distance <= (Math.abs(dx1) + Math.abs(dy1) + Math.abs(dx2) + Math.abs(dy2))) {
-     console.log('Накладка є ');
-
-     // э накладеня векторів, перевірити чи герой в разі ходу достає ворога
-
-     if (_length => ( Math.abs(hero1.x - hero2.x) + Math.abs(hero1.y - hero2.y) )) {
-     console.log(hero1.name,' атакує ',hero2.name);
-     return	true;
-     }
-     }
-     }
-
-     return console.log('Не пересікаються', x,dx2);
+vector.scalar = function (x, y, x2, y2) {
+    return x * x2 + y * y2;
+};
 
 
-     var	y = x3 * y4 - y3 * x4;
-     vector.crossX = x = ((x1 * y2 - y1 * x2) * dx2 - y * dx1) / x;
-     vector.crossY = y = (dy2 * x - y) / dx2;
+/*
+ vector.intersection  = function (hero1, hero2, x1, y1, x2, y2, x3, y3, x4, y4) {
+ // http://www.cyberforum.ru/cpp-beginners/thread588383.html формулу перетину запозичено, протестовано, перероблено, але все даремно , не пригодилася.. покищо
+ var	dx1 = x2 - x1;
+ var	dy1 = y2 - y1;
+ var	dx2 = x4 - x3;
+ var	dy2 = y4 - y3;
+ var	x = dy1 * dx2 - dy2 * dx1;
+ var distance = 0;
 
-     if ( ((x1 <= x && x2 >= x) || (x2 <= x && x1 >= x)) && ((x3 <= x && x4 >= x) || (x4 <= x && x3 >= x))) {
-     console.log('Герої зустрінуться,  координати перетину х', x,' y', y);
-     return	true;
-     }
-     else return	false;
-     }
-     */
+ // перевірка паралельності, ділення на 0
+ if ( (!x)|| (!dx2)){
+
+ //  перевірити чи нема накладок відрізків
+
+ distance = Math.max(x1, x2, x3, x4) - Math.min(x1, x2, x3, x4) + Math.max(y1, y2, y3, y4) - Math.min(y1, y2, y3, y4);
+
+ if (distance <= (Math.abs(dx1) + Math.abs(dy1) + Math.abs(dx2) + Math.abs(dy2))) {
+ console.log('Накладка є ');
+
+ // э накладеня векторів, перевірити чи герой в разі ходу достає ворога
+
+ if (_length => ( Math.abs(hero1.x - hero2.x) + Math.abs(hero1.y - hero2.y) )) {
+ console.log(hero1.name,' атакує ',hero2.name);
+ return	true;
+ }
+ }
+ }
+
+ return console.log('Не пересікаються', x,dx2);
+
+
+ var	y = x3 * y4 - y3 * x4;
+ vector.crossX = x = ((x1 * y2 - y1 * x2) * dx2 - y * dx1) / x;
+ vector.crossY = y = (dy2 * x - y) / dx2;
+
+ if ( ((x1 <= x && x2 >= x) || (x2 <= x && x1 >= x)) && ((x3 <= x && x4 >= x) || (x4 <= x && x3 >= x))) {
+ console.log('Герої зустрінуться,  координати перетину х', x,' y', y);
+ return	true;
+ }
+ else return	false;
+ }
+ */
 
 //------------------------------------------------------------------------------
 // Код виконання
@@ -483,23 +477,23 @@ Vampires.prototype.constructor = Vampires;
 
 
 
-    function checkHero(heroName) {
+function checkHero(heroName) {
 
-        var isFind;
+    var isFind;
 
-        for (var i = heroes.length - 1; i >= 0; i--) {
-            if (heroes[i].name == heroName) {
-                isFind = heroes[i];
-            }
+    for (var i = heroes.length - 1; i >= 0; i--) {
+        if (heroes[i].name == heroName) {
+            isFind = heroes[i];
         }
-        return isFind;
     }
+    return isFind;
+}
 
 function start (mode) {
 
 
     function gameStep(){
-       // console.log('*********************** ',gameSpedTimer);
+        // console.log('*********************** ',gameSpedTimer);
         if (startGame) {
 
             numberOfSteps++;
@@ -551,9 +545,9 @@ function start (mode) {
 
 
             else {
-               // clearInterval(gameSpedTimer); // якщо героїв менше двох - зупинити
+                // clearInterval(gameSpedTimer); // якщо героїв менше двох - зупинити
                 // якщо героїв менше двох - зупинити
-               // gameSpedTimer = 0;
+                // gameSpedTimer = 0;
             }
         }
         console.log('Персонажів: ',numberOfHero,' з них живі',numberOfLivingHero );
@@ -565,8 +559,8 @@ function start (mode) {
         clearInterval(gameSpedTimer);
         gameSpedTimer = setInterval(function () {
             gameStep();
-         //   console.log('Таймер2:',gameSpedTimer._idleTimeout);
-         //   console.log(' тик так',myLocation.timeBetweenSteps);
+            //   console.log('Таймер2:',gameSpedTimer._idleTimeout);
+            //   console.log(' тик так',myLocation.timeBetweenSteps);
 
         }, myLocation.timeBetweenSteps);
         // var myLocation = new Location(800, 600, 0, 0, 10, 20, 0.2, 1, 0.2, 100, 4000);
@@ -574,10 +568,10 @@ function start (mode) {
         startGame = true;
         //console.log(" Гра почалася ", startGame);
 
-         gameSpedTimer = setInterval(function () {
+        gameSpedTimer = setInterval(function () {
             gameStep();
-          //   console.log('Таймер1:',gameSpedTimer._idleTimeout);
-         //   console.log(' тик так', myLocation.timeBetweenSteps);
+            //   console.log('Таймер1:',gameSpedTimer._idleTimeout);
+            //   console.log(' тик так', myLocation.timeBetweenSteps);
         }, myLocation.timeBetweenSteps);
 
     }
@@ -636,7 +630,7 @@ module.exports.freezeHero = function(heroName,command) {
     }
 
 };
-        module.exports.setMoveTo = function(heroName,x,y) {
+module.exports.setMoveTo = function(heroName,x,y) {
     var isFind = checkHero(heroName);
 
     if (!isFind) {
@@ -644,10 +638,15 @@ module.exports.freezeHero = function(heroName,command) {
         return 'Sorry but there is no hero that has name:' + heroName;
     }
     else {
-        isFind.nextDestinationPointX = x;
-        isFind.nextDestinationPointY = y;
-        console.log('Змінено точку призначення',isFind.name,' тепер він прямує в :',isFind.nextDestinationPointX, isFind.nextDestinationPointY);
-        return 'Hero: ' + isFind.name + ' recived new point of destenition';
+        if (myLocation.validatePoint(x,y) > 0) {
+            return 'Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(x,y);
+        }
+        else {
+            isFind.nextDestinationPointX = x;
+            isFind.nextDestinationPointY = y;
+            console.log('Змінено точку призначення',isFind.name,' тепер він прямує в :',isFind.nextDestinationPointX, isFind.nextDestinationPointY);
+            return 'Hero: ' + isFind.name + ' recived new point of destenition';
+        }
     }
 };
 
@@ -682,78 +681,94 @@ module.exports.newSettings = function(newSettingsOfHero) {
     }
     else {
 
-var logic=0;
-        for (var k in newSettingsOfHero) {
-
-            // преобразуватор типів відповідно до типу паттерна . на ці граблі сьогодні не наступимо :)
-
-            if  ( typeof (isFind[k]) == 'number')  { isFind[k] = +newSettingsOfHero[k]; logic=1;}
-            if  ( typeof (isFind[k]) == 'boolean')  {isFind[k] = !!newSettingsOfHero[k]; logic=1;}
-            if (logic==0) isFind[k] = newSettingsOfHero[k];
-
-        // тру або фалсе - розморозити...
-            if  ( k == 'isFreeze')  isFind.freezeStepLeft = isFind[k] ? 1000: 0;
-
-
-            logChanges +=' ' + k + ' = ' + isFind[k] + typeof (isFind[k]);
-       }
-
-console.dir(isFind);
-        return heroName + ' received next changes : ' + logChanges + ' '+isFind.freezeStepLeft;
+        var logic = 0;
+        if ('nextDestinationPointX' in newSettingsOfHero && myLocation.validatePoint(newSettingsOfHero.nextDestinationPointX, newSettingsOfHero.nextDestinationPointY) > 0) {
+            return 'Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(newSettingsOfHero.nextDestinationPointX, newSettingsOfHero.nextDestinationPointY);
         }
+        else {
+            for (var k in newSettingsOfHero) {
+
+                // преобразуватор типів відповідно до типу паттерна . на ці граблі сьогодні не наступимо :)
+
+                if (typeof (isFind[k]) == 'number') {
+                    isFind[k] = +newSettingsOfHero[k];
+                    logic = 1;
+                }
+                if (typeof (isFind[k]) == 'boolean') {
+                    isFind[k] = !!newSettingsOfHero[k];
+                    logic = 1;
+                }
+                if (logic == 0) isFind[k] = newSettingsOfHero[k];
+
+                // тру або фалсе - розморозити...
+                if (k == 'isFreeze')  isFind.freezeStepLeft = isFind[k] ? 1000 : 0;
+
+
+                logChanges += ' ' + k + ' = ' + isFind[k] + typeof (isFind[k]);
+
+            }
+            console.dir(isFind);
+            return heroName + ' received next changes : ' + logChanges + ' ' + isFind.freezeStepLeft;
+        }
+    }
 };
 
 module.exports.heroCreate = function(name, clan, x, y) {
 
 //console.log(numberOfLivingHero);
     var created = false;
-    // console.log(name, name.length,(name == 'Wolverine') );
-                                                      //XMen(clan, name, level, features, hairСolor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
-    if (name == 'Wolverine') {
-        heroes.push(new XMen('X-Men', 'Wolverine', 1, 'healing factor, six retractable claws', 'black', 'small', 'no', 'man', 100, 2, 4, 10, 20, 70, 0, 10, false, 0, false, false, true, false, false, false, true, 15, false, true, x, y));
-        created = true;
+    if (myLocation.validatePoint(x,y) > 0) {
+        return 'Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(x,y);
     }
-
-
-    if (name == 'Sweetdeath') {
-        heroes.push(new Vampires('Vampires', 'Sweetdeath', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'big', 'woman', 150, 2, 6, 15, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
-        created = true;
-    }
-
-    if (name == 'Dracula') {
-        heroes.push(new Vampires('Vampires', 'Dracula', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 180, 3, 6, 17, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
-        created = true;
-    }
-
-    if (name == 'MegaVamp') {
-        heroes.push(new Vampires('Vampires', 'MegaVamp', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 200, 3, 6, 20, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
-        created = true;
-    }
-
-
-    if (!created) {
-
-
-        created = true;
-
-        var defObject = defSet(name, clan, +x, +y);
-
-        if (clan == 'X-Men') {
-            console.log('Це новенький Хмен');
-            heroes.push(new XMen(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y));
+    else {
+        // console.log(name, name.length,(name == 'Wolverine') );
+        //XMen(clan, name, level, features, hairСolor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
+        if (name == 'Wolverine') {
+            heroes.push(new XMen('X-Men', 'Wolverine', 1, 'healing factor, six retractable claws', 'black', 'small', 'no', 'man', 100, 2, 4, 10, 20, 70, 0, 10, false, 0, false, false, true, false, false, false, true, 15, false, true, x, y));
+            created = true;
         }
 
-        if (clan == 'Vampires') {
-            console.log('Це новенький Вампір');
-            heroes.push(new Vampires(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y));
+
+        if (name == 'Sweetdeath') {
+            heroes.push(new Vampires('Vampires', 'Sweetdeath', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'big', 'woman', 150, 2, 6, 15, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
+            created = true;
         }
-    }
-    if (created) {
-        numberOfHero = heroes.length;
-        numberOfLivingHero++;
 
-    }
-    console.dir(heroes[heroes.length - 1]);
+        if (name == 'Dracula') {
+            heroes.push(new Vampires('Vampires', 'Dracula', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 180, 3, 6, 17, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
+            created = true;
+        }
 
-    };
+        if (name == 'MegaVamp') {
+            heroes.push(new Vampires('Vampires', 'MegaVamp', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 200, 3, 6, 20, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
+            created = true;
+        }
+
+
+        if (!created) {
+
+
+            created = true;
+
+            var defObject = defSet(name, clan, +x, +y);
+
+            if (clan == 'X-Men') {
+                console.log('Це новенький Хмен');
+                heroes.push(new XMen(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y));
+            }
+
+            if (clan == 'Vampires') {
+                console.log('Це новенький Вампір');
+                heroes.push(new Vampires(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y));
+            }
+        }
+        if (created) {
+            numberOfHero = heroes.length;
+            numberOfLivingHero++;
+
+        }
+        console.dir(heroes[heroes.length - 1]);
+    }
+};
 module.exports.start= start;
+//module.exports.myLocation = myLocation;
