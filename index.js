@@ -721,11 +721,13 @@ module.exports.heroCreate = function(name, clan, x, y) {
         return 'Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(x,y);
     }
     else {
+        console.log('validate hero passed')
         // console.log(name, name.length,(name == 'Wolverine') );
         //XMen(clan, name, level, features, hairСolor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
         if (name == 'Wolverine') {
             heroes.push(new XMen('X-Men', 'Wolverine', 1, 'healing factor, six retractable claws', 'black', 'small', 'no', 'man', 100, 2, 4, 10, 20, 70, 0, 10, false, 0, false, false, true, false, false, false, true, 15, false, true, x, y));
             created = true;
+
         }
 
 
@@ -765,6 +767,7 @@ module.exports.heroCreate = function(name, clan, x, y) {
         if (created) {
             numberOfHero = heroes.length;
             numberOfLivingHero++;
+            return 'Hero '+ heroes[heroes.length-1].name +' was succesful creates ';
 
         }
         console.dir(heroes[heroes.length - 1]);
