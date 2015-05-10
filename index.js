@@ -2,6 +2,8 @@
 var heroMovePath = require('./modules/classPathmap.js');
 var defSet = require('./modules/defaultClassSettings.js');
 var myLocation = require('./modules/location.js');
+var initHeroOnMap = require('./routes/socketRoutes.js').initHero;
+var moveHeroOnMap = require('./routes/socketRoutes.js').moveHeroOnMap;
 var gameSpedTimer=0;
 
 var numberOfLivingHero = 0;
@@ -334,6 +336,7 @@ XMen.prototype = {
                         for (var i = path.length-1, j =0; i >= 0 && j < this.speed; i--, j++) {
                             this.x = path[i].x;
                             this.y = path[i].y;
+                            moveHeroOnMap(this,0);
                             // на кожній координаті робимо перевірку...
                             console.log(this.showHeroInfo() +' перемістився в обході');
                             if (this.areaCheck()){ //вороги знайдено далі йти нема змсісту
@@ -504,6 +507,7 @@ function start (mode) {
             if (numberOfLivingHero >= 1) {
 
                 for (var i = numberOfHero-1; i >= 0; i--) {
+                    moveHeroOnMap(heroes[i],i);
                     if (heroes[i].health > 0) {
                         //console.log(i);
                         //console.dir(heroes[i]);
@@ -534,6 +538,7 @@ function start (mode) {
                                     // Якщо живий після пройденого шляху робить перевірку локації
                                     if (heroes[i].health > 0) heroes[i].areaCheck();
                                 }
+                                moveHeroOnMap(heroes[i],i);
                             }
                         }
                     }
@@ -767,6 +772,7 @@ module.exports.heroCreate = function(name, clan, x, y) {
         if (created) {
             numberOfHero = heroes.length;
             numberOfLivingHero++;
+            initHeroOnMap(heroes[heroes.length-1],heroes.length-1);
             return 'Hero '+ heroes[heroes.length-1].name +' was succesful creates ';
 
         }
@@ -774,4 +780,25 @@ module.exports.heroCreate = function(name, clan, x, y) {
     }
 };
 module.exports.start= start;
-//module.exports.myLocation = myLocation;
+
+module.exports.heroArray = function(antiCaching) {
+    console.log(heroes);
+    if (heroes) return heroes;
+    if (!heroes) return 1;
+
+
+}
+
+
+// функції для відображення на на Батлфілді !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+//function checkHero(heroName) {
+//
+//    var isFind;
+//
+//    for (var i = heroes.length - 1; i >= 0; i--) {
+//        if (heroes[i].name == heroName) {
+//            isFind = heroes[i];
+//        }
+//    }
+//    return isFind;
+//}

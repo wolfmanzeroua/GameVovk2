@@ -678,7 +678,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
 
 
 // умова глубини пошуку  ... потыбно тыльки наприклад 10 кроків
-            while (myLocation.mustFindPath && stepCount < 2000) {
+            while (myLocation.mustFindPath && stepCount < 80000) {
                 // while (this.mustFindPath) {
                 //console.log (stepCount);
                 pathFinder.findAround(stepCount);
@@ -746,8 +746,11 @@ module.exports = myLocation;
 //this.rectangle[0] = new Rectangles('Болото', 2, 2, 2, 20, 23, 25);
 //myLocation.findPath(7, 0, 12, 30);
 //myLocation.findPath(7, 1, 11, 30);
-//myLocation.findPath(7, 1, 800, 600);
-//myLocation.findPath(700, 599, 600, 549);
+//myLocation.findPath(1,1, 800, 600);
+//myLocation.findPath(7, 1, 200, 100);
+//myLocation.findPath( 200, 100,300,250);
+//myLocation.findPath( 300,250, 660, 250);
+////myLocation.findPath(700, 599, 600, 549);
 //myLocation.findPath(0, 50, 70, 50);
 
 //myLocation.findPath(10, 0, 30, 30,10);
