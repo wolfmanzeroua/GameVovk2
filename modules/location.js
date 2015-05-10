@@ -187,9 +187,11 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
         //this.triangle[0]= new Triangles('Ліс',1, 3,5,1,3,5,5,8);
 
 
-        this.triangle[0] = new Triangles('Ліс', 1, 3, 10, 15, 70, 20, 50, 30);
-        this.triangle[1] = new Triangles('Болото', 2, 2, 120, 200, 20, 30, 60, 60);
-        this.triangle[2] = new Triangles('Гора', 3, 1, 600, 600, 50, 650, 750, 600);
+        this.triangle.push(new Triangles('Ліс', 1, 3, 66, 506, 154, 391, 154, 460));
+        this.triangle.push(new Triangles('Гора', 3, 1, 396, 460, 506, 504, 506, 370));
+        this.triangle.push(new Triangles('Болото', 2, 2, 682, 322, 800, 322, 800, 437));
+        this.triangle.push(new Triangles('Гора', 3, 1, 330, 230, 418, 230, 390, 23));
+        this.triangle.push(new Triangles('Ліс', 1, 3, 440, 209, 430, 70, 528, 70));
         //this.triangle[3]= new Triangles('Озеро',4, 1,2,2,0,10,20,70);
 
         triangleCount = this.triangle.length;
@@ -200,19 +202,26 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
         //console.dir(this.triangle[3]);
 
         // Тест кийс для карти 20х20
-        this.rectangle[0] = new Rectangles('Ліс', 1, 2, 2, 2, 20, 20); /// було
+        this.rectangle.push(new Rectangles('Болото', 2, 2, 220, 600, 244, 460));
+        this.rectangle.push(new Rectangles('Гора',3, 1, 660, 506, 800, 490));
+        this.rectangle.push(new Rectangles('Озеро',4, 1, 616, 600, 626, 390));
+        this.rectangle.push(new Rectangles('Ліс', 1, 2, 44, 46, 220, 92));
 
         //this.rectangle[0]= new Rectangles('Ліс',1, 3, 10, 20, 20, 50);
-        this.rectangle[1] = new Rectangles('Болото', 2, 2, 600, 550, 300, 500);
+        //this.rectangle[1] = new Rectangles('Болото', 2, 2, 600, 550, 300, 500);
         //       this.rectangle[1] = new Rectangles('Болото', 2, 2, 511, 501, 488, 500);
-        this.rectangle[1] = new Rectangles('Болото', 2, 2, 1, 20, 25, 25);
+        //this.rectangle[1] = new Rectangles('Болото', 2, 2, 1, 20, 25, 25);
         //this.rectangle[2]= new Rectangles('Гора',3, 1, 70, 90, 90, 100);
         //this.rectangle[3]= new Rectangles('Гора',3, 1, 65, 65, 70, 70);
 
         rectangleCount = this.rectangle.length;
 
         // Тест кийс для карти 20х20
-        this.ellipse[0] = new Ellipses('Ліс', 1, 3, 400, 400, 20, 30);
+        this.ellipse.push(new Ellipses('Озеро',4, 1, 420, 310, 40, 60));
+        this.ellipse.push(new Ellipses('Озеро',4, 1, 620, 380, 30, 60));
+        this.ellipse.push(new Ellipses('Болото', 2, 2, 40, 240, 30, 100));
+        this.ellipse.push(new Ellipses('Озеро',4, 1, 680, 140, 30, 60));
+        this.ellipse.push(new Ellipses('Ліс', 1, 2, 690, 140, 40, 60));
 
         //this.ellipse[0]= new Ellipses('Ліс',1, 3,50,20,20,20);
         //this.ellipse[1]= new Ellipses('Болото',2,2, 70,70,10,20);
@@ -735,10 +744,10 @@ module.exports = myLocation;
 //myLocation.barriersInit();
 
 //this.rectangle[0] = new Rectangles('Болото', 2, 2, 2, 20, 23, 25);
-myLocation.findPath(7, 0, 12, 30);
-myLocation.findPath(7, 1, 11, 30);
-myLocation.findPath(7, 1, 800, 600);
-myLocation.findPath(700, 599, 600, 549);
-myLocation.findPath(0, 50, 70, 50);
+//myLocation.findPath(7, 0, 12, 30);
+//myLocation.findPath(7, 1, 11, 30);
+//myLocation.findPath(7, 1, 800, 600);
+//myLocation.findPath(700, 599, 600, 549);
+//myLocation.findPath(0, 50, 70, 50);
 
 //myLocation.findPath(10, 0, 30, 30,10);

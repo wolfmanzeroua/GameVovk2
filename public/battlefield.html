@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+    <title>BattleField</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%;  }
+        form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+        form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 5px 10px; }
+        #messages li:nth-child(odd) { background: #eee; }
+    </style>
+</head>
+<body>
+
+
+
+<svg id="mySvg" width="801" height="601" style="background-color: whitesmoke"  xmlns="http://www.w3.org/2000/svg">
+    <!-- <circle cx="50" cy="50" r="40"  fill="LightGreen" />
+     <polygon points="200,10 250,190 160,210" style="fill:lime" />
+     <polygon points="700,550 700,600, 800,600, 800,550" style="fill:DimGray" />
+
+
+     <ellipse cx="100" cy="70" rx="85" ry="55" fill="Tan" />
+     <ellipse cx="700" cy="100" rx="100" ry="200"  style="fill:SkyBlue ;" /> -->
+
+ </svg>
+
+ <ul id="messages"></ul>
+ <form action="">
+     <input id="m" autocomplete="off" /><button >Send</button>
+ </form>
+
+ <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+ <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+ <script>
+
+
+     // http://habrahabr.ru/post/37595/
+
+     var socket = io();
+     $('form').submit(function(){
+         socket.emit('chat message', $('#m').val());
+         $('#m').val('');
+         changeSvg();
+         return false;
+     });
+ //    socket.on('chat message', function(msg){
+ //       // console.log(JSON.parse(msq));
+ //        console.log(msq);
+ //    });
+
+     socket.on('chat message', function(msg){
+         $('#messages').append($('<li>').text(msg));
+         console.log(msg);
+        // console.log(JSON.parse(msg));
+     });
+
+     socket.on('initMap', function(msg){
+        var fig;
+         function setColor(type) {
+             /* Тип перешкод, type
+              * 1 - Ліс
+              * 2 - Болото
+              * 3 - Гора
+              * 4 - Озеро
+              */
+
+             if (type == 1) return 'LightGreen';
+             if (type == 2) return 'Tan';
+             if (type == 3) return 'DimGray';
+             if (type == 4) return 'SkyBlue';
+
+         }
+         //$('#messages').append($('<li>').text(msg));
+         //console.dir(msg);
+         //console.log(msg.fіgura);
+          if(msg.fіgura == 1) {
+             //малюємо трикутник
+             //console.log('трикутник')
+              console.dir(msg);
+              addTriangleToSvg(setColor(msg.type),msg.x1,600 - msg.y1, msg.x2,600 - msg.y2,msg.x3,600 - msg.y3);
+
+         }
+
+         if(msg.fіgura == 2) {
+             //малюємо прямокутник
+             //console.log('прямокутник')
+
+             addRectangleToSvg(setColor(msg.type),msg.x1,600 - msg.y1, msg.x2,600 - msg.y2,msg.x3,600 - msg.y3, msg.x4,600 - msg.y4);
+
+         }
+
+         if(msg.fіgura == 3) {
+             //малюємо еліпс
+            // addElipseToSvg(color,x,y,rx,ry)
+  //           console.dir(msg);
+
+             addElipseToSvg(setColor(msg.type),msg.cx,600 - msg.cy, msg.rx, msg.ry);
+
+
+         }
+        // console.log(JSON.parse(msg));
+     });
+
+     function addTriangleToSvg(color,x1,y1,x2,y2,x3,y3) {
+
+         //circle.addEventListener('click', click, false);
+ console.log(color,x1,y1,x2,y2,x3,y3);
+         var c1 = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+         c1.setAttribute("points",x1 + "," + y1 + "," + x2 + "," + y2 + "," + x3 + "," + y3);
+         c1.setAttribute("fill", color);
+         document.getElementById('mySvg').appendChild(c1);
+     }
+
+     function addRectangleToSvg(color,x1,y1,x2,y2,x3,y3,x4,y4) {
+
+         var c2 = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+         c2.setAttribute("points",x1 + "," + y1 + "," + x2 + "," + y2 + "," + x3 + "," + y3 + "," + x4 + "," + y4);
+         c2.setAttribute("fill", color);
+         document.getElementById('mySvg').appendChild(c2);
+     }
+
+     function addElipseToSvg(color,cx,cy,rx,ry) {
+     //<ellipse cx="100" cy="70" rx="85" ry="55" fill="Tan" />
+
+         var c3 = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+         c3.setAttribute("cx","" + cx);
+         c3.setAttribute("cy","" + cy);
+         c3.setAttribute("rx","" + rx);
+         c3.setAttribute("ry","" + ry);
+         c3.setAttribute("fill", color);
+         document.getElementById('mySvg').appendChild(c3);
+     }
+
+
+         function changeSvg() {
+       var mySvg = document.getElementById('mySvg');
+       // console.log(mySvg);
+        //circle.addEventListener('click', click, false);
+
+        var c1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c1.setAttributeNS(null,"cx","100px");
+        c1.setAttributeNS(null,"cy","100px");
+        c1.setAttributeNS(null,"r","6px");
+        c1.setAttributeNS(null,"fill", "#0A0EF2");
+        c1.setAttributeNS(null,"opacity", "0.5");
+       document.getElementById('mySvg').appendChild(c1);
+       // var svgDocument = evt.target.ownerDocument;
+
+     var c2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+     c2.setAttributeNS(null,"cx","300px");
+     c2.setAttributeNS(null,"cy","300px");
+     c2.setAttributeNS(null,"r","7px");
+     c2.setAttributeNS(null,"fill", "red");
+     c2.setAttributeNS(null,"opacity", "0.5");
+        document.getElementById('mySvg').appendChild(c2);
+
+        var c3= document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c3.setAttributeNS(null,"cx","200px");
+        c3.setAttributeNS(null,"cy","200px");
+        c3.setAttributeNS(null,"r","7px");
+        c3.setAttributeNS(null,"fill", "red");
+        c3.setAttributeNS(null,"opacity", "0.5");
+        document.getElementById('mySvg').appendChild(c3);
+        // create and append a red <rect> element into the group, at index 0 (before the green rectangle)
+       // var c4= document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+
+        //c4.setAttrValues( { x:600, y:550, r:50, fill:"#0003A3" } );
+
+    }
+
+
+ </script>
+
+ </body>
+ </html>
