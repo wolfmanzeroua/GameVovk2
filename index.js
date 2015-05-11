@@ -78,6 +78,7 @@ function XMen(clan, name, level, features, hairСolor, beard, tits, sex, health,
     this.walkedAllWay = false;
     this.nextDestinationPointX = x;
     this.nextDestinationPointY = y;
+    this.caсhePath = [];            /// для кешування шляху обходу
 
 
 }
@@ -108,7 +109,7 @@ XMen.prototype = {
                 // логування в історії двох героїв
                 this.history.push(this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
                 hero.history.push(this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
-            };
+            }
 
             if (hero.health <= 0) {
                 console.log(this.showHeroInfo() +' знищив ' + hero.name);
@@ -190,7 +191,7 @@ XMen.prototype = {
 
         var _x, x1, x2, x3 = 0;
         var _y, y1, y2, y3 = 0;
-        var x2 =0;
+        var x2 = 0;
         var y2 = 0;
         var minD = 1001;
         var minI = -1;
@@ -199,17 +200,20 @@ XMen.prototype = {
         var distanceTo = 0;
         var cosineAngle = 0;
         var _point = {};
-        var logic = (gameMode == 'Deathmatch') ? true : false;
+        var logic = gameMode == 'Deathmatch';
 
-        // генерування довільного вектора напряму
+        var indexOfthisHero = heroes.indexOf(this);
 
-        if (this.lookForTrouble == true && numberOfLivingHero > 1 ) { // Логан або інші мачо має цю властивість, тому хоче переслідувати противника
+
+        if (this.lookForTrouble == true && numberOfLivingHero > 1) { // Логан або інші мачо має цю властивість, тому хоче переслідувати противника
+            console.log('lookForTrouble in working');
 
             // цикл пошуку противників, має шукати найближчого противника і брати на нього напрямок
 
-            for (var i = numberOfHero - 1; i >= 0; i--) {
-                logic = logic ? true :this.clan != heroes[i].clan;
+            for (var i = heroes.length - 1; i >= 0; i--) {
+                logic = logic ? true : this.clan != heroes[i].clan;
 
+                console.log(logic);
                 if (this != heroes[i] && heroes[i].health > 0 && logic) {
                     distanceTo = Math.pow((heroes[i].x - this.x) * (heroes[i].x - this.x) + (heroes[i].y - this.y) * (_y = heroes[i].y - this.y), 0.5);
                     if (minD > distanceTo) {
@@ -227,13 +231,27 @@ XMen.prototype = {
 
         // інші герої отримують довільний напрямок
         else {
-            //console.log('Персонаж', this.name,' номер точки маршруту',this.PathMapStep);
-            // _point = heroMovePath.call(this, this.PathMapStep);
-            //
-            //this.nextDestinationPointX = _x = _point.x;
-            //this.nextDestinationPointY = _y = _point.y;
-            //this.walkedAllWay = _point.isLast;
+            if (this.caсhePath.length > 0) {
+                console.log(this.showHeroInfo(), ' У героя в кеші є ще точки шляху', this.caсhePath);
+                for (var i = this.caсhePath.length - 1, j = 0; i >= 0 && j < this.speed; i--, j++) {
 
+                    this.x = this.caсhePath[i].x;
+                    this.y = this.caсhePath[i].y;
+
+                    this.caсhePath.pop();
+
+                    moveHeroOnMap(this, indexOfthisHero);
+                    // на кожній координаті робимо перевірку...
+                    console.log(this.showHeroInfo() + ' перемістився в обході з свого кеша');
+                    if (this.areaCheck()) { //вороги знайдено далі йти нема змсісту
+                        console.log('при обході перешкоди відбувся бій');
+
+                        return false;
+                    }  // герой зупиняэться, щоб не робив ще раз чек ареа
+                }
+                // герой пройшов шлях із кеша і далі нічого йти
+                return false;
+            }
 
             if (this.nextDestinationPointX == this.x && this.nextDestinationPointY == this.y) {
                 this.PathMapStep++;
@@ -249,136 +267,117 @@ XMen.prototype = {
             }
             else {
                 _x = this.nextDestinationPointX;
-                _y =this.nextDestinationPointY;
+                _y = this.nextDestinationPointY;
             }
         }
 
+                distanceTo = Math.pow((_x - this.x) * (_x - this.x) + (_y - this.y) * (_y - this.y), 0.5);
 
-        // генерування векторe в напрямку противника
-        // визначення кута між вектором і обєктом, вважаємо що швидкість обєкта - це гіпотенуза, для визначення координати нової точки треба мало побабратися
-        //cosineAngle = vector.scalar(this.x, this.y, _x,_y) / (vector.module(this.x, this.y) * vector.module(_x,_y));
-        //console.log(Math.acos(cosineAngle));
-        //_dirX = this.speed * cosineAngle;
-        //_dirY = this.speed * Math.sin(Math.acos(cosineAngle));
+                _dirX = (_x - this.x) * this.speed / distanceTo;
+                _dirY = (_y - this.y) * this.speed / distanceTo;
 
-
-        //distanceTo = Math.pow((_x - this.x)*(_x - this.x) + (_y - this.y)*(_y - this.y),0.5);
-        //console.log('Відстань до обєкта ',distanceTo);
-
-        //_dirX = _x * this.speed/distanceTo;
-        //_dirY = _y * this.speed/distanceTo;
-
-        distanceTo = Math.pow((_x - this.x) * (_x - this.x) + (_y - this.y) * (_y - this.y), 0.5);
-//console.log('выдстань до кінцевої точки',distanceTo);
-        // вирахувати супротив вітру !!!!!!!! ы запистаи в windresistance дыстанц - резыстанц в умову
-
-
-
-        // перевірка чи поряд нема противника, якщо є і ближче ніж крок, - стишити хід.
-        //Якщо противник на ощній прямі або поряд в области ітаки наступним буде бій
-        // для двох героїв працюэ потребує доробки і винесення в окремий метод.
-
-
-        _dirX = (_x - this.x) * this.speed / distanceTo;
-        _dirY = (_y - this.y) * this.speed / distanceTo;
-        //  console.log('проміжкові',distanceTo, _dirX , _dirY);
-
-        // Визначення косинуса між векторами покищо не пригодилось.. а крові попило...
-        //cosineAngle = vector.scalar(this.x, this.y, _x,_y) / (vector.module(this.x, this.y) * vector.module(_x,_y));
-        //console.log(Math.acos(cosineAngle));
-
-        if (distanceTo > this.speed) {
-            //this.x = this.x + Math.floor(_dirX);
-            //this.y = this.y + Math.floor(_dirY);
-            x2 = this.x + Math.round(_dirX);
-            y2 = this.y + Math.round(_dirY);
-            //console.log(this.x, this.y);
-
-        }
-
-        else {
-            x2 = _x;
-            y2 = _y;
-        }
-
-        _x = this.x; _y = this.y;
-        x3 = this.x; y3 = this.y;
-
-        var barrierOrEnemyDetected = false;
-        var path =[];
-
-        // берем кожну цілу координату і здійснюємо перевірку на ворога і на перешкоду.
-
-
-        while (!( Math.round(_x) == x2 &&  Math.round(_y) == y2)&&!barrierOrEnemyDetected) {
-            _x = _x + _dirX / this.speed;
-            _y = _y + _dirY / this.speed;
-//console.log(_x,_y,x3,y3);
-            // координата змінилася
-            //console.log('Кінцева ',x2,y2,' розкадровка шляху:',Math.round(_x),Math.round(_y),_x,_y)
-            if ((x3 != Math.round(_x)) || (y3 != Math.round(_y))) {
-
-                //якщо ячейка карти != 0  тобто є перешкода - запускаємо алгоритм обходу перешкод.
-
-
-                if (myLocation.map[Math.round(_x)][Math.round(_y)] != 0) {
-                    barrierOrEnemyDetected = true;
-                    console.log( this.showHeroInfo() + ' натрапив на перешкоду',[Math.round(_x)], [Math.round(_y)],' типу:', myLocation.map[Math.round(_x)][Math.round(_y)]);
-
-
-                    // Алгоритм не працює... покишо..
-// Глюк найдено.. наступна точка  маршруту попадала у перешкоду ........ :))
-                    if (path = myLocation.findPath(this.x, this.y, this.nextDestinationPointX,this.nextDestinationPointY, this.speed)){
-                        // console.log('Урра--- отримав масив', path.length-1, path[10].x,path[10].y )
-                        //          if (null)
-                        barrierOrEnemyDetected =true;
-// були граблі неправильної роботи коду коли довжина шляху залишалась меншою кроку
-                        for (var i = path.length-1, j =0; i >= 0 && j < this.speed; i--, j++) {
-                            this.x = path[i].x;
-                            this.y = path[i].y;
-                            moveHeroOnMap(this,0);
-                            // на кожній координаті робимо перевірку...
-                            console.log(this.showHeroInfo() +' перемістився в обході');
-                            if (this.areaCheck()){ //вороги знайдено далі йти нема змсісту
-                                console.log('при обході перешкоди відбувся бій');
-
-                                return false;
-                            }  // герой зупиняэться, щоб не робив ще раз чек ареа
-                        }
-                        // якщо шляху не знайдено.. тепік
-                    }
-                    return false;
-                    // якщо шлях не знайдено завершуэмо ходьбу потребуэ доробки логыки !!!!!!!!!!!!!!!!!!!!!
+                if (distanceTo > this.speed) {
+                    x2 = this.x + Math.round(_dirX);
+                    y2 = this.y + Math.round(_dirY);
+                    //console.log(this.x, this.y);
 
                 }
-                //x3 = Math.round(_x);
-                //y3 = Math.round(_y);
 
-            }
-        }
-        // якщо барэрыв не було в не було ворога = пролітаємо відрізок
-        if (!barrierOrEnemyDetected) {
-            this.x = x2;
-            this.y = y2;
-            console.log(this.showHeroInfo() +' перемістився');
-            this.history.push(this.showHeroInfo() +' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
+                else {
+                    x2 = _x;
+                    y2 = _y;
+                }
 
-        }
+                _x = this.x;
+                _y = this.y;
+                x3 = this.x;
+                y3 = this.y;
+
+                var barrierOrEnemyDetected = false;
+                //var path = [];
+
+                // берем кожну цілу координату і здійснюємо перевірку на ворога і на перешкоду.
+
+
+                while (!( Math.round(_x) == x2 && Math.round(_y) == y2) && !barrierOrEnemyDetected) {
+                    _x = _x + _dirX / this.speed;
+                    _y = _y + _dirY / this.speed;
+//console.log(_x,_y,x3,y3);
+                    // координата змінилася
+                    //console.log('Кінцева ',x2,y2,' розкадровка шляху:',Math.round(_x),Math.round(_y),_x,_y)
+                    if ((x3 != Math.round(_x)) || (y3 != Math.round(_y))) {
+
+                        //перевірка на наявність  ворга
+                        if (this.areaCheck()) { //вороги знайдено далі йти нема змісту
+                            console.log('при обході перешкоди відбувся бій');
+
+                            return false;
+                        }  // герой зупиняється, щоб не робив ще раз чек ареа
+
+                        //якщо ячейка карти != 0  тобто є перешкода - запускаємо алгоритм обходу перешкод.
+                        if (myLocation.map[Math.round(_x)][Math.round(_y)] != 0) {
+                            barrierOrEnemyDetected = true;
+                            console.log(this.showHeroInfo() + ' натрапив на перешкоду', [Math.round(_x)], [Math.round(_y)], ' типу:', myLocation.map[Math.round(_x)][Math.round(_y)]);
+
+
+                            // Алгоритм не працює... покишо..
+// Глюк найдено.. наступна точка  маршруту попадала у перешкоду ........ :))
+                            if (this.caсhePath = myLocation.findPath(this.x, this.y, this.nextDestinationPointX, this.nextDestinationPointY, this.speed)) {
+
+                                // console.log('Урра--- отримав масив', path.length-1, path[10].x,path[10].y )
+                                //          if (null)
+                                //        barrierOrEnemyDetected =true;
+
+                                for (var i = this.caсhePath.length - 1, j = 0; i >= 0 && j < this.speed; i--, j++) {
+
+                                    this.x = this.caсhePath[i].x;
+                                    this.y = this.caсhePath[i].y;
+
+                                    this.caсhePath.pop();
+
+                                    moveHeroOnMap(this, indexOfthisHero);
+                                    // на кожній координаті робимо перевірку...
+                                    console.log(this.showHeroInfo() + ' перемістився в обході');
+                                    if (this.areaCheck()) { //вороги знайдено далі йти нема змісту
+                                        console.log('при обході перешкоди відбувся бій');
+
+                                        return false;
+                                    }  // герой зупиняється, щоб не робив ще раз чек ареа
+                                }
+                                // якщо шляху не знайдено.. тупік
+                            }
+                            return false;
+                            // якщо шлях не знайдено завершуэмо ходьбу потребує доробки логыки !!!!!!!!!!!!!!!!!!!!!
+
+                        }
+                        //x3 = Math.round(_x);
+                        //y3 = Math.round(_y);
+
+                    }
+                }
+                // якщо барэрыв не було в не було ворога = пролітаємо відрізок
+                if (!barrierOrEnemyDetected) {
+                    this.x = x2;
+                    this.y = y2;
+                    console.log(this.showHeroInfo() + ' перемістився');
+                    this.history.push(this.showHeroInfo() + ' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
+
+                }
 
 // перевірка НЕвиходу за межі локації
 
-        //this.x = (this.x >= myLocation.mapMaxX) ? myLocation.mapMaxX : ((this.x <= 0) ? 0 : this.x);
-        //this.y = (this.y >= myLocation.mapMaxY) ? myLocation.mapMaxY : ((this.y <= 0) ? 0 : this.y);
+                //this.x = (this.x >= myLocation.mapMaxX) ? myLocation.mapMaxX : ((this.x <= 0) ? 0 : this.x);
+                //this.y = (this.y >= myLocation.mapMaxY) ? myLocation.mapMaxY : ((this.y <= 0) ? 0 : this.y);
 
     },
 
     levelUp: function () {
         this.level += 0.2;
-        this.maxHealth = Math.round(this.maxHealth * this.level);
-        this.power = Math.round(this.power * this.level);
-        this.damage = Math.round(this.damage * this.level);
-        this.specDamage = Math.round(this.specDamage * this.level);
-        this.chanceSpecDamage = Math.round(this.chanceSpecDamage * this.level);
+        this.maxHealth = this.maxHealth +  Math.round(this.maxHealth * 0.2);
+        this.power = this.power + Math.round(this.power * 0.2);
+        this.damage = this.damage + Math.round(this.damage * 0.2);
+        this.specDamage = this.specDamage + Math.round(this.specDamage * 0.2);
+        this.chanceSpecDamage = this.chanceSpecDamage + Math.round(this.chanceSpecDamage * 0.2);
         console.log(this.showHeroInfo() +'досяг нового рівня, покращивши свої характеристики макс.здаровя:', this.maxHealth,', сила:', this.power,', атака:', this.damage,', спец. атака:', this.specDamage);
         //console.log(this.name, '(', this.health, ')досяг нового рівня, покращивши свої характеристики макс.здаровя:', this.maxHealth,', сила:', this.power,', атака:', this.damage,', спец. атака:', this.specDamage);
 
@@ -403,15 +402,10 @@ XMen.prototype = {
     // повторювався код пошуку найближчого противника... треба буде реалызувати
     findingNearest: function () {
     }
-}
+};
 
 Vampires.prototype = Object.create(XMen.prototype);
 Vampires.prototype.constructor = Vampires;
-
-
-
-
-
 
 
 
@@ -649,6 +643,7 @@ module.exports.setMoveTo = function(heroName,x,y) {
         else {
             isFind.nextDestinationPointX = x;
             isFind.nextDestinationPointY = y;
+            isFind.walkedAllWay = false;
             console.log('Змінено точку призначення',isFind.name,' тепер він прямує в :',isFind.nextDestinationPointX, isFind.nextDestinationPointY);
             return 'Hero: ' + isFind.name + ' recived new point of destenition';
         }
@@ -707,6 +702,10 @@ module.exports.newSettings = function(newSettingsOfHero) {
 
                 // тру або фалсе - розморозити...
                 if (k == 'isFreeze')  isFind.freezeStepLeft = isFind[k] ? 1000 : 0;
+                if (k == 'nextDestinationPointX') {
+                    isFind.walkedAllWay = false;
+                    isFind.caсhePath = [];
+                }
 
 
                 logChanges += ' ' + k + ' = ' + isFind[k] + typeof (isFind[k]);
@@ -726,7 +725,7 @@ module.exports.heroCreate = function(name, clan, x, y) {
         return 'Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(x,y);
     }
     else {
-        console.log('validate hero passed')
+        console.log('validate hero passed');
         // console.log(name, name.length,(name == 'Wolverine') );
         //XMen(clan, name, level, features, hairСolor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
         if (name == 'Wolverine') {
@@ -787,18 +786,6 @@ module.exports.heroArray = function(antiCaching) {
     if (!heroes) return 1;
 
 
-}
+};
 
 
-// функції для відображення на на Батлфілді !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-//function checkHero(heroName) {
-//
-//    var isFind;
-//
-//    for (var i = heroes.length - 1; i >= 0; i--) {
-//        if (heroes[i].name == heroName) {
-//            isFind = heroes[i];
-//        }
-//    }
-//    return isFind;
-//}

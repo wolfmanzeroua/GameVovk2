@@ -35,7 +35,10 @@ function initMap (app) {
 
 
     app.get('/', function(req, res){
-        res.sendfile('./public/battlefield.html');
+        res.sendfile('./postRestAPIandButleField.html');
+    });
+    app.get('/img/:file', function(req, res){
+        res.sendfile('./img/' + req.params.file);
     });
 
     io.on('connection', function(socket){
@@ -91,7 +94,7 @@ function initMap (app) {
     });
 
     http.listen(3000, function(){
-        console.log('listening on *:3000');
+        console.log('Socked listening on *:3000');
     });
 }
 

@@ -2,29 +2,41 @@
 <html>
 <head>
     <title>BattleField</title>
-    <!--<style>-->
-        <!--* { margin: 0; padding: 0; box-sizing: border-box; }-->
-        <!--body { font: 13px Helvetica, Arial; }-->
-        <!--form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%;  }-->
-        <!--form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }-->
-        <!--form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }-->
-        <!--#messages { list-style-type: none; margin: 0; padding: 0; }-->
-        <!--#messages li { padding: 5px 10px; }-->
-        <!--#messages li:nth-child(odd) { background: #eee; }-->
-    <!--</style>-->
+    <style>-->
+    .list {
+        width: auto;
+        height: auto;
+        background-color: white;
+        padding: 3px;
+        clear:both;
+        border: 1px solid lightgray;
+    }
+
+
+    </style>
 </head>
 <body>
 
 
+<div style="width: 224px; height: 600px; float: left; border: 1px solid lightgray;">
+<div style =" background-color: lightsteelblue;  float: none; border: 1px solid lightgray; text-align: center;" ><b> List of Heroes </b></div>
+<div id = "list" style =" width: auto; height: auto; background-color: white; float: none; border: 1px solid lightgray; position: relative " ><b> </b></div>
+</div>
 
 <svg id="mySvg" width="801" height="601" style="background-color: whitesmoke"  xmlns="http://www.w3.org/2000/svg">
-    <!-- <circle cx="50" cy="50" r="40"  fill="LightGreen" />
-     <polygon points="200,10 250,190 160,210" style="fill:lime" />
-     <polygon points="700,550 700,600, 800,600, 800,550" style="fill:DimGray" />
+    <text x="0" y="598" fill="red"><tspan style="font-size: 10px;">(0,0)</tspan></text>
+    <text x="0" y="300" fill="red"><tspan style="font-size: 10px;">(0,300)</tspan></text>
+    <text x="0" y="10" fill="red"><tspan style="font-size: 10px;">(0,600)</tspan></text>
+
+    <text x="770" y="598" fill="red"><tspan style="font-size: 10px;">(800,0)</tspan></text>
+    <text x="760" y="300" fill="red"><tspan style="font-size: 10px;">(800,300)</tspan></text>
+    <text x="760" y="10" fill="red"><tspan style="font-size: 10px;">(800,600)</tspan></text>
+
+    <text x="380" y="598" fill="red"><tspan style="font-size: 10px;">(400,0)</tspan></text>
+    <text x="380" y="10" fill="red"><tspan style="font-size: 10px;">(400,600)</tspan></text>
 
 
-     <ellipse cx="100" cy="70" rx="85" ry="55" fill="Tan" />
-     <ellipse cx="700" cy="100" rx="100" ry="200"  style="fill:SkyBlue ;" /> -->
+
 
 </svg>
 
@@ -42,7 +54,7 @@
 
 
     socket.on('initMap', function(msg){
-        var fig;
+
         function setColor(type) {
             /* Тип перешкод, type
              * 1 - Ліс
@@ -132,12 +144,9 @@
     heroNumber = msg.heroNumber;
         console.dir(msg);
 
-        var areaColor = '#0A0EF2';
-        // console.log(mySvg);
+      //  var areaColor = '#0A0EF2';
+         console.log("" + hero.name + heroNumber);
         //circle.addEventListener('click', click, false);
-
-
-
 
         var c1 = document.getElementById("" + hero.name + heroNumber);
         c1.setAttribute("cx", hero.x + "px");
@@ -147,11 +156,25 @@
 
         if (hero.health <= 0) {
             c1.setAttribute("fill", "black");
+
         }
 
-         //   c1.setAttribute("opacity", "0.5");
-      //  document.getElementById('mySvg').appendChild(c1);
-    }
+
+
+        // Добавляємо героя в DIV Геро ліст
+
+        var heroDiv = document.getElementById( "list" + hero.name + heroNumber);
+        //newDiv.setAttribute("id", "" + hero.name + heroNumber);
+        //newDiv.setAttribute("class", "list");
+        heroDiv.innerHTML = hero.name +  "\u2764" + hero.health + " (" + hero.x + "," + hero.y + ")";
+        if (hero.health <= 0) {
+            heroDiv.style.color = "black";
+            heroDiv.innerHTML = "\u2671" + hero.name +  "\u2764" + hero.health + " (" + hero.x + "," + hero.y + ")";
+
+        }
+
+
+         }
 
     function initHero  (msg) {
         hero = msg.hero;
@@ -176,6 +199,16 @@
         c1.setAttribute("fill", areaColor);
         c1.setAttribute("opacity", "0.5");
         document.getElementById('mySvg').appendChild(c1);
+
+        // Добавляємо героя в DIV Геро ліст
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("id", "list" + hero.name + heroNumber);
+        newDiv.setAttribute("class", "list");
+        newDiv.style.color = areaColor;
+        var node = document.createTextNode(hero.name +  "\u2764" + hero.health + " (" + hero.x + "," + hero.y + ")");
+        newDiv.appendChild(node);
+        document.getElementById('list').appendChild(newDiv);
+
     }
 
 

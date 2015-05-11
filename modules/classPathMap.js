@@ -1,13 +1,13 @@
 var  heroMovePath = function (heroCounterPassedPoint) {
 
     var DefaultHeroDestinationPointOfXMen =
-        [[1, 40, 88, 80, 260, 790, 352, 440],
-         [1, 100, 250, 540, 520, 590, 260, 20 ]];
+        [[1, 50, 70, 80, 260, 580, 600, 790, 600, 352, 440],
+         [1, 95, 250, 540, 520, 490,260, 590, 290, 260, 20 ]];
 
      //console.log('Hello',  DefaultHeroDestinationPointOfXMen)
     var  DefaultHeroDestinationPointOfVampires =
-        [[800, 300, 20, 10, 650, 450, 100, 480],
-        [50, 600, 1, 300, 500, 5, 600, 300]];
+        [[800, 550, 300, 220, 20, 10, 120, 610, 450, 100, 480],
+        [50, 290, 600, 230,1, 300, 300, 500, 5, 600, 300]];
 
 
 
