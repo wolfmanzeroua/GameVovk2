@@ -1,40 +1,38 @@
 var  heroMovePath = function (heroCounterPassedPoint) {
 
     var DefaultHeroDestinationPointOfXMen =
-        [[1, 50, 70, 80, 260, 580, 600, 790, 600, 352, 440],
-         [1, 95, 250, 540, 520, 490,260, 590, 290, 260, 20 ]];
+        [{x:1, y:1},{x:50, y:95}, {x:70, y:250}, {x:80, y:540}, {x:260, y:520}, {x:580, y:490}, {x:600, y:260}, {x:790, y:590}, {x:600, y:290}, {x:352, y:260}, {x:440, y:20}];
 
      //console.log('Hello',  DefaultHeroDestinationPointOfXMen)
     var  DefaultHeroDestinationPointOfVampires =
-        [[800, 550, 300, 220, 20, 10, 120, 610, 450, 100, 480],
-        [50, 290, 600, 230,1, 300, 300, 500, 5, 600, 300]];
+        [{x:800, y:50},{x:550, y:290}, {x:300, y:600}, {x:220, y:230}, {x:20, y:1}, {x:10, y:300}, {x:120, y:300}, {x:610, y:500}, {x:450, y:5},{x:100, y:600}, {x:480, y:300}];
 
 
 
     var endOfPath = false;
 
     if (this.clan == 'X-Men') {
-        if  (heroCounterPassedPoint > DefaultHeroDestinationPointOfXMen[0].length -1){
-            heroCounterPassedPoint = DefaultHeroDestinationPointOfXMen[0].length-1;
+        if  (heroCounterPassedPoint > DefaultHeroDestinationPointOfXMen.length -1){
+            heroCounterPassedPoint = DefaultHeroDestinationPointOfXMen.length-1;
             endOfPath = true;
         }
        //console.log(this.name, this.clan,' точка маршруту:',heroCounterPassedPoint,  DefaultHeroDestinationPointOfXMen[0][heroCounterPassedPoint], DefaultHeroDestinationPointOfXMen[1][heroCounterPassedPoint]);
         return {
-            x:  DefaultHeroDestinationPointOfXMen[0][heroCounterPassedPoint],
-            y:  DefaultHeroDestinationPointOfXMen[1][heroCounterPassedPoint],
+            x:  DefaultHeroDestinationPointOfXMen[heroCounterPassedPoint].x,
+            y:  DefaultHeroDestinationPointOfXMen[heroCounterPassedPoint].y,
             isLast: endOfPath
         }
     }
 
     if (this.clan == 'Vampires') {
-        if  (heroCounterPassedPoint >  DefaultHeroDestinationPointOfVampires[0].length -1) {
-            heroCounterPassedPoint = DefaultHeroDestinationPointOfVampires[0].length - 1;
+        if  (heroCounterPassedPoint >  DefaultHeroDestinationPointOfVampires.length -1) {
+            heroCounterPassedPoint = DefaultHeroDestinationPointOfVampires.length - 1;
             endOfPath = true;
         }
       //  console.log(this.name, this.clan,' точка маршруту:',heroCounterPassedPoint,  DefaultHeroDestinationPointOfVampires[0][heroCounterPassedPoint], DefaultHeroDestinationPointOfVampires[1][heroCounterPassedPoint]);
         return {
-            x:  DefaultHeroDestinationPointOfVampires[0][heroCounterPassedPoint],
-            y:  DefaultHeroDestinationPointOfVampires[1][heroCounterPassedPoint],
+            x:  DefaultHeroDestinationPointOfVampires[heroCounterPassedPoint].x,
+            y:  DefaultHeroDestinationPointOfVampires[heroCounterPassedPoint].y,
             isLast: endOfPath
         }
 

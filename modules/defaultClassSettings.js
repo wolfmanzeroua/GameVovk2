@@ -4,7 +4,7 @@ var defaultClassSettings = function ( name, clan, x, y) {
         clan: clan,
         name: name,
         features: ' defaul hero dount have features',
-        hairСolor: 'does not matter',
+        hairColor: 'does not matter',
         beard: 'does not matter',
         tits: 'does not matter',
         sex: 'does not matter',

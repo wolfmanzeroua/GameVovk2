@@ -1,5 +1,5 @@
 
-var heroMovePath = require('./modules/classPathmap.js');
+var heroMovePath = require('./modules/classPathMap.js');
 var defSet = require('./modules/defaultClassSettings.js');
 var myLocation = require('./modules/location.js');
 var initHeroOnMap = require('./routes/socketRoutes.js').initHero;
@@ -22,16 +22,16 @@ var startGame = false;
 
 
 // клас потомок
-function Vampires(clan, name, level, features, hairСolor, beard, tits, sex, health, power, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, hasVampBite, x, y) {
+function Vampires(clan, name, level, features, hairColor, beard, tits, sex, health, power, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, hasVampBite, x, y) {
     XMen.apply(this, arguments);
 }
 
 // клас нащалок
-function XMen(clan, name, level, features, hairСolor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
+function XMen(clan, name, level, features, hairColor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
     this.clan = clan;
     this.name = name;
     this.features = features;
-    this.hairСolor = hairСolor;
+    this.hairСolor = hairColor;
     this.beard = beard;
     this.tits = tits;
     this.sex = sex;

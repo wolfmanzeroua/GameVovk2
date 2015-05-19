@@ -1,6 +1,6 @@
 // клас локації
 var myLocation = new Location(800, 600, 0, 0, 10, 20, 0.2, 1, 0.2, 3000, 4000);
-var heroMovePath = require('./classPathmap.js');
+var heroMovePath = require('./classPathMap.js');
 myLocation.barriersInit();
 myLocation.classPathPointValidation();
 
