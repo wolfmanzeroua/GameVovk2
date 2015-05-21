@@ -2,10 +2,14 @@
 var heroMovePath = require('./modules/classPathMap.js');
 var defSet = require('./modules/defaultClassSettings.js');
 var myLocation = require('./modules/location.js');
+var personsHistoryDB = require('./modules/mongoDbClient.js');
+var personsDB = require('./modules/mongooseDBClient.js');
+
 var initHeroOnMap = require('./routes/socketRoutes.js').initHero;
 var moveHeroOnMap = require('./routes/socketRoutes.js').moveHeroOnMap;
-var gameSpedTimer=0;
 
+
+var gameSpedTimer=0;
 var numberOfLivingHero = 0;
 var numberOfHero = 0;
 var numberOfSteps = 0;
@@ -27,7 +31,7 @@ function Vampires(clan, name, level, features, hairColor, beard, tits, sex, heal
 }
 
 // клас нащалок
-function XMen(clan, name, level, features, hairColor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
+function XMen(clan, name, level, features, hairColor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y, heroID) {
     this.clan = clan;
     this.name = name;
     this.features = features;
@@ -71,7 +75,7 @@ function XMen(clan, name, level, features, hairColor, beard, tits, sex, health, 
     this.lookForTrouble = lookForTrouble;
 
     // масив для збереження історії героя
-    this.history = [];
+    //this.history = [];
     this.x = x;
     this.y = y;
     this.PathMapStep = 0;
@@ -79,6 +83,7 @@ function XMen(clan, name, level, features, hairColor, beard, tits, sex, health, 
     this.nextDestinationPointX = x;
     this.nextDestinationPointY = y;
     this.caсhePath = [];            /// для кешування шляху обходу
+    this.heroID = heroID;
 
 
 }
@@ -97,8 +102,11 @@ XMen.prototype = {
             console.log(this.showHeroInfo() +' атакував ' + hero.showHeroInfo() +'), нанесено шкоди '+ _totalDamage + ' пункти');
 
             // логування в історії двох героїв
-            this.history.push(this.showHeroInfo() +' атакував ' + hero.showHeroInfo() +'), нанесено шкоди '+ _totalDamage + ' пункти');
-            hero.history.push(this.name + '('+ this.health + ') атакував ' + hero.name + '(', hero.health, '), нанесено шкоди'+ _totalDamage + ' пункти');
+
+            //this.history.push(this.showHeroInfo() +' атакував ' + hero.showHeroInfo() +'), нанесено шкоди '+ _totalDamage + ' пункти');
+            //hero.history.push(this.name + '('+ this.health + ') атакував ' + hero.name + '(', hero.health, '), нанесено шкоди'+ _totalDamage + ' пункти');
+            personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +' атакував ' + hero.showHeroInfo() +'), нанесено шкоди '+ _totalDamage + ' пункти');
+            personsHistoryDB.personsAddLog(hero.heroID, this.showHeroInfo() +' атакував ' + hero.showHeroInfo() +'), нанесено шкоди '+ _totalDamage + ' пункти');
 
             //якщо відбувся суперудар і це був вампір
             if (_specFeature && this.hasVampBite) {
@@ -107,16 +115,23 @@ XMen.prototype = {
                 console.log(this.showHeroInfo() + ' напився крові і відновив ' + _totalDamage + ((hero.health < 0) ? hero.health : 0) + ' пунктів здоровя');
 
                 // логування в історії двох героїв
-                this.history.push(this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
-                hero.history.push(this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
+
+                //this.history.push(this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
+                //hero.history.push(this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
+                personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
+                personsHistoryDB.personsAddLog(hero.heroID, this.showHeroInfo() + ' напився крові і відновив '+ (_totalDamage + ((hero.health < 0) ? hero.health : 0)) + ' пунктів здоровя');
+
             }
 
             if (hero.health <= 0) {
                 console.log(this.showHeroInfo() +' знищив ' + hero.name);
 
                 // логування в історії двох героїв
-                this.history.push(this.showHeroInfo() +' знищив ' + hero.name);
-                hero.history.push(this.name + '(' + this.health + ')знищив ' + hero.name);
+                //this.history.push(this.showHeroInfo() +' знищив ' + hero.name);
+                //hero.history.push(this.name + '(' + this.health + ')знищив ' + hero.name);
+
+                personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +' знищив ' + hero.name);
+                personsHistoryDB.personsAddLog(hero.heroID, this.showHeroInfo() +' знищив ' + hero.name);
 
                 // тут зменшуємо кількість героїв
                 numberOfLivingHero--;
@@ -170,6 +185,11 @@ XMen.prototype = {
                         if ((heroes[i].health > 0) && (this.health > 0)) {
                             console.log(this.showHeroInfo() +'попав в зону атаки', heroes[i].showHeroInfo());
                             heroes[i].figth(this);
+
+                           // відправка логів в БД
+                            personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +'попав в зону атаки', heroes[i].showHeroInfo());
+                            personsHistoryDB.personsAddLog(heroes[i].heroID, this.showHeroInfo() +'попав в зону атаки', heroes[i].showHeroInfo());
+
                             // return true;    // не передається, герой отримав пілюлі і продовжує  рух.
                         }
                     }
@@ -243,6 +263,8 @@ XMen.prototype = {
                     moveHeroOnMap(this, indexOfthisHero);
                     // на кожній координаті робимо перевірку...
                     console.log(this.showHeroInfo() + ' перемістився в обході з свого кеша');
+                    personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +' перемістився в обході з свого кеша');
+
                     if (this.areaCheck()) { //вороги знайдено далі йти нема змсісту
                         console.log('при обході перешкоди відбувся бій');
 
@@ -263,7 +285,8 @@ XMen.prototype = {
                 this.walkedAllWay = _point.isLast;
                 // console.log('this.walkedAllWay',this.walkedAllWay);
 
-                //    console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
+                    console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
+                personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' отримав новий машрут, прямує до [' + _x + ',' + _y + '] точка маршруту' + this.PathMapStep);
             }
             else {
                 _x = this.nextDestinationPointX;
@@ -318,7 +341,7 @@ XMen.prototype = {
                         if (myLocation.map[Math.round(_x)][Math.round(_y)] != 0) {
                             barrierOrEnemyDetected = true;
                             console.log(this.showHeroInfo() + ' натрапив на перешкоду', [Math.round(_x)], [Math.round(_y)], ' типу:', myLocation.map[Math.round(_x)][Math.round(_y)]);
-
+                            personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo()  + ' натрапив на перешкоду' + Math.round(_x)+ ',' + Math.round(_y) + ' типу:' + myLocation.map[Math.round(_x)][Math.round(_y)]);
 
                             // Алгоритм не працює... покишо..
 // Глюк найдено.. наступна точка  маршруту попадала у перешкоду ........ :))
@@ -338,6 +361,8 @@ XMen.prototype = {
                                     moveHeroOnMap(this, indexOfthisHero);
                                     // на кожній координаті робимо перевірку...
                                     console.log(this.showHeroInfo() + ' перемістився в обході');
+                                    personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' перемістився в обході');
+
                                     if (this.areaCheck()) { //вороги знайдено далі йти нема змісту
                                         console.log('при обході перешкоди відбувся бій');
 
@@ -360,8 +385,8 @@ XMen.prototype = {
                     this.x = x2;
                     this.y = y2;
                     console.log(this.showHeroInfo() + ' перемістився');
-                    this.history.push(this.showHeroInfo() + ' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
-
+                    //this.history.push(this.showHeroInfo() + ' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
+                    personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +  ' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
                 }
 
 // перевірка НЕвиходу за межі локації
@@ -380,21 +405,22 @@ XMen.prototype = {
         this.chanceSpecDamage = this.chanceSpecDamage + Math.round(this.chanceSpecDamage * 0.2);
         console.log(this.showHeroInfo() +'досяг нового рівня, покращивши свої характеристики макс.здаровя:', this.maxHealth,', сила:', this.power,', атака:', this.damage,', спец. атака:', this.specDamage);
         //console.log(this.name, '(', this.health, ')досяг нового рівня, покращивши свої характеристики макс.здаровя:', this.maxHealth,', сила:', this.power,', атака:', this.damage,', спец. атака:', this.specDamage);
-
+        personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' досяг нового рівня, покращивши свої характеристики макс.здаровя: ' + this.maxHealth +', сила: ' + this.power + ', атака: ' + this.damage +', спец. атака: ' + this.specDamage);
     },
 
     regeneration: function () {
-        var _regerHp = 0;
+        var regenerHp = 0;
 
         if (this.canHealing && (this.health > 0) && (this.health < this.maxHealth)) {
-            _regerHp = Math.round(this.healingMaxPoint * Math.random());
+            regenerHp = Math.round(this.healingMaxPoint * Math.random());
 
-            if (_regerHp > 0) {
-                this.health += _regerHp;
+            if (regenerHp > 0) {
+                this.health += regenerHp;
                 this.health = (this.health < this.maxHealth) ? this.health : this.maxHealth;
-                console.log(this.showHeroInfo() + ' зцілився на '+ _regerHp + ' пунктів здоровя');
+                console.log(this.showHeroInfo() + ' зцілився на '+ regenerHp + ' пунктів здоровя');
 
-                this.history.push(this.showHeroInfo() + 'зцілився на ' + _regerHp + ' пунктів здоровя');
+                //this.history.push(this.showHeroInfo() + 'зцілився на ' + regenerHp + ' пунктів здоровя');
+                personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + 'зцілився на ' + regenerHp + ' пунктів здоровя');
             }
         }
     },
@@ -511,12 +537,14 @@ function start (mode) {
                         if (heroes[i].isFreeze && heroes[i].freezeStepLeft == 0) {
                             heroes[i].isFreeze = false;
                             console.log(heroes[i].showHeroInfo(),') розморозився');
+                            personsHistoryDB.personsAddLog(heroes[i].heroID, heroes[i].showHeroInfo(),') розморозився');
                         }
 
                         if (heroes[i].isFreeze && heroes[i].freezeStepLeft > 0) {
                             heroes[i].freezeStepLeft--;
                             // console.log(heroes[i].name, ' \u2764',heroes[i].helth,'(',heroes[i].x,heroes[i].y,') заморожений і пропускає хід');
                             console.log(heroes[i].showHeroInfo() + 'заморожений і пропускає хід');
+                            personsHistoryDB.personsAddLog(heroes[i].heroID,heroes[i].showHeroInfo() + 'заморожений і пропускає хід');
 
                         }
                         else {
@@ -618,12 +646,14 @@ module.exports.freezeHero = function(heroName,command) {
             isFind.isFreeze = true;
             isFind.freezeStepLeft = 1000;
             console.log(isFind.name, ', було заморожено___________________________________!!!!');
+            personsHistoryDB.personsAddLog(isFind.heroID, ' Hero: ' + isFind.name + ' було заморожено');
             return ' Hero: ' + isFind.name + ' було заморожено';
         }
         else {
             isFind.isFreeze = false;
             isFind.freezeStepLeft = 0;
             console.log(isFind.name, ', було розможено________________________');
+            personsHistoryDB.personsAddLog(isFind.heroID, ' Hero: ' + isFind.name + ' було розморожено');
             return 'Hero: ' + isFind.name + ' було розморожено'+ command;
         }
     }
@@ -645,6 +675,7 @@ module.exports.setMoveTo = function(heroName,x,y) {
             isFind.nextDestinationPointY = y;
             isFind.walkedAllWay = false;
             console.log('Змінено точку призначення',isFind.name,' тепер він прямує в :',isFind.nextDestinationPointX, isFind.nextDestinationPointY);
+            personsHistoryDB.personsAddLog(isFind.heroID, 'Змінено точку призначення ' + isFind.name + ' тепер він прямує в : ' + isFind.nextDestinationPointX + ',' + isFind.nextDestinationPointY);
             return 'Hero: ' + isFind.name + ' recived new point of destenition';
         }
     }
@@ -712,7 +743,8 @@ module.exports.newSettings = function(newSettingsOfHero) {
 
             }
             console.dir(isFind);
-            return heroName + ' received next changes : ' + logChanges + ' ' + isFind.freezeStepLeft;
+            personsHistoryDB.personsAddLog(isFind.heroID, isFind.name + ' received next changes : ' + logChanges);
+            return heroName + ' received next changes : ' + logChanges;
         }
     }
 };
@@ -729,25 +761,33 @@ module.exports.heroCreate = function(name, clan, x, y) {
         // console.log(name, name.length,(name == 'Wolverine') );
         //XMen(clan, name, level, features, hairСolor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
         if (name == 'Wolverine') {
-            heroes.push(new XMen('X-Men', 'Wolverine', 1, 'healing factor, six retractable claws', 'black', 'small', 'no', 'man', 100, 2, 4, 10, 20, 70, 0, 10, false, 0, false, false, true, false, false, false, true, 15, false, true, x, y));
+            heroes.push(new XMen('X-Men', 'Wolverine', 1, 'healing factor, six retractable claws', 'black', 'small', 'no', 'man', 100, 2, 4, 10, 20, 70, 0, 10, false, 0, false, false, true, false, false, false, true, 15, false, true, x, y, heroes.length));
             created = true;
+            console.log('Створено персонажа');
+            console.log(heroes[heroes.length-1]);
 
         }
 
 
         if (name == 'Sweetdeath') {
-            heroes.push(new Vampires('Vampires', 'Sweetdeath', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'big', 'woman', 150, 2, 6, 15, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
+            heroes.push(new Vampires('Vampires', 'Sweetdeath', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'big', 'woman', 150, 2, 6, 15, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y, heroes.length));
             created = true;
+            console.log('Створено персонажа');
+            console.log(heroes[heroes.length-1]);
         }
 
         if (name == 'Dracula') {
-            heroes.push(new Vampires('Vampires', 'Dracula', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 180, 3, 6, 17, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
+            heroes.push(new Vampires('Vampires', 'Dracula', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 180, 3, 6, 17, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y, heroes.length));
             created = true;
+            console.log('Створено персонажа');
+            console.log(heroes[heroes.length-1]);
         }
 
         if (name == 'MegaVamp') {
-            heroes.push(new Vampires('Vampires', 'MegaVamp', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 200, 3, 6, 20, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y));
+            heroes.push(new Vampires('Vampires', 'MegaVamp', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 200, 3, 6, 20, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y, heroes.length));
             created = true;
+            console.log('Створено персонажа');
+            console.log(heroes[heroes.length-1]);
         }
 
 
@@ -759,20 +799,27 @@ module.exports.heroCreate = function(name, clan, x, y) {
             var defObject = defSet(name, clan, +x, +y);
 
             if (clan == 'X-Men') {
+                heroes.push(new XMen(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y, heroes.length));
                 console.log('Це новенький Хмен');
-                heroes.push(new XMen(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y));
+                console.log(heroes[heroes.length-1]);
+
             }
 
             if (clan == 'Vampires') {
+                heroes.push(new Vampires(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y, heroes.length));
                 console.log('Це новенький Вампір');
-                heroes.push(new Vampires(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y));
+                console.log(heroes[heroes.length-1]);
+
             }
         }
         if (created) {
             numberOfHero = heroes.length;
             numberOfLivingHero++;
+
             initHeroOnMap(heroes[heroes.length-1],heroes.length-1);
-            return 'Hero '+ heroes[heroes.length-1].name +' was succesful creates ';
+            personsHistoryDB.personsSave(heroes[heroes.length-1].heroID,'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ')
+            personsDB.updatePerson(heroes[heroes.length-1]);
+            return 'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ';
 
         }
         console.dir(heroes[heroes.length - 1]);

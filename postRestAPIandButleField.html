@@ -223,6 +223,7 @@
         // http://habrahabr.ru/post/37595/
 
         var socket = io();
+        socket.emit('connectGameUI',{});
 
 
         socket.on('initMap', function(msg){
@@ -312,24 +313,24 @@
         // XMen(clan, name, health, attackRange, invisible, canShoot, x, y)
 
         function moveHero(msg) {
-            hero = msg.hero;
-            heroNumber = msg.heroNumber;
-            console.dir(msg);
+                hero = msg.hero;
+                heroNumber = msg.heroNumber;
+                console.dir(msg);
 
-            //  var areaColor = '#0A0EF2';
-            console.log("" + hero.name + heroNumber);
-            //circle.addEventListener('click', click, false);
+                //  var areaColor = '#0A0EF2';
+                console.log("" + hero.name + heroNumber);
+                //circle.addEventListener('click', click, false);
 
-            var c1 = document.getElementById("" + hero.name + heroNumber);
-            c1.setAttribute("cx", hero.x + "px");
-            c1.setAttribute("cy",(600 - hero.y) + "px");
-            //c1.setAttribute("r", hero.attackRange + "px");
-            // c1.setAttribute("id", "" + hero.name + heroNumber);
+                var c1 = document.getElementById("" + hero.name + heroNumber);
+                c1.setAttribute("cx", hero.x + "px");
+                c1.setAttribute("cy",(600 - hero.y) + "px");
+                //c1.setAttribute("r", hero.attackRange + "px");
+                // c1.setAttribute("id", "" + hero.name + heroNumber);
 
-            if (hero.health <= 0) {
-                c1.setAttribute("fill", "black");
+                if (hero.health <= 0) {
+                    c1.setAttribute("fill", "black");
 
-            }
+                }
 
 
 
