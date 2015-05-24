@@ -287,6 +287,13 @@ XMen.prototype = {
                 this.walkedAllWay = _point.isLast;
                 // console.log('this.walkedAllWay',this.walkedAllWay);
 
+                // якщо вже кінцева точка - припинити обрахунок
+                if (this.walkedAllWay) {
+                    console.log(this.showHeroInfo() + ' дійшов до кінцевої точки точка Дефолтного маршруту №' + this.PathMapStep);
+                    personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' дійшов до кінцевої точки точка Дефолтного маршруту №' + this.PathMapStep);
+                    return;
+                }
+
                 console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
                 personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' дійшов до кінцевої точки і отримав новий машрут, прямує до [' + _x + ',' + _y + '] точка маршруту №' + this.PathMapStep);
             }
