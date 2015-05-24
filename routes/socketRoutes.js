@@ -10,7 +10,7 @@ var myGameSocket;
 var myDbSocket;
 var heroes = require('../index.js');
 var historyLog = require('../modules/mongoDbClient.js');
-var persons = require('../modules/mongooseDBClient.js');
+var personsDB = require('../modules/mongooseDBClient.js');
 
 // ініціалізація, створення обектівгероїв
 function initHeroOnMap (hero,heroNumber) {
@@ -63,13 +63,24 @@ function initMap (app) {
         // фіксуємо вхідне підключення з сторінки ДБ
 
         socket.on('connectDBUI', function(msg) {
+            var _heroes = heroes.heroArray(0);
+
             myDbSocket = socket;
             console.log('Інтрефейс БД підключено');
-            var obj = historyLog.historyLogFindLog(0,socket);
-            var obj2 = persons.findPerson(0,socket);
+           //historyLog.historyLogFindLog(0,socket);
+          // personsDB.findPerson(0,socket);
+           personsDB.updateHeroList(_heroes.length, socket);
 
             //console.log('_____',obj);
             //socket.emit('showLog', obj)
+        });
+
+        socket.on('getHeroInfo', function(msg) {
+            var _heroes = heroes.heroArray(0);
+            historyLog.historyLogFindLog(msg,socket);
+            personsDB.findPerson(msg,socket);
+            personsDB.updateHeroList(_heroes.length, socket);
+
         });
 
         socket.on('connectGameUI', function(msg) {

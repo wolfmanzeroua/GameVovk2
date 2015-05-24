@@ -33,7 +33,7 @@ var defaultClassSettings = function ( name, clan, x, y) {
 
         // Спеціальний навик деяких істот відновлюватися
         canHealing: false,
-        healingMaxPoint: false,
+        healingMaxPoint: 0,
 
         // Спеціальний навик вампіра, якщо тру - дає можливість відновити здоровся за рахунок нанесеного урона
         hasVampBite: false,

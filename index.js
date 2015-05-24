@@ -2,6 +2,7 @@
 var heroMovePath = require('./modules/classPathMap.js');
 var defSet = require('./modules/defaultClassSettings.js');
 var myLocation = require('./modules/location.js');
+
 var personsHistoryDB = require('./modules/mongoDbClient.js');
 var personsDB = require('./modules/mongooseDBClient.js');
 
@@ -186,7 +187,7 @@ XMen.prototype = {
                             console.log(this.showHeroInfo() +'попав в зону атаки', heroes[i].showHeroInfo());
                             heroes[i].figth(this);
 
-                           // відправка логів в БД
+                            // відправка логів в БД
                             personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +'попав в зону атаки', heroes[i].showHeroInfo());
                             personsHistoryDB.personsAddLog(heroes[i].heroID, this.showHeroInfo() +'попав в зону атаки', heroes[i].showHeroInfo());
 
@@ -253,6 +254,7 @@ XMen.prototype = {
         else {
             if (this.caсhePath.length > 0) {
                 console.log(this.showHeroInfo(), ' У героя в кеші є ще точки шляху', this.caсhePath);
+                personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +' бере координати з свого кеша обходу перешкод');
                 for (var i = this.caсhePath.length - 1, j = 0; i >= 0 && j < this.speed; i--, j++) {
 
                     this.x = this.caсhePath[i].x;
@@ -263,7 +265,7 @@ XMen.prototype = {
                     moveHeroOnMap(this, indexOfthisHero);
                     // на кожній координаті робимо перевірку...
                     console.log(this.showHeroInfo() + ' перемістився в обході з свого кеша');
-                    personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +' перемістився в обході з свого кеша');
+                    //personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +' перемістився в обході з свого кеша');
 
                     if (this.areaCheck()) { //вороги знайдено далі йти нема змсісту
                         console.log('при обході перешкоди відбувся бій');
@@ -285,8 +287,8 @@ XMen.prototype = {
                 this.walkedAllWay = _point.isLast;
                 // console.log('this.walkedAllWay',this.walkedAllWay);
 
-                    console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
-                personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' отримав новий машрут, прямує до [' + _x + ',' + _y + '] точка маршруту' + this.PathMapStep);
+                console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
+                personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' отримав новий машрут, прямує до [' + _x + ',' + _y + '] точка маршруту №' + this.PathMapStep);
             }
             else {
                 _x = this.nextDestinationPointX;
@@ -294,105 +296,105 @@ XMen.prototype = {
             }
         }
 
-                distanceTo = Math.pow((_x - this.x) * (_x - this.x) + (_y - this.y) * (_y - this.y), 0.5);
+        distanceTo = Math.pow((_x - this.x) * (_x - this.x) + (_y - this.y) * (_y - this.y), 0.5);
 
-                _dirX = (_x - this.x) * this.speed / distanceTo;
-                _dirY = (_y - this.y) * this.speed / distanceTo;
+        _dirX = (_x - this.x) * this.speed / distanceTo;
+        _dirY = (_y - this.y) * this.speed / distanceTo;
 
-                if (distanceTo > this.speed) {
-                    x2 = this.x + Math.round(_dirX);
-                    y2 = this.y + Math.round(_dirY);
-                    //console.log(this.x, this.y);
+        if (distanceTo > this.speed) {
+            x2 = this.x + Math.round(_dirX);
+            y2 = this.y + Math.round(_dirY);
+            //console.log(this.x, this.y);
 
-                }
+        }
 
-                else {
-                    x2 = _x;
-                    y2 = _y;
-                }
+        else {
+            x2 = _x;
+            y2 = _y;
+        }
 
-                _x = this.x;
-                _y = this.y;
-                x3 = this.x;
-                y3 = this.y;
+        _x = this.x;
+        _y = this.y;
+        x3 = this.x;
+        y3 = this.y;
 
-                var barrierOrEnemyDetected = false;
-                //var path = [];
+        var barrierOrEnemyDetected = false;
+        //var path = [];
 
-                // берем кожну цілу координату і здійснюємо перевірку на ворога і на перешкоду.
+        // берем кожну цілу координату і здійснюємо перевірку на ворога і на перешкоду.
 
 
-                while (!( Math.round(_x) == x2 && Math.round(_y) == y2) && !barrierOrEnemyDetected) {
-                    _x = _x + _dirX / this.speed;
-                    _y = _y + _dirY / this.speed;
+        while (!( Math.round(_x) == x2 && Math.round(_y) == y2) && !barrierOrEnemyDetected) {
+            _x = _x + _dirX / this.speed;
+            _y = _y + _dirY / this.speed;
 //console.log(_x,_y,x3,y3);
-                    // координата змінилася
-                    //console.log('Кінцева ',x2,y2,' розкадровка шляху:',Math.round(_x),Math.round(_y),_x,_y)
-                    if ((x3 != Math.round(_x)) || (y3 != Math.round(_y))) {
+            // координата змінилася
+            //console.log('Кінцева ',x2,y2,' розкадровка шляху:',Math.round(_x),Math.round(_y),_x,_y)
+            if ((x3 != Math.round(_x)) || (y3 != Math.round(_y))) {
 
-                        //перевірка на наявність  ворга
-                        if (this.areaCheck()) { //вороги знайдено далі йти нема змісту
-                            console.log('при обході перешкоди відбувся бій');
+                //перевірка на наявність  ворга
+                if (this.areaCheck()) { //вороги знайдено далі йти нема змісту
+                    console.log('при обході перешкоди відбувся бій');
 
-                            return false;
-                        }  // герой зупиняється, щоб не робив ще раз чек ареа
+                    return false;
+                }  // герой зупиняється, щоб не робив ще раз чек ареа
 
-                        //якщо ячейка карти != 0  тобто є перешкода - запускаємо алгоритм обходу перешкод.
-                        if (myLocation.map[Math.round(_x)][Math.round(_y)] != 0) {
-                            barrierOrEnemyDetected = true;
-                            console.log(this.showHeroInfo() + ' натрапив на перешкоду', [Math.round(_x)], [Math.round(_y)], ' типу:', myLocation.map[Math.round(_x)][Math.round(_y)]);
-                            personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo()  + ' натрапив на перешкоду' + Math.round(_x)+ ',' + Math.round(_y) + ' типу:' + myLocation.map[Math.round(_x)][Math.round(_y)]);
+                //якщо ячейка карти != 0  тобто є перешкода - запускаємо алгоритм обходу перешкод.
+                if (myLocation.map[Math.round(_x)][Math.round(_y)] != 0) {
+                    barrierOrEnemyDetected = true;
+                    console.log(this.showHeroInfo() + ' натрапив на перешкоду', [Math.round(_x)], [Math.round(_y)], ' типу:', myLocation.map[Math.round(_x)][Math.round(_y)]);
+                    personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo()  + ' натрапив на перешкоду' + Math.round(_x)+ ',' + Math.round(_y) + ' типу:' + myLocation.map[Math.round(_x)][Math.round(_y)]);
 
-                            // Алгоритм не працює... покишо..
+                    // Алгоритм не працює... покишо..
 // Глюк найдено.. наступна точка  маршруту попадала у перешкоду ........ :))
-                            if (this.caсhePath = myLocation.findPath(this.x, this.y, this.nextDestinationPointX, this.nextDestinationPointY, this.speed)) {
+                    if (this.caсhePath = myLocation.findPath(this.x, this.y, this.nextDestinationPointX, this.nextDestinationPointY, this.speed)) {
 
-                                // console.log('Урра--- отримав масив', path.length-1, path[10].x,path[10].y )
-                                //          if (null)
-                                //        barrierOrEnemyDetected =true;
+                        // console.log('Урра--- отримав масив', path.length-1, path[10].x,path[10].y )
+                        //          if (null)
+                        //        barrierOrEnemyDetected =true;
 
-                                for (var i = this.caсhePath.length - 1, j = 0; i >= 0 && j < this.speed; i--, j++) {
+                        for (var i = this.caсhePath.length - 1, j = 0; i >= 0 && j < this.speed; i--, j++) {
 
-                                    this.x = this.caсhePath[i].x;
-                                    this.y = this.caсhePath[i].y;
+                            this.x = this.caсhePath[i].x;
+                            this.y = this.caсhePath[i].y;
 
-                                    this.caсhePath.pop();
+                            this.caсhePath.pop();
 
-                                    moveHeroOnMap(this, indexOfthisHero);
-                                    // на кожній координаті робимо перевірку...
-                                    console.log(this.showHeroInfo() + ' перемістився в обході');
-                                    personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' перемістився в обході');
+                            moveHeroOnMap(this, indexOfthisHero);
+                            // на кожній координаті робимо перевірку...
+                            console.log(this.showHeroInfo() + ' перемістився в обході');
+                            personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' перемістився в обході');
 
-                                    if (this.areaCheck()) { //вороги знайдено далі йти нема змісту
-                                        console.log('при обході перешкоди відбувся бій');
+                            if (this.areaCheck()) { //вороги знайдено далі йти нема змісту
+                                console.log('при обході перешкоди відбувся бій');
 
-                                        return false;
-                                    }  // герой зупиняється, щоб не робив ще раз чек ареа
-                                }
-                                // якщо шляху не знайдено.. тупік
-                            }
-                            return false;
-                            // якщо шлях не знайдено завершуэмо ходьбу потребує доробки логыки !!!!!!!!!!!!!!!!!!!!!
-
+                                return false;
+                            }  // герой зупиняється, щоб не робив ще раз чек ареа
                         }
-                        //x3 = Math.round(_x);
-                        //y3 = Math.round(_y);
-
+                        // якщо шляху не знайдено.. тупік
                     }
+                    return false;
+                    // якщо шлях не знайдено завершуэмо ходьбу потребує доробки логыки !!!!!!!!!!!!!!!!!!!!!
+
                 }
-                // якщо барэрыв не було в не було ворога = пролітаємо відрізок
-                if (!barrierOrEnemyDetected) {
-                    this.x = x2;
-                    this.y = y2;
-                    console.log(this.showHeroInfo() + ' перемістився');
-                    //this.history.push(this.showHeroInfo() + ' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
-                    personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +  ' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
-                }
+                //x3 = Math.round(_x);
+                //y3 = Math.round(_y);
+
+            }
+        }
+        // якщо барэрыв не було в не було ворога = пролітаємо відрізок
+        if (!barrierOrEnemyDetected) {
+            this.x = x2;
+            this.y = y2;
+            console.log(this.showHeroInfo() + ' перемістився');
+            //this.history.push(this.showHeroInfo() + ' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY) + ' вектор direction: ' + Math.floor(_x) + ',' + Math.floor(_y));
+            personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() +  ' перемістився зміщення по x:' + Math.floor(_dirX) + ' y:' + Math.floor(_dirY));
+        }
 
 // перевірка НЕвиходу за межі локації
 
-                //this.x = (this.x >= myLocation.mapMaxX) ? myLocation.mapMaxX : ((this.x <= 0) ? 0 : this.x);
-                //this.y = (this.y >= myLocation.mapMaxY) ? myLocation.mapMaxY : ((this.y <= 0) ? 0 : this.y);
+        //this.x = (this.x >= myLocation.mapMaxX) ? myLocation.mapMaxX : ((this.x <= 0) ? 0 : this.x);
+        //this.y = (this.y >= myLocation.mapMaxY) ? myLocation.mapMaxY : ((this.y <= 0) ? 0 : this.y);
 
     },
 
@@ -449,55 +451,6 @@ vector.scalar = function (x, y, x2, y2) {
 };
 
 
-/*
- vector.intersection  = function (hero1, hero2, x1, y1, x2, y2, x3, y3, x4, y4) {
- // http://www.cyberforum.ru/cpp-beginners/thread588383.html формулу перетину запозичено, протестовано, перероблено, але все даремно , не пригодилася.. покищо
- var	dx1 = x2 - x1;
- var	dy1 = y2 - y1;
- var	dx2 = x4 - x3;
- var	dy2 = y4 - y3;
- var	x = dy1 * dx2 - dy2 * dx1;
- var distance = 0;
-
- // перевірка паралельності, ділення на 0
- if ( (!x)|| (!dx2)){
-
- //  перевірити чи нема накладок відрізків
-
- distance = Math.max(x1, x2, x3, x4) - Math.min(x1, x2, x3, x4) + Math.max(y1, y2, y3, y4) - Math.min(y1, y2, y3, y4);
-
- if (distance <= (Math.abs(dx1) + Math.abs(dy1) + Math.abs(dx2) + Math.abs(dy2))) {
- console.log('Накладка є ');
-
- // э накладеня векторів, перевірити чи герой в разі ходу достає ворога
-
- if (_length => ( Math.abs(hero1.x - hero2.x) + Math.abs(hero1.y - hero2.y) )) {
- console.log(hero1.name,' атакує ',hero2.name);
- return	true;
- }
- }
- }
-
- return console.log('Не пересікаються', x,dx2);
-
-
- var	y = x3 * y4 - y3 * x4;
- vector.crossX = x = ((x1 * y2 - y1 * x2) * dx2 - y * dx1) / x;
- vector.crossY = y = (dy2 * x - y) / dx2;
-
- if ( ((x1 <= x && x2 >= x) || (x2 <= x && x1 >= x)) && ((x3 <= x && x4 >= x) || (x4 <= x && x3 >= x))) {
- console.log('Герої зустрінуться,  координати перетину х', x,' y', y);
- return	true;
- }
- else return	false;
- }
- */
-
-//------------------------------------------------------------------------------
-// Код виконання
-
-
-
 
 
 function checkHero(heroName) {
@@ -528,6 +481,8 @@ function start (mode) {
 
                 for (var i = numberOfHero-1; i >= 0; i--) {
                     moveHeroOnMap(heroes[i],i);
+                    personsDB.updatePerson(heroes[i]);
+
                     if (heroes[i].health > 0) {
                         //console.log(i);
                         //console.dir(heroes[i]);
@@ -561,6 +516,7 @@ function start (mode) {
                                     if (heroes[i].health > 0) heroes[i].areaCheck();
                                 }
                                 moveHeroOnMap(heroes[i],i);
+                                personsDB.updatePerson(heroes[i]);
                             }
                         }
                     }
@@ -647,6 +603,7 @@ module.exports.freezeHero = function(heroName,command) {
             isFind.freezeStepLeft = 1000;
             console.log(isFind.name, ', було заморожено___________________________________!!!!');
             personsHistoryDB.personsAddLog(isFind.heroID, ' Hero: ' + isFind.name + ' було заморожено');
+            personsDB.updatePerson(isFind);
             return ' Hero: ' + isFind.name + ' було заморожено';
         }
         else {
@@ -654,6 +611,7 @@ module.exports.freezeHero = function(heroName,command) {
             isFind.freezeStepLeft = 0;
             console.log(isFind.name, ', було розможено________________________');
             personsHistoryDB.personsAddLog(isFind.heroID, ' Hero: ' + isFind.name + ' було розморожено');
+            personsDB.updatePerson(isFind);
             return 'Hero: ' + isFind.name + ' було розморожено'+ command;
         }
     }
@@ -676,6 +634,7 @@ module.exports.setMoveTo = function(heroName,x,y) {
             isFind.walkedAllWay = false;
             console.log('Змінено точку призначення',isFind.name,' тепер він прямує в :',isFind.nextDestinationPointX, isFind.nextDestinationPointY);
             personsHistoryDB.personsAddLog(isFind.heroID, 'Змінено точку призначення ' + isFind.name + ' тепер він прямує в : ' + isFind.nextDestinationPointX + ',' + isFind.nextDestinationPointY);
+            personsDB.updatePerson(heroes[heroes.length-1]);
             return 'Hero: ' + isFind.name + ' recived new point of destenition';
         }
     }
@@ -739,11 +698,13 @@ module.exports.newSettings = function(newSettingsOfHero) {
                 }
 
 
-                logChanges += ' ' + k + ' = ' + isFind[k] + typeof (isFind[k]);
+                //logChanges += ' ' + k + ' = ' + isFind[k] + typeof (isFind[k]);
+                logChanges += ' ' + k + ' = ' + isFind[k];
 
             }
             console.dir(isFind);
             personsHistoryDB.personsAddLog(isFind.heroID, isFind.name + ' received next changes : ' + logChanges);
+            personsDB.updatePerson(isFind);
             return heroName + ' received next changes : ' + logChanges;
         }
     }
@@ -812,17 +773,17 @@ module.exports.heroCreate = function(name, clan, x, y) {
 
             }
         }
-        if (created) {
-            numberOfHero = heroes.length;
-            numberOfLivingHero++;
 
-            initHeroOnMap(heroes[heroes.length-1],heroes.length-1);
-            personsHistoryDB.personsSave(heroes[heroes.length-1].heroID,'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ')
-            personsDB.updatePerson(heroes[heroes.length-1]);
-            return 'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ';
+        numberOfHero = heroes.length;
+        numberOfLivingHero++;
 
-        }
-        console.dir(heroes[heroes.length - 1]);
+        initHeroOnMap(heroes[heroes.length-1],heroes.length-1);
+        personsHistoryDB.personsSave(heroes[heroes.length-1].heroID,'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ')
+        personsDB.updatePerson(heroes[heroes.length-1]);
+        return 'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ';
+
+
+        // console.dir(heroes[heroes.length - 1]);
     }
 };
 module.exports.start= start;

@@ -38,7 +38,7 @@ io.on('connection', function(socket) {
         console.log('Інтреіейс БД підключено');
      var obj = historyLog.historyLogFindLog(0,socket);
      var obj2 = persons.findPerson(1,socket);
-
+     var obj2 = persons.findPerson(1,socket);
         //console.log('_____',obj);
         //socket.emit('showLog', obj)
     });
