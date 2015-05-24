@@ -5,14 +5,13 @@
 // це не чистий роутер... не получилося розділити правильно черз те що два, потім перероблю
 // зараз основна ціль відображення переміщення героя, щоб переконатися що обхід працює корректно
 
-var mySocket;
 var myGameSocket;
 var myDbSocket;
 var heroes = require('../index.js');
 var historyLog = require('../modules/mongoDbClient.js');
 var personsDB = require('../modules/mongooseDBClient.js');
 
-// ініціалізація, створення обектівгероїв
+// ініціалізація, створення обектів героїв на карті
 function initHeroOnMap (hero,heroNumber) {
     //console.log('Init on map started ')
     if (myGameSocket) {
@@ -28,14 +27,14 @@ function moveHeroOnMap (hero,heroNumber) {
 }
 
 
-
-
 // ініціалізація перешкод на карті
+//  із ініціалізації карти функція переросла в центральну розподілчу функцію,
+
 function initMap (app) {
     var http = require('http').Server(app);
     var io = require('socket.io')(http);
 
-   // var myGame = require('../index.js');
+    // var myGame = require('../index.js');
     var myLocation = require('../modules/location.js');
 
 
@@ -46,8 +45,6 @@ function initMap (app) {
     app.get('/db', function(req, res){
         res.sendfile('./dataBaseUI.html');
     });
-
-
 
     app.get('/img/:file', function(req, res){
         res.sendfile('./img/' + req.params.file);
@@ -66,10 +63,10 @@ function initMap (app) {
             var _heroes = heroes.heroArray(0);
 
             myDbSocket = socket;
-            console.log('Інтрефейс БД підключено');
-           //historyLog.historyLogFindLog(0,socket);
-          // personsDB.findPerson(0,socket);
-           personsDB.updateHeroList(_heroes.length, socket);
+            console.log('Інтрефейс  DB UI підключено');
+            //historyLog.historyLogFindLog(0,socket);
+            // personsDB.findPerson(0,socket);
+            personsDB.updateHeroList(_heroes.length, socket);
 
             //console.log('_____',obj);
             //socket.emit('showLog', obj)
@@ -85,9 +82,9 @@ function initMap (app) {
 
         socket.on('connectGameUI', function(msg) {
             myGameSocket = socket;
-            console.log('Інтрефейс GAME підключено');
+            console.log('Інтрефейс GAME UI підключено');
 
-// Ініціалізація перешкод на батлполе
+// Ініціалізація перешкод на батлполі
 // трикутники
             for (var i = myLocation.triangle.length - 1; i >= 0; i--) {
                 _fig = myLocation.triangle[i];
@@ -148,18 +145,15 @@ function initMap (app) {
         });
 
 
-
         socket.on('disconnect', function(){
-            if (socket == myGameSocket )
-            {
+            if (socket == myGameSocket ){
                 myGameSocket = undefined;
-                console.log('Game Ui a disconnected');
+                console.log('Game UI is disconnected');
             }
 
-            if (socket == myDbSocket )
-            {
+            if (socket == myDbSocket) {
                 myDbSocket = undefined;
-                console.log('Db UI a disconnected');
+                console.log('Db UI is disconnected');
             }
 
         });

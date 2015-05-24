@@ -20,7 +20,6 @@ module.exports = function(app) {
     app.get('/info', function (reg, res, next) {
         res.status(200).send('This is Game Server');
         console.log('This is Game Server');
-
     });
 
     app.get('/:heroName/:MoveTo/:x/:y', function (req, res, next) {
@@ -30,8 +29,6 @@ module.exports = function(app) {
 
     app.get('/:heroName/setToFly/:type', function (req, res, next) {
         res.status(200).send(myGame.setToFly(req.params.heroName, req.params.type));
-
-
     });
 
 
@@ -57,7 +54,7 @@ module.exports = function(app) {
     app.get('/get/numberOfLivingHero/', function (req, res, next) {
         //  res.status(200).send("<script>window.parent.deliver("+ myGame.numberOfLivingHero +")</script>" + "10");
         res.status(200).send(" " + myGame.numberOfLivingHero(0));
-        iframeMemory = res;
+        // iframeMemory = res;
         //console.log('відповів',    myGame.numberOfLivingHero(0));
         // res.redirect(301, 'http://google.com');
         // console.log(req.params.xx);
@@ -85,11 +82,10 @@ module.exports = function(app) {
 
         //res.status(200).send({"suxess" : "Hello World"});
     });
+
     app.post('/setHero/', function (req, res, next) {
         var body = req.body;
         console.dir(body);
-
-
         //myGame.heroCreate(body.name);
         //console.log(body.name, body.clan, +body.x, +body.y);
         res.status(200).send(myGame.newSettings(body));
@@ -116,4 +112,4 @@ module.exports = function(app) {
 
     });
 
-}
+};

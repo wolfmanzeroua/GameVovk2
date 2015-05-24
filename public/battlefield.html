@@ -19,8 +19,8 @@
 
 
 <div style="width: 224px; height: 600px; float: left; border: 1px solid lightgray;">
-<div style =" background-color: lightsteelblue;  float: none; border: 1px solid lightgray; text-align: center;" ><b> List of Heroes </b></div>
-<div id = "list" style =" width: auto; height: auto; background-color: white; float: none; border: 1px solid lightgray; position: relative " ><b> </b></div>
+    <div style =" background-color: lightsteelblue;  float: none; border: 1px solid lightgray; text-align: center;" ><b> List of Heroes </b></div>
+    <div id = "list" style =" width: auto; height: auto; background-color: white; float: none; border: 1px solid lightgray; position: relative " ><b> </b></div>
 </div>
 
 <svg id="mySvg" width="801" height="601" style="background-color: whitesmoke"  xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +75,7 @@
         if(msg.fіgura == 1) {
             //малюємо трикутник
             //console.log('трикутник')
-         //   console.dir(msg);
+            //   console.dir(msg);
             addTriangleToSvg(setColor(msg.type),msg.x1,600 - msg.y1, msg.x2,600 - msg.y2,msg.x3,600 - msg.y3);
 
         }
@@ -83,7 +83,7 @@
         if(msg.fіgura == 2) {
             //малюємо прямокутник
             //console.log('прямокутник')
-         //   console.dir(msg);
+            //   console.dir(msg);
 
             addRectangleToSvg(setColor(msg.type),msg.x1,600 - msg.y1, msg.x2,600 - msg.y2,msg.x3,600 - msg.y3, msg.x4,600 - msg.y4);
 
@@ -93,7 +93,7 @@
             //малюємо еліпс
             // addElipseToSvg(color,x,y,rx,ry)
             //           console.dir(msg);
-         //   console.dir(msg);
+            //   console.dir(msg);
             addElipseToSvg(setColor(msg.type),msg.cx,600 - msg.cy, msg.rx, msg.ry);
 
 
@@ -110,7 +110,7 @@
     function addTriangleToSvg(color,x1,y1,x2,y2,x3,y3) {
 
         //circle.addEventListener('click', click, false);
-       // console.log(color,x1,y1,x2,y2,x3,y3);
+        // console.log(color,x1,y1,x2,y2,x3,y3);
         var c1 = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
         c1.setAttribute("points",x1 + "," + y1 + "," + x2 + "," + y2 + "," + x3 + "," + y3);
         c1.setAttribute("fill", color);
@@ -141,18 +141,18 @@
 
     function moveHero(msg) {
         hero = msg.hero;
-    heroNumber = msg.heroNumber;
+        heroNumber = msg.heroNumber;
         console.dir(msg);
 
-      //  var areaColor = '#0A0EF2';
-         console.log("" + hero.name + heroNumber);
+        //  var areaColor = '#0A0EF2';
+        console.log("" + hero.name + heroNumber);
         //circle.addEventListener('click', click, false);
 
         var c1 = document.getElementById("" + hero.name + heroNumber);
         c1.setAttribute("cx", hero.x + "px");
         c1.setAttribute("cy",(600 - hero.y) + "px");
         //c1.setAttribute("r", hero.attackRange + "px");
-       // c1.setAttribute("id", "" + hero.name + heroNumber);
+        // c1.setAttribute("id", "" + hero.name + heroNumber);
 
         if (hero.health <= 0) {
             c1.setAttribute("fill", "black");
@@ -174,11 +174,11 @@
         }
 
 
-         }
+    }
 
     function initHero  (msg) {
         hero = msg.hero;
-    heroNumber = msg.heroNumber;
+        heroNumber = msg.heroNumber;
         console.dir(msg);
 
         var areaColor = '#0A0EF2';

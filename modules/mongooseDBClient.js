@@ -14,36 +14,24 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
     console.log('Mongoose is connected too');
     //savePerson();
-    var body = {
-        name: '------------------Vamp3-----------',
-        clan: 'Vampires',
-        features: 'String',
-        hairСolor: 'String',
-        beard: 'ng',
-        tits: 'Biggg',
-        sex: 'Sexxx',
-        history : ['hello','Andrey'],
-        heroID : 5
-    };
-    //updatePerson(body);
-
+     //updatePerson(body);
 });
 
 updateHeroList = function(heroNumber,socket) {
     UserMode = db.model('Persons', UserSchema);
-  //  console.log('_________________',heroNumber,'____________updateHeroList() ____');
+    //  console.log('_________________',heroNumber,'____________updateHeroList() ____');
 
     for (var id = 0; id < heroNumber; id++) {
         UserMode.findOne({heroID: id}, function (err, doc) {
             socket.emit('updateHeroList', doc);
-           // console.log('______________________________________________________ Hero Added ________________________________________________________');
+            // console.log('______________________________________________________ Hero Added ________________________________________________________');
         });
     }
 };
 
 savePerson = function(hero) {
     UserMode = db.model('Persons', UserSchema);
-    var user = new UserMode(body);
+    var user = new UserMode(hero);
     user.save(function (err, user) {
         if (err) {
             return next(err);
@@ -61,8 +49,8 @@ updatePerson = function(hero) {
     delete user['_id'];
     delete user['dateOfBirth'];
 
-   // console.log ('*************)))))))))))))))))))',user);
-
+    // Тестування роботи з масивом, команда push
+    // console.log ('*************)))))))))))))))))))',user);
     //UserMode.findOneAndUpdate( {heroID:0}, {$push: {'history': 'Added new line 11111111111111111111111111111111111'} }, {upsert:true}, function(err){
     //       if(err){
     //           console.log(err);
@@ -70,7 +58,6 @@ updatePerson = function(hero) {
     //           console.log("Successfully added");
     //       }
     //   });
-
 
     UserMode.findOneAndUpdate( {heroID: hero.heroID},user, {upsert:true}, function(err){
         if(err){
@@ -80,20 +67,17 @@ updatePerson = function(hero) {
         }
     });
 
-
 };
 
 findPerson = function(id, socket) {
-
     UserMode = db.model('Persons', UserSchema);
-
     UserMode.findOne({ heroID: id },'-_id -__v', function (err, doc) {
         socket.emit('showHeroProperty', doc);
         // console.log('______________________________________________________',doc);
     })
-
 };
 
 module.exports.findPerson  = findPerson;
 module.exports.updatePerson  = updatePerson;
+module.exports.savePerson  = savePerson;
 module.exports.updateHeroList  = updateHeroList;

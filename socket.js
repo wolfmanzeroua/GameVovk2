@@ -18,7 +18,7 @@ var myDbSocket;
 
 
 app.get('/', function(req, res){
-   // res.sendfile('./public/battlefield.html');
+    // res.sendfile('./public/battlefield.html');
     res.sendfile('./dataBaseUI.html');
 });
 
@@ -31,14 +31,14 @@ io.on('connection', function(socket) {
 
     var ID = (socket.id).toString().substr(0, 15);
     var time = (new Date).toLocaleTimeString();
-   // console.log('a user connected', ID);
+    // console.log('a user connected', ID);
 
     socket.on('connectDBUI', function(msg) {
         myDbSocket = socket;
         console.log('Інтреіейс БД підключено');
-     var obj = historyLog.historyLogFindLog(0,socket);
-     var obj2 = persons.findPerson(1,socket);
-     var obj2 = persons.findPerson(1,socket);
+        var obj = historyLog.historyLogFindLog(0,socket);
+        var obj2 = persons.findPerson(1,socket);
+        var obj2 = persons.findPerson(1,socket);
         //console.log('_____',obj);
         //socket.emit('showLog', obj)
     });
@@ -80,20 +80,20 @@ io.on('connection', function(socket) {
     });
 
 
-  socket.on('disconnect', function(){
-      if (socket == myGameSocket )
-      {
-          myGameSocket = undefined;
-          console.log('Game Ui a disconnected');
-      }
+    socket.on('disconnect', function(){
+        if (socket == myGameSocket )
+        {
+            myGameSocket = undefined;
+            console.log('Game Ui a disconnected');
+        }
 
-      if (socket == myDbSocket )
-      {
-          myDbSocket = undefined;
-          console.log('Db UI a disconnected');
-      }
+        if (socket == myDbSocket )
+        {
+            myDbSocket = undefined;
+            console.log('Db UI a disconnected');
+        }
 
-       // myGameSocket;  = undefined;
+        // myGameSocket;  = undefined;
         //clearInterval(interval);
 
     });

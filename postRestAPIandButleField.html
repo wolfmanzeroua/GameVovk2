@@ -64,7 +64,7 @@
     <img src="img/shapka.jpg" align="middle" >
     <div style="position: absolute; width:100px;height: 100px;   margin: auto;   overflow:visible; z-index:101;
  top: 310px; left: 45%; bottom: auto; right: auto;">
-       <img onclick=" postToIframe({startBloodyBattle: true}, 'http://localhost:3030/startGame/', 'myIframe');" src="img/start.png" onmouseover="this.style.cursor='pointer'" >
+        <img onclick=" postToIframe({startBloodyBattle: true}, 'http://localhost:3030/startGame/', 'myIframe');" src="img/start.png" onmouseover="this.style.cursor='pointer'" >
     </div>
 
     <div id ="vs" style="position: absolute; width:200px;height: 200px;   margin: auto;   overflow:visible; z-index:98;
@@ -121,14 +121,14 @@
 
         <br>
 
-            <div  onclick="createHero()"  style=" text-align:center; border:2px solid #000000;width: 300px;  height: 45px; left:100px; position: relative;
+        <div  onclick="createHero()"  style=" text-align:center; border:2px solid #000000;width: 300px;  height: 45px; left:100px; position: relative;
     border-radius:6px; -moz-border-radius:5px; -khtml-border-radius:10px; background-color:greenyellow;">
-                <div onmouseover="this.style.cursor='pointer'">
+            <div onmouseover="this.style.cursor='pointer'">
         <span style="font-family:Arial;font-size:32px;font-weight:bold;color:#000000; text-shadow: 1px 1px white;">
         Create the Heroes 
         </span>
-                </div>
             </div>
+        </div>
 
 
     </div>
@@ -159,7 +159,7 @@
             <input type="number" name="x11" id="x11" min="0" max="800" onKeyDown="changeSeting()" onchange="changeSeting()" value="200" step="10" size ="4" style="width: 50px">
             Y: <input type="number" name="y11" id="y11" min="0" max="600"  onKeyDown="changeSeting()" onchange="changeSeting()" value="200" step="10" width="80" size ="4" style="width: 50px">
             <div style="text-align: left; text-indent: 150px;" onmouseover="changeSeting()"   ><b><span onmouseover="this.style.cursor='pointer'" onclick="click1({ name: setHeroSettings.name,  nextDestinationPointX: setHeroSettings.nextDestinationPointX, nextDestinationPointY: setHeroSettings.nextDestinationPointY})" id ="heroMoveToLink" style="color: blue ">SEND POST:</span></b></div>
-                <b>Set to fly: </b>
+            <b>Set to fly: </b>
             <input type="radio" name="stoFly" id="isFly1" onchange="changeSeting()" value="true"> True
             <input type="radio" name="stoFly" id="toFly2" onchange="changeSeting()" value="false" checked="checked"> False
             <br>
@@ -223,11 +223,14 @@
         // http://habrahabr.ru/post/37595/
 
         var socket = io();
+        var hero;
+        var  heroNumber;
+
         socket.emit('connectGameUI',{});
 
 
         socket.on('initMap', function(msg){
-            var fig;
+            //var fig;
             function setColor(type) {
                 /* Тип перешкод, type
                  * 1 - Ліс
@@ -313,24 +316,24 @@
         // XMen(clan, name, health, attackRange, invisible, canShoot, x, y)
 
         function moveHero(msg) {
-                hero = msg.hero;
-                heroNumber = msg.heroNumber;
-                console.dir(msg);
+            hero = msg.hero;
+            heroNumber = msg.heroNumber;
+            console.dir(msg);
 
-                //  var areaColor = '#0A0EF2';
-                console.log("" + hero.name + heroNumber);
-                //circle.addEventListener('click', click, false);
+            //  var areaColor = '#0A0EF2';
+            console.log("" + hero.name + heroNumber);
+            //circle.addEventListener('click', click, false);
 
-                var c1 = document.getElementById("" + hero.name + heroNumber);
-                c1.setAttribute("cx", hero.x + "px");
-                c1.setAttribute("cy",(600 - hero.y) + "px");
-                //c1.setAttribute("r", hero.attackRange + "px");
-                // c1.setAttribute("id", "" + hero.name + heroNumber);
+            var c1 = document.getElementById("" + hero.name + heroNumber);
+            c1.setAttribute("cx", hero.x + "px");
+            c1.setAttribute("cy",(600 - hero.y) + "px");
+            //c1.setAttribute("r", hero.attackRange + "px");
+            // c1.setAttribute("id", "" + hero.name + heroNumber);
 
-                if (hero.health <= 0) {
-                    c1.setAttribute("fill", "black");
+            if (hero.health <= 0) {
+                c1.setAttribute("fill", "black");
 
-                }
+            }
 
 
 
@@ -525,7 +528,7 @@
 
         getCommand = "SEND POST: { __:" +  setHeroSettings.name + ", __:" + setHeroSettings.isFreeze +'}';
         document.getElementById("setFreezeLink").innerHTML = getCommand;
-       // console.log(document.getElementById("setFreezeLink").innerHTML)
+        // console.log(document.getElementById("setFreezeLink").innerHTML)
 
         // setHeroSpeed
         setHeroSettings.speed = document.getElementById("setHeroSpeed").value;
@@ -539,7 +542,7 @@
 
         var setUrl = "http://localhost:3030/setHero/";
         postToIframe(obj, setUrl, 'myIframe');
-      //  document.getElementById('lastRequest').innerHTML = x.href;
+        //  document.getElementById('lastRequest').innerHTML = x.href;
     }
 
 
@@ -580,8 +583,8 @@
         console.log('Відправив');
         phonyForm.submit();
     }
-//    }
-   
+    //    }
+
 </script>
 
 
@@ -600,8 +603,8 @@
             <b> Set the GAME speed: </b> 100 ms
             <input type="range" id="gameSped" name="a" value="3000" min="100" max="3000" onchange="postToIframe({timeBetweenSteps: this.value}, 'http://localhost:3030/setGame/', 'myIframe');"> 3000
             <output name="x" for="a" style="font-weight: bold;"></output>
-           </form>
-        <iframe name="myIframe" id="myIframe"src="" width="744" height="40" style=" background-color: whitesmoke;left: 0; right: 0;"></iframe> <br>
+        </form>
+        <iframe name="myIframe" id="myIframe" src="" width="744" height="40" style=" background-color: whitesmoke;left: 0; right: 0;"></iframe> <br>
 
 
     </div>

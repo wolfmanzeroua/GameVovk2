@@ -1,6 +1,7 @@
 // клас локації
 var myLocation = new Location(800, 600, 0, 0, 10, 20, 0.2, 1, 0.2, 3000, 4000);
 var heroMovePath = require('./classPathMap.js');
+
 myLocation.barriersInit();
 myLocation.classPathPointValidation();
 
@@ -55,19 +56,16 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
             this.map[x][y] = this.triangle[i].type;
         }
         //  else  this.map[x][y] = 0;
-
     };
 
     // Відмічення на карті локації області заданої прямокутником, проганяє координати точок через умову, присвоює координаты карти тип перешкоди
 
     this.rectangleInit = function (i, x, y, maxX, maxY, minX, minY) {
-
         if ((maxX >= x) && (minX <= x) && (maxY >= y) && (minY <= y)) {
             // console.log('попадає');
             this.map[x][y] = this.rectangle[i].type;
         }
         //  else  this.map[x][y] = 0;
-
     };
 
     this.ellipseInit = function (i, x, y) {
@@ -76,7 +74,6 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
             this.map[x][y] = this.ellipse[i].type;
         }
         //  else  this.map[x][y] = 0;
-
     };
 
     //перевірити карту героїв на точки що попадають на площину перешкод.
@@ -92,14 +89,14 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
         var class1 = {
             clan: 'X-Men'
         };
-        var _point= {isLast: false};
 
+        var _point= {isLast: false};
         var class2 = {
             clan: 'Vampires'
         };
 
-
         var i = 0;
+
         while (!_point.isLast) {
             // while (i > 0) {
             _point = heroMovePath.call(class1,i);
@@ -181,10 +178,6 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
          * 4 - Озеро
          */
 
-        // Тест кийс для карти 20х20
-        //Triangles (name, type, resistance, x1, y1, x2, y2, x3, y3)
-        // this.triangle[0] = new Triangles('Ліс', 1, 3, 5, 0, 3, 5, 5, 8);
-        //this.triangle[0]= new Triangles('Ліс',1, 3,5,1,3,5,5,8);
 
 
         this.triangle.push(new Triangles('Ліс', 1, 3, 66, 506, 154, 391, 154, 460));
@@ -192,46 +185,24 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
         this.triangle.push(new Triangles('Болото', 2, 2, 682, 322, 800, 322, 800, 437));
         this.triangle.push(new Triangles('Гора', 3, 1, 330, 230, 418, 230, 390, 23));
         this.triangle.push(new Triangles('Ліс', 1, 3, 440, 209, 430, 70, 528, 70));
-        //this.triangle[3]= new Triangles('Озеро',4, 1,2,2,0,10,20,70);
 
         triangleCount = this.triangle.length;
 
-        //console.dir(triangleCount);
-        //console.dir(this.triangle[1]);
-        //console.dir(this.triangle[2]);
-        //console.dir(this.triangle[3]);
-
-        // Тест кийс для карти 20х20
         this.rectangle.push(new Rectangles('Болото', 2, 2, 220, 600, 244, 460));
         this.rectangle.push(new Rectangles('Гора',3, 1, 660, 506, 800, 490));
         this.rectangle.push(new Rectangles('Озеро',4, 1, 616, 600, 626, 390));
         this.rectangle.push(new Rectangles('Ліс', 1, 2, 44, 46, 220, 92));
 
-        //this.rectangle[0]= new Rectangles('Ліс',1, 3, 10, 20, 20, 50);
-        //this.rectangle[1] = new Rectangles('Болото', 2, 2, 600, 550, 300, 500);
-        //       this.rectangle[1] = new Rectangles('Болото', 2, 2, 511, 501, 488, 500);
-        //this.rectangle[1] = new Rectangles('Болото', 2, 2, 1, 20, 25, 25);
-        //this.rectangle[2]= new Rectangles('Гора',3, 1, 70, 90, 90, 100);
-        //this.rectangle[3]= new Rectangles('Гора',3, 1, 65, 65, 70, 70);
-
         rectangleCount = this.rectangle.length;
 
-        // Тест кийс для карти 20х20
         this.ellipse.push(new Ellipses('Озеро',4, 1, 420, 310, 40, 60));
         this.ellipse.push(new Ellipses('Озеро',4, 1, 620, 380, 30, 60));
         this.ellipse.push(new Ellipses('Болото', 2, 2, 40, 240, 30, 100));
         this.ellipse.push(new Ellipses('Озеро',4, 1, 680, 140, 30, 60));
         this.ellipse.push(new Ellipses('Ліс', 1, 2, 690, 140, 40, 60));
 
-        //this.ellipse[0]= new Ellipses('Ліс',1, 3,50,20,20,20);
-        //this.ellipse[1]= new Ellipses('Болото',2,2, 70,70,10,20);
-        //this.ellipse[2]= new Ellipses('Озеро',4, 1,5,70,5,30);
-
         ellipseCount = this.ellipse.length;
 
-        //console.dir(this.ellipse[0]);
-        //console.dir(this.ellipse[1]);
-        // console.dir(this.ellipse[2]);
 
 
 // прогон точок-координат на принадлежність до перешкод трикутників
@@ -306,18 +277,11 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
 
         for (var j = this.mapMaxY; j >= 0; j--) {
             for (var i = 0; i < this.mapMaxX; i++) {
-
                 _s+=this.map[i][j];
             }
             console.log(_s);
             _s=' ';
         }
-
-//console.log(this.map[51][30]);
-//console.log(this.map);
-//console.log(this.triangle.length);
-//this.triangleInit(1,12,10);
-
     };
 
     /*
@@ -387,7 +351,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
                     if (pathFinder.openPointArray[posX][posY] != undefined) {
                         pathFinder.openPointArray[posX][posY].status = false;
                         pathFinder.countOfOpenPoin--;
-                      //  console.log('addClose: ', posX, posY, ' кількість відкритих', pathFinder.countOfOpenPoin);
+                        //  console.log('addClose: ', posX, posY, ' кількість відкритих', pathFinder.countOfOpenPoin);
 
                     }
                 }
@@ -717,7 +681,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
                     this.caсhePath.push(pathFinder.path.slice());
 
                     //видаляємо точку початку маршруту
-                                        //console.log('До кінцевої точки маршруту треба пройти ', pathFinder.path.length - 1,' кроків');
+                    //console.log('До кінцевої точки маршруту треба пройти ', pathFinder.path.length - 1,' кроків');
                 }
                 stepCount++;
             }
@@ -729,7 +693,7 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
         }
         pathFinder.path.pop();
         console.log('Зроблено', stepCount, 'Ітерацій, до кінцевої точки маршруту треба пройти', pathFinder.path.length - 1, pathFinder.path);
-         return pathFinder.path;
+        return pathFinder.path;
         //}
     }
 

@@ -288,7 +288,7 @@ XMen.prototype = {
                 // console.log('this.walkedAllWay',this.walkedAllWay);
 
                 console.log(this.name, ' отримав новий машрут, прямує до [', _x, ',', _y, '] точка маршруту', this.PathMapStep);
-                personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' отримав новий машрут, прямує до [' + _x + ',' + _y + '] точка маршруту №' + this.PathMapStep);
+                personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + ' дійшов до кінцевої точки і отримав новий машрут, прямує до [' + _x + ',' + _y + '] точка маршруту №' + this.PathMapStep);
             }
             else {
                 _x = this.nextDestinationPointX;
@@ -425,11 +425,9 @@ XMen.prototype = {
                 personsHistoryDB.personsAddLog(this.heroID, this.showHeroInfo() + 'зцілився на ' + regenerHp + ' пунктів здоровя');
             }
         }
-    },
-
-    // повторювався код пошуку найближчого противника... треба буде реалызувати
-    findingNearest: function () {
     }
+
+
 };
 
 Vampires.prototype = Object.create(XMen.prototype);
@@ -778,8 +776,8 @@ module.exports.heroCreate = function(name, clan, x, y) {
         numberOfLivingHero++;
 
         initHeroOnMap(heroes[heroes.length-1],heroes.length-1);
-        personsHistoryDB.personsSave(heroes[heroes.length-1].heroID,'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ')
-        personsDB.updatePerson(heroes[heroes.length-1]);
+        personsHistoryDB.personsSave(heroes[heroes.length-1].heroID,'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ');
+        personsDB.savePerson(heroes[heroes.length-1]);
         return 'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ';
 
 

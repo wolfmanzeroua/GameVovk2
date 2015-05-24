@@ -6,7 +6,7 @@ var DB;
 
 function getTime(){
     var t = new Date();
-return t.getHours() + ':' + t.getMinutes() + ':' + t.getSeconds()+ ' ';
+    return t.getHours() + ':' + t.getMinutes() + ':' + t.getSeconds()+ ' ';
 }
 
 // Connect to the db
@@ -20,8 +20,8 @@ MongoClient.connect(userUrl, function(err, db) {
         console.log('We are connected to',userUrl);
         console.log('Drop all previos collections');
 
-       PersonsCollection.drop();
-       HistoryCollection.drop();
+        PersonsCollection.drop();
+        HistoryCollection.drop();
 
     }
     else console.log('Cant connect to',userUrl);
@@ -38,7 +38,7 @@ function personsAddLog(id,text) {
 
 function personsFindLog(id, socket) {
 
- console.log('************************************8');
+   // console.log('************************************8');
     HistoryCollection.findOne({owner: +id}, function(err, item) {
         if(err){
             console.log(err);
