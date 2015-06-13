@@ -38,17 +38,7 @@ function initMap (app) {
     var myLocation = require('../modules/location.js');
 
 
-    app.get('/', function(req, res){
-        res.sendfile('./postRestAPIandButleField.html');
-    });
 
-    app.get('/db', function(req, res){
-        res.sendfile('./dataBaseUI.html');
-    });
-
-    app.get('/img/:file', function(req, res){
-        res.sendfile('./img/' + req.params.file);
-    });
 
     io.on('connection', function(socket){
         var _fig;

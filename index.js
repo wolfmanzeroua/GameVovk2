@@ -783,7 +783,7 @@ module.exports.heroCreate = function(name, clan, x, y) {
         numberOfLivingHero++;
 
         initHeroOnMap(heroes[heroes.length-1],heroes.length-1);
-        personsHistoryDB.personsSave(heroes[heroes.length-1].heroID,'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ');
+        personsHistoryDB.personsSave(heroes[heroes.length-1].heroID,'Hero '+ heroes[heroes.length-1].name +' was succesfull created ');
         personsDB.savePerson(heroes[heroes.length-1]);
         return 'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ';
 
