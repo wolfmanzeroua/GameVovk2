@@ -4,101 +4,101 @@
         <table>
             <tr><th>Heroes picture</th> <th>The list of properties</th>       <th>Input, set properties</th>      <th>Description of properties</th></tr>
             <tr> <td rowspan="33" width="200px" style="vertical-align: top">
-                <img src="./img/noAvatar.png"></td> <td style="color: red"><b> Server choose default Clan Settings </b></td> <td style="color: red"><b><input type="radio" name="default" id="default1" onchange="changeSeting()" value="true"  checked>True
-                <input type="radio" name="default" id="default2" onchange="changeSeting()" value="false" >False </b></td>       <td style="color: red"><b>True = Clan settings, False = input settings  </b></td></tr>
+                <img src="./img/noAvatar.png"></td> <td style="color: red"><b> Server choose default Clan Settings </b></td> <td style="color: red"><b><input type="radio" name="default" id="defaultProperty"  value="true"  checked>True
+                <input type="radio" name="default" id="ownProperty"  value="false" >False </b></td>       <td style="color: red"><b>True = Clan settings, False = input settings  </b></td></tr>
 
             <tr><td><b>clan:</b></td> <td>
-                <input type="radio" name="clan" id="clan" onchange="changeSeting()" value="true"  checked="X-Men">X-Men
-                <input type="radio" name="clan" id="clan1" onchange="changeSeting()" value="Vampires" >Vampires</td>       <td>There are two clans of heroes X-Men and Vamoires. Make your choice</td></tr>
+                <input type="radio" name="clan" id="clan"  value="true"  checked="X-Men">X-Men
+                <input type="radio" name="clan" id="clan1"  value="Vampires" >Vampires</td>       <td>There are two clans of heroes X-Men and Vamoires. Make your choice</td></tr>
 
             <tr><td><b>name:</b></td>       <td><input type="text" name="name" id="name" size="20" maxlength="20" required></td>      <td> Input new Hero name. Note: Wolverine, Sweetdeath,Dracula has own default settings</td></tr>
-            <tr><td><b>features:</b></td>   <td><textarea name="features" id="features" rows="2" cols="20">he's just a cool dude</textarea></td><td> Description. Like this: can heal or recover, can fly, have six retractable claws,can drink blood etc. </td></tr>
-            <tr><td><b>hairСolor:</b></td>  <td><input type="text" name="name" id="hairСolor" size="20" maxlength="20" value="black"></td><td> Description. Like this: black. </td></tr>
-            <tr><td><b>beard:</b></td>      <td><input type="text" name="name" id="beard" size="20" maxlength="20" value="cool"></td>  <td> Description. Like this: small, cool. </td></tr>
-            <tr><td><b>tits:</b></td>       <td><input type="text" name="name" id="tits" size="20" maxlength="20" value="no"></td>   <td> Description. Like this: no, small, cool, big, wonderful  </td></tr>
+            <tr><td class = "hidden"><b>features:</b></td>   <td class = "hidden"><textarea name="features" id="features" rows="2" cols="20">he's just a cool dude</textarea></td><td class = "hidden"> Description. Like this: can heal or recover, can fly, have six retractable claws,can drink blood etc. </td></tr>
+            <tr><td class = "hidden"><b>hairСolor:</b></td>  <td class = "hidden"><input type="text" name="name" id="hairСolor" size="20" maxlength="20" value="black"></td><td class = "hidden"> Description. Like this: black. </td></tr>
+            <tr><td class = "hidden"><b>beard:</b></td>      <td class = "hidden"><input type="text" name="name" id="beard" size="20" maxlength="20" value="cool"></td>  <td class = "hidden"> Description. Like this: small, cool. </td></tr>
+            <tr><td class = "hidden"><b>tits:</b></td>       <td class = "hidden"><input type="text" name="name" id="tits" size="20" maxlength="20" value="no"></td>   <td class = "hidden"> Description. Like this: no, small, cool, big, wonderful  </td></tr>
 
-            <tr><td><b>sex: </b></td>       <td>
-                <input type="radio" name="sex" id="sex1" onchange="changeSeting()" value="true"  checked="checked"> Man
-                <input type="radio" name="sex" id="sex2" onchange="changeSeting()" value="false" >Woman</td>        <td> *** </td></tr>
+            <tr><td class = "hidden"><b>sex: </b></td>       <td class = "hidden">
+                <input type="radio" name="sex" id="sex1"  value="true"  checked="checked"> Man
+                <input type="radio" name="sex" id="sex2"  value="false" >Woman</td>        <td class = "hidden"> *** </td></tr>
 
-            <tr><td><b>health:</b></td>     <td><input type="number" name="health" id="health" min="70" max="300" onKeyDown="" onchange="" value="100" step="10" size ="4" style="width: 50px"></td>  <td>An important property. For People normal grading 90-120. In Vampire depending on the class 150-200. </td></tr>
-            <!--<tr><td><b>maxHealth: </b></td> <td>100</td></tr>-->
-            <tr><td><b>power:</b></td>      <td><input type="number" name="power" id="power" min="1" max="7" onKeyDown="" onchange="" value="2" step="1" size ="4" style="width: 50px"></td>  <td>An important property. For People normal grading 1-3. In Vampire depending on the class 2-5. </td></tr>
-            <tr><td><b>attackRange:</b></td><td><input type="number" name="attackRange" id="attackRange" min="1" max="10" onKeyDown="" onchange="" value="4" step="1" size ="4" style="width: 50px"></td>  <td>An important property. For People normal grading 3-4. In Vampire depending on the class 3-6. </td></tr>
-            <tr><td><b>damage:</b></td>     <td><input type="number" name="damage" id="damage" min="1" max="30" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td>An important property. For People normal grading 8-11. In Vampire depending on the class 8-20. </td></tr>
-            <tr><td><b>specDamage:</b></td> <td><input type="number" name="specDamage" id="specDamage" min="1" max="30" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td>An important property. Depends on the hero's super kick. (10-25) </td></tr>
-            <tr><td><b>chanceSpecDamage:</b></td>   <td><input type="number" name="chanceSpecDamage" id="chanceSpecDamage" min="10" max="90" onKeyDown="" onchange="" value="50" step="1" size ="4" style="width: 50px"></td>  <td>An important property. Chance to make super kick </td></tr>
-            <!--<tr><td><b>defence:</b></td>    <td> 0</td></tr>-->
-            <tr><td><b>speed: </b></td>     <td><input type="number" name="speed" id="speed" min="5" max="100" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td>An important property. For People near 10. For  Vampire 10-15 </td></tr>
+            <tr><td class = "hidden"><b>health:</b></td>     <td class = "hidden"><input type="number" name="health" id="health" min="70" max="300" onKeyDown="" onchange="" value="100" step="10" size ="4" style="width: 50px"></td>  <td class = "hidden">An important property. For People normal grading 90-120. In Vampire depending on the class 150-200. </td></tr>
+            <!--<tr><td class = "hidden"><b>maxHealth: </b></td> <td class = "hidden">100</td></tr>-->
+            <tr><td class = "hidden"><b>power:</b></td>      <td class = "hidden"><input type="number" name="power" id="power" min="1" max="7" onKeyDown="" onchange="" value="2" step="1" size ="4" style="width: 50px"></td>  <td class = "hidden">An important property. For People normal grading 1-3. In Vampire depending on the class 2-5. </td></tr>
+            <tr><td class = "hidden"><b>attackRange:</b></td><td class = "hidden"><input type="number" name="attackRange" id="attackRange" min="1" max="10" onKeyDown="" onchange="" value="4" step="1" size ="4" style="width: 50px"></td>  <td class = "hidden">An important property. For People normal grading 3-4. In Vampire depending on the class 3-6. </td></tr>
+            <tr><td class = "hidden"><b>damage:</b></td>     <td class = "hidden"><input type="number" name="damage" id="damage" min="1" max="30" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td class = "hidden">An important property. For People normal grading 8-11. In Vampire depending on the class 8-20. </td></tr>
+            <tr><td class = "hidden"><b>specDamage:</b></td> <td class = "hidden"><input type="number" name="specDamage" id="specDamage" min="1" max="30" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td class = "hidden">An important property. Depends on the hero's super kick. (10-25) </td></tr>
+            <tr><td class = "hidden"><b>chanceSpecDamage:</b></td>   <td class = "hidden"><input type="number" name="chanceSpecDamage" id="chanceSpecDamage" min="10" max="90" onKeyDown="" onchange="" value="50" step="1" size ="4" style="width: 50px"></td>  <td class = "hidden">An important property. Chance to make super kick </td></tr>
+            <!--<tr><td class = "hidden"><b>defence:</b></td>    <td class = "hidden"> 0</td></tr>-->
+            <tr><td class = "hidden"><b>speed: </b></td>     <td class = "hidden"><input type="number" name="speed" id="speed" min="5" max="100" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td class = "hidden">An important property. For People near 10. For  Vampire 10-15 </td></tr>
 
-            <tr><td><b>canFly: </b></td>    <td>
-                <input type="radio" name="canFly" id="canFly1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="canFly" id="canFly2" onchange="changeSeting()" value="false" > False </td>   <td>Note: option is not available, no impact on the game!</td></tr>
-
-
-            <tr><td><b>flySpeed: </b></td>  <td><input type="number" name="flySpeed" id="flySpeed" min="5" max="90" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td>Note: option is not available, no impact on the game!</td></tr>
-
-            <tr><td><b>canBeInvisible:</b></td><td>
-                <input type="radio" name="canBeInvisible" id="canBeInvisible1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="canBeInvisible" id="canBeInvisible2" onchange="changeSeting()" value="false" > False </td>   <td>Note: option is not available, no impact on the game!</td></tr>
+            <tr><td class = "hidden"><b>canFly: </b></td>    <td class = "hidden">
+                <input type="radio" name="canFly" id="canFly1"  value="true"  checked="checked"> True
+                <input type="radio" name="canFly" id="canFly2"  value="false" > False </td>   <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
 
 
-            <tr><td><b>invisible: </b></td><td>
-                <input type="radio" name="invisible" id="invisible1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="invisible" id="invisible2" onchange="changeSeting()" value="false" > False</td>  <td>Note: option is not available, no impact on the game!</td></tr>
+            <tr><td class = "hidden"><b>flySpeed: </b></td>  <td class = "hidden"><input type="number" name="flySpeed" id="flySpeed" min="5" max="90" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
+
+            <tr><td class = "hidden"><b>canBeInvisible:</b></td><td class = "hidden">
+                <input type="radio" name="canBeInvisible" id="canBeInvisible1"  value="true"  checked="checked"> True
+                <input type="radio" name="canBeInvisible" id="canBeInvisible2"  value="false" > False </td>   <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
 
 
-            <tr><td><b>canJump:</b></td><td>
-                <input type="radio" name="canJump" id="canJump1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="canJump" id="canJump2" onchange="changeSeting()" value="false" > False </td>     <td>Note: option is not available, no impact on the game!</td></tr>
+            <tr><td class = "hidden"><b>invisible: </b></td><td class = "hidden">
+                <input type="radio" name="invisible" id="invisible1"  value="true"  checked="checked"> True
+                <input type="radio" name="invisible" id="invisible2"  value="false" > False</td>  <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
 
 
-            <tr><td><b>canTeleport: </b></td><td>
-                <input type="radio" name="canTeleport" id="canTeleport1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="canTeleport" id="canTeleport2" onchange="changeSeting()" value="false" > False</td>  <td>Note: option is not available, no impact on the game!</td></tr>
+            <tr><td class = "hidden"><b>canJump:</b></td><td class = "hidden">
+                <input type="radio" name="canJump" id="canJump1"  value="true"  checked="checked"> True
+                <input type="radio" name="canJump" id="canJump2"  value="false" > False </td>     <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
 
 
-            <tr><td><b>canShoot: </b></td><td>
-                <input type="radio" name="canShoot" id="canShoot1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="canShoot" id="canShoot2" onchange="changeSeting()" value="false" > False</td>   <td>Note: option is not available, no impact on the game!</td></tr>
-
-            <tr><td><b>canFreeze:</b></td><td>
-                <input type="radio" name="canFreeze" id="canFreeze1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="canFreeze" id="canFreeze2" onchange="changeSeting()" value="false" > False</td> <td>Note: option is not available, no impact on the game!</td></tr>
+            <tr><td class = "hidden"><b>canTeleport: </b></td><td class = "hidden">
+                <input type="radio" name="canTeleport" id="canTeleport1"  value="true"  checked="checked"> True
+                <input type="radio" name="canTeleport" id="canTeleport2"  value="false" > False</td>  <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
 
 
-            <tr><td><b>isFreeze: </b></td><td>
-                <input type="radio" name="isFreeze" id="isFreeze1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="isFreeze" id="isFreeze2" onchange="changeSeting()" value="false" > False</td>   <td>Note: option is not available, no impact on the game!</td></tr>
+            <tr><td class = "hidden"><b>canShoot: </b></td><td class = "hidden">
+                <input type="radio" name="canShoot" id="canShoot1"  value="true"  checked="checked"> True
+                <input type="radio" name="canShoot" id="canShoot2"  value="false" > False</td>   <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
 
-            <tr><td><b>isFly:</b></td><td>
-                <input type="radio" name="isFly" id="isFly1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="isFly" id="isFly2" onchange="changeSeting()" value="false" > False</td>     <td>Note: option is not available, no impact on the game!</td></tr>
+            <tr><td class = "hidden"><b>canFreeze:</b></td><td class = "hidden">
+                <input type="radio" name="canFreeze" id="canFreeze1"  value="true"  checked="checked"> True
+                <input type="radio" name="canFreeze" id="canFreeze2"  value="false" > False</td> <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
 
-            <!--<tr><td><b>freezeStepLeft:</b></td><td> 0-->
 
-            <tr><td><b>canHealing:</b></td><td>
-                <input type="radio" name="canHealing" id="canHealing1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="canHealing" id="canHealing2" onchange="changeSeting()" value="false" > False</td>     <td>An important property. Can hero regenerate health or no.</td></tr>
+            <tr><td class = "hidden"><b>isFreeze: </b></td><td class = "hidden">
+                <input type="radio" name="isFreeze" id="isFreeze1"  value="true"  checked="checked"> True
+                <input type="radio" name="isFreeze" id="isFreeze2"  value="false" > False</td>   <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
 
-            <tr><td><b>healingMaxPoint: </b></td>   <td><input type="number" name="healingMaxPoint" id="healingMaxPoint" min="5" max="30" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td>An important property. How many health points can restore.</td></tr>
-            <tr><td><b>hasVampBite: </b></td><td>
-                <input type="radio" name="hasVampBite" id="hasVampBite1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="hasVampBite" id="hasVampBite2" onchange="changeSeting()" value="false" > False </td>     <td>An important property. Vampires can drink blood and healing health. </td></tr>
+            <tr><td class = "hidden"><b>isFly:</b></td><td class = "hidden">
+                <input type="radio" name="isFly" id="isFly1"  value="true"  checked="checked"> True
+                <input type="radio" name="isFly" id="isFly2"  value="false" > False</td>     <td class = "hidden">Note: option is not available, no impact on the game!</td></tr>
 
-            <!--<tr><td><b>level:</b></td><td> 1-->
+            <!--<tr><td class = "hidden"><b>freezeStepLeft:</b></td><td class = "hidden"> 0-->
 
-            <tr><td><b>lookForTrouble:</b></td><td>
-                <input type="radio" name="lookForTrouble" id="lookForTrouble1" onchange="changeSeting()" value="true"  checked="checked"> True
-                <input type="radio" name="lookForTrouble" id="lookForTrouble2" onchange="changeSeting()" value="false" > False</td>      <td>An important property. Hero look for the nearest enemy and pursues it.</td></tr>
+            <tr><td class = "hidden"><b>canHealing:</b></td><td class = "hidden">
+                <input type="radio" name="canHealing" id="canHealing1"  value="true"  checked="checked"> True
+                <input type="radio" name="canHealing" id="canHealing2"  value="false" > False</td>     <td class = "hidden">An important property. Can hero regenerate health or no.</td></tr>
+
+            <tr><td class = "hidden"><b>healingMaxPoint: </b></td>   <td class = "hidden"><input type="number" name="healingMaxPoint" id="healingMaxPoint" min="5" max="30" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td class = "hidden">An important property. How many health points can restore.</td></tr>
+            <tr><td class = "hidden"><b>hasVampBite: </b></td><td class = "hidden">
+                <input type="radio" name="hasVampBite" id="hasVampBite1"  value="true"  checked="checked"> True
+                <input type="radio" name="hasVampBite" id="hasVampBite2"  value="false" > False </td>     <td class = "hidden">An important property. Vampires can drink blood and healing health. </td></tr>
+
+            <!--<tr><td class = "hidden"><b>level:</b></td><td class = "hidden"> 1-->
+
+            <tr><td class = "hidden"><b>lookForTrouble:</b></td><td class = "hidden">
+                <input type="radio" name="lookForTrouble" id="lookForTrouble1"  value="true"  checked="checked"> True
+                <input type="radio" name="lookForTrouble" id="lookForTrouble2"  value="false" > False</td>      <td class = "hidden">An important property. Hero look for the nearest enemy and pursues it.</td></tr>
 
             <tr><td><b>X: </b></td><td> <input type="number" name="x1" id="x" min="0" max="800" onKeyDown="" onchange="" value="200" step="10" size ="4" style="width: 50px"> </td>    <td>An important property. Current X-coordinate.</td></tr>
             <tr><td><b>Y: </b></td><td> <input type="number" name="x1" id="y" min="0" max="600"  onKeyDown="" onchange="" value="200" step="10" width="80" size ="4" style="width: 50px"> </td>    <td>An important property. Current Y-coordinate.</td></tr>
 
-            <!--<tr><td><b>PathMapStep:</b></td><td> 0-->
-            <!--<tr><td><b>walkedAllWay: </b></td><td>false-->
-            <tr><td><b>nextDestinationPointX:</b></td><td> <input type="number" name="nextDestinationPointX" id="nextDestinationPointX" min="0" max="800" onKeyDown="" onchange="" value="200" step="10" size ="4" style="width: 50px"> </td>    <td>An important property. X-coordinate of the destination point.</td></tr>
-            <tr><td><b>nextDestinationPointY: </b></td><td> <input type="number" name="nextDestinationPointY" id="nextDestinationPointY" min="0" max="800" onKeyDown="" onchange="" value="200" step="10" size ="4" style="width: 50px"> </td>    <td>An important property. Y-coordinate of the destination point.</td></tr>
+            <!--<tr><td class = "hidden"><b>PathMapStep:</b></td><td class = "hidden"> 0-->
+            <!--<tr><td class = "hidden"><b>walkedAllWay: </b></td><td class = "hidden">false-->
+            <tr><td class = "hidden"><b>nextDestinationPointX:</b></td><td class = "hidden"> <input type="number" name="nextDestinationPointX" id="nextDestinationPointX" min="0" max="800" onKeyDown="" onchange="" value="200" step="10" size ="4" style="width: 50px"> </td>    <td class = "hidden">An important property. X-coordinate of the destination point.</td></tr>
+            <tr><td class = "hidden"><b>nextDestinationPointY: </b></td><td class = "hidden"> <input type="number" name="nextDestinationPointY" id="nextDestinationPointY" min="0" max="800" onKeyDown="" onchange="" value="200" step="10" size ="4" style="width: 50px"> </td>    <td class = "hidden">An important property. Y-coordinate of the destination point.</td></tr>
 
         </table>
 

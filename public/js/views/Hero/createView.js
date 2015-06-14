@@ -9,14 +9,26 @@ define([
         template: _.template(content),
 
         events: {
-            'click #saveBtn' : 'saveUser'
+            'click #saveBtn' : 'saveUser',
+            'click #defaultProperty':'defaultPropertyChecked',
+            'click #ownProperty':'ownPropertyChecked'
         },
+
+        defaultPropertyChecked: function (){
+            console.log('defaultPropertyChecked');
+        },
+
+        ownPropertyChecked: function (){
+            console.log('ownPropertyChecked');
+        },
+
 
         initialize: function () {
             console.log('createView initialize');
            this.render();
 
         },
+
 
         saveUser: function(e){
             console.log('Save Button pressed');
