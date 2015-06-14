@@ -1,8 +1,8 @@
 
 define([
     'text!templates/Hero/create.html',
-    'models/user'
-], function (content, UserModel) {
+    '../../models/hero'
+], function (content, HeroModel) {
     var mainView = Backbone.View.extend({
         el: '#contentHolder',
 
@@ -13,41 +13,45 @@ define([
         },
 
         initialize: function () {
-           this.render();
             console.log('createView initialize');
+           this.render();
+
         },
 
         saveUser: function(e){
+            console.log('Save Button pressed');
             var el = this.$el;
-            var model = new UserModel();
-            var firstName = el.find('#first').val();
-            var lastName = el.find('#last').val();
-            var age = el.find('#age').val();
+            var model = new HeroModel();
 
-            var data = {
-                name: {
-                    first: firstName,
-                    last: lastName
-                },
-                age: age
-            };
-            model.save(data, {
-                success: function(model){
-                    Backbone.history.fragment = '';
-                    Backbone.history.navigate('jsGroup/User', {trigger: true});
-                },
-                error: function(err, xhr, model){
-                    alert(xhr);
-                }
-            });
+            //var firstName = el.find('#first').val();
+            //var lastName = el.find('#last').val();
+            //var age = el.find('#age').val();
+            //
+            //var data = {
+            //    name: {
+            //        first: firstName,
+            //        last: lastName
+            //    },
+            //    age: age
+            //};
+
+            //model.save(data, {
+            //    success: function(model){
+            //        Backbone.history.fragment = '';
+            //        Backbone.history.navigate('jsGroup/User', {trigger: true});
+            //    },
+            //    error: function(err, xhr, model){
+            //        alert(xhr);
+            //    }
+            //});
         },
 
         render: function () {
             var templateHtml = this.template();
-            console.log(templateHtml);
-
-            this.$el.html(this.template());
+           // console.log(templateHtml);
             console.log('createView render');
+            this.$el.html(this.template());
+
             //$.extend($.ui.dialog.prototype.options, {
             //    modal: true,
             //    resizable: false,

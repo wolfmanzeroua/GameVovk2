@@ -23,30 +23,40 @@ define([
         goToCreateHero: function(e){
 
             e.preventDefault();
-            e.stopPropagation();
+            //e.stopPropagation();
 
             var targetEl = $(e.target);
-            console.log(targetEl);
+            //console.log(targetEl);
 
             var hash = targetEl.data('hash');
             //console.log(hash);
 
             //hash = 'jsGroup/' + hash;
-            new createView();
+            //new createView();
             Backbone.history.navigate(hash, {trigger: true});
-
         },
+
         goToChangeProperties: function(e){
             e.preventDefault();
 
             var targetEl = $(e.target);
             var hash = targetEl.data('hash');
-            hash = 'jsGroup/' + hash;
+            //hash = 'jsGroup/' + hash;
 
             Backbone.history.navigate(hash, {trigger: true});
         },
 
-        //create: function(e){
+
+        goToShowDatabase: function(e){
+            e.preventDefault();
+
+            var targetEl = $(e.target);
+            var hash = targetEl.data('hash');
+            //hash = 'jsGroup/' + hash;
+
+            Backbone.history.navigate(hash, {trigger: true});
+        },
+                //create: function(e){
         //    new createView();
         //},
 

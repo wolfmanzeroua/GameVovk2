@@ -1,12 +1,16 @@
 
 define([
     'Backbone',
-    'views/mainView'
-], function (Backbone, mainView) {
+    'views/mainView',
+    'views/Hero/createView',
+    'views/Hero/changeView',
+    'views/databaseView'
+
+], function (Backbone, mainView,createView,changeView, databaseView ) {
     var Router = Backbone.Router.extend({
 
-        //mainView: null,
-        //contentView: null,
+        mainView: null,
+        contentView: null,
 
         routes: {
             "index": "index",
@@ -45,24 +49,33 @@ define([
         },
 
         createHero: function () {
-            //if (!this.mainView) {
-            //    this.mainView = new mainView();
-            //}
+
+            if(this.contentView){
+                this.contentView.undelegateEvents();
+            }
             console.log('createHero');
-        },
+            this.contentView = new createView();
+
+         },
 
         changeProperties: function () {
-            //if (!this.mainView) {
-            //    this.mainView = new mainView();
-            //}
+
+            if(this.contentView){
+                this.contentView.undelegateEvents();
+            }
             console.log('changeProperties');
+            this.contentView = new changeView();
+
+
         },
-//
+
         showDatabase: function () {
-            //if (!this.mainView) {
-            //    this.mainView = new mainView();
-            //}
+            if(this.contentView){
+                this.contentView.undelegateEvents();
+            }
             console.log('showDatabase');
+            this.contentView = new databaseView();
+
         }
     });
 //
