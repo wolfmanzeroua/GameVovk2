@@ -23,18 +23,24 @@ define([
             var el = this.$el;
             var model = new HeroModel();
 
-            //var firstName = el.find('#first').val();
-            //var lastName = el.find('#last').val();
-            //var age = el.find('#age').val();
-            //
-            //var data = {
-            //    name: {
-            //        first: firstName,
-            //        last: lastName
-            //    },
-            //    age: age
-            //};
 
+
+
+            var name = el.find('#name').val();
+            var clan = el.find('#clan')[0].checked ? 'X-Men':'Vampires';
+            //console.log(el.find('#clan'));
+            //console.log(el.find('#name'));
+
+            var x = el.find('#x').val();
+            var y = el.find('#y').val();
+
+            var data = {
+                name: name,
+                clan : clan,
+                x : x,
+                y : y,
+                };
+console.log(data);
             //model.save(data, {
             //    success: function(model){
             //        Backbone.history.fragment = '';
@@ -45,6 +51,51 @@ define([
             //    }
             //});
         },
+        //var UserSchema = new Schema({
+        //    name: String,
+        //    dateOfBirth: {type: Date, default: Date.now},//JSON
+        //    clan : String,
+        //    features : String,
+        //    hairСolor : String,
+        //    beard : String,
+        //    tits : String,
+        //    sex : String,
+        //    health : Number,
+        //    maxHealth : Number,
+        //    power : Number,
+        //    attackRange : Number,
+        //    damage : Number,
+        //    specDamage : Number,
+        //    chanceSpecDamage : Number,
+        //    defence : Number,
+        //    speed : Number,
+        //    canFly : Boolean,
+        //    flySpeed : Number,
+        //    canBeInvisible : Boolean,
+        //    invisible : Boolean,
+        //    canJump : Boolean,
+        //    canTeleport : Boolean,
+        //    canShoot : Boolean,
+        //    canFreeze : Boolean,
+        //    isFreeze : Boolean,
+        //    isFly : Boolean,
+        //    freezeStepLeft : Number,
+        //    canHealing : Boolean,
+        //    healingMaxPoint : Number,
+        //    hasVampBite : Boolean,
+        //    level : Number,
+        //    lookForTrouble : Boolean,
+        //    //history : ['2323232323232423423'],
+        //    x : Number,
+        //    y : Number,
+        //    PathMapStep : Number,
+        //    walkedAllWay : false,
+        //    nextDestinationPointX : Number,
+        //    nextDestinationPointY : Number,
+        //    heroID : Number
+        //
+        //
+        //}, {collection: 'Persons'});
 
         render: function () {
             var templateHtml = this.template();
