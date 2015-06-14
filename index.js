@@ -715,82 +715,107 @@ module.exports.newSettings = function(newSettingsOfHero) {
     }
 };
 
-module.exports.heroCreate = function(name, clan, x, y) {
+module.exports.heroCreate = function(savedHero) {
+
+    if (savedHero.defaultProperty) {
+        var name = savedHero.name;
+        var clan = savedHero.clan;
+        var x = savedHero.x;
+        var y = savedHero.y;
 
 //console.log(numberOfLivingHero);
-    var created = false;
-    if (myLocation.validatePoint(x,y) > 0) {
-        return 'Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(x,y);
+        var created = false;
+        if (myLocation.validatePoint(x, y) > 0) {
+            console.log('Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(x, y));
+            return {err: 'Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(x, y)};
+        }
+        else {
+            console.log('Validate Hero passed');
+            // console.log(name, name.length,(name == 'Wolverine') );
+            //XMen(clan, name, level, features, hairСolor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
+            if (name == 'Wolverine') {
+                heroes.push(new XMen('X-Men', 'Wolverine', 1, 'healing factor, six retractable claws', 'black', 'small', 'no', 'man', 100, 2, 4, 10, 20, 70, 0, 10, false, 0, false, false, true, false, false, false, true, 15, false, true, x, y, heroes.length));
+                created = true;
+                console.log('Create Wolverine');
+                console.log(heroes[heroes.length - 1]);
+
+            }
+
+
+            if (name == 'Sweetdeath') {
+                heroes.push(new Vampires('Vampires', 'Sweetdeath', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'big', 'woman', 150, 2, 6, 15, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y, heroes.length));
+                created = true;
+                console.log('Create Sweetdeath');
+                console.log(heroes[heroes.length - 1]);
+            }
+
+            if (name == 'Dracula') {
+                heroes.push(new Vampires('Vampires', 'Dracula', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 180, 3, 6, 17, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y, heroes.length));
+                created = true;
+                console.log('Create Dracula');
+                console.log(heroes[heroes.length - 1]);
+            }
+
+            if (name == 'MegaVamp') {
+                heroes.push(new Vampires('Vampires', 'MegaVamp', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 200, 3, 6, 20, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y, heroes.length));
+                created = true;
+                console.log('Create MegaVamp ');
+                console.log(heroes[heroes.length - 1]);
+            }
+
+
+            if (!created) {
+
+
+                created = true;
+
+                var defObject = defSet(name, clan, +x, +y);
+
+                if (clan == 'X-Men') {
+                    heroes.push(new XMen(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y, heroes.length));
+                    console.log('Oh... Its a new  Х-Men  with default properties');
+                    console.log(heroes[heroes.length - 1]);
+
+                }
+
+                if (clan == 'Vampires') {
+                    heroes.push(new Vampires(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y, heroes.length));
+                    console.log('Oh... Its a new  Vampires with default properties ');
+                    console.log(heroes[heroes.length - 1]);
+
+                }
+            }
+        }
     }
     else {
-        console.log('validate hero passed');
-        // console.log(name, name.length,(name == 'Wolverine') );
-        //XMen(clan, name, level, features, hairСolor, beard, tits, sex, health, power, attackRange, damage, specDamage, chanceSpecDamage, defence, speed, canFly, flySpeed, canBeInvisible, invisible, canJump, canTeleport, canShoot, canFreeze, canHealing, healingMaxPoint, hasVampBite,lookForTrouble, x, y) {
-        if (name == 'Wolverine') {
-            heroes.push(new XMen('X-Men', 'Wolverine', 1, 'healing factor, six retractable claws', 'black', 'small', 'no', 'man', 100, 2, 4, 10, 20, 70, 0, 10, false, 0, false, false, true, false, false, false, true, 15, false, true, x, y, heroes.length));
-            created = true;
-            console.log('Створено персонажа');
-            console.log(heroes[heroes.length-1]);
+        if (savedHero.clan == 'X-Men') {
+            heroes.push(new XMen(savedHero.clan, savedHero.name, /*savedHero.level */1, savedHero.features, savedHero.hairСolor, savedHero.beard, savedHero.tits, savedHero.sex, savedHero.health, savedHero.power, savedHero.attackRange, savedHero.damage, savedHero.specDamage, savedHero.chanceSpecDamage, /*savedHero.defence */ 0, savedHero.speed, savedHero.canFly, savedHero.flySpeed, savedHero.canBeInvisible, savedHero.invisible, savedHero.canJump, savedHero.canTeleport, savedHero.canShoot, savedHero.canFreeze, savedHero.canHealing, savedHero.healingMaxPoint, savedHero.hasVampBite, savedHero.lookForTrouble, savedHero.x, savedHero.y, heroes.length));
+            console.log('Oh... Its a new  Х-Men with individual properties ');
+            console.log(heroes[heroes.length - 1]);
 
         }
 
+        if (savedHero.clan == 'Vampires') {
+            heroes.push(new Vampires(savedHero.clan, savedHero.name,  /*savedHero.level */1, savedHero.features, savedHero.hairСolor, savedHero.beard, savedHero.tits, savedHero.sex, savedHero.health, savedHero.power, savedHero.attackRange, savedHero.damage, savedHero.specDamage, savedHero.chanceSpecDamage, /*savedHero.defence */ 0, savedHero.speed, savedHero.canFly, savedHero.flySpeed, savedHero.canBeInvisible, savedHero.invisible, savedHero.canJump, savedHero.canTeleport, savedHero.canShoot, savedHero.canFreeze, savedHero.canHealing, savedHero.healingMaxPoint, savedHero.hasVampBite, savedHero.lookForTrouble, savedHero.x, savedHero.y, heroes.length));
+            console.log('Oh... Its a new  Vampires  with individual properties ');
+            console.log(heroes[heroes.length - 1]);
 
-        if (name == 'Sweetdeath') {
-            heroes.push(new Vampires('Vampires', 'Sweetdeath', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'big', 'woman', 150, 2, 6, 15, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y, heroes.length));
-            created = true;
-            console.log('Створено персонажа');
-            console.log(heroes[heroes.length-1]);
         }
 
-        if (name == 'Dracula') {
-            heroes.push(new Vampires('Vampires', 'Dracula', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 180, 3, 6, 17, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y, heroes.length));
-            created = true;
-            console.log('Створено персонажа');
-            console.log(heroes[heroes.length-1]);
-        }
-
-        if (name == 'MegaVamp') {
-            heroes.push(new Vampires('Vampires', 'MegaVamp', 1, 'invisibility,can fly, regeneration bites', 'carrot', 'no', 'no', 'man', 200, 3, 6, 20, 10, 30, 0, 15, true, 20, true, false, true, false, false, false, true, 7, true, false, x, y, heroes.length));
-            created = true;
-            console.log('Створено персонажа');
-            console.log(heroes[heroes.length-1]);
-        }
-
-
-        if (!created) {
-
-
-            created = true;
-
-            var defObject = defSet(name, clan, +x, +y);
-
-            if (clan == 'X-Men') {
-                heroes.push(new XMen(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y, heroes.length));
-                console.log('Це новенький Хмен');
-                console.log(heroes[heroes.length-1]);
-
-            }
-
-            if (clan == 'Vampires') {
-                heroes.push(new Vampires(defObject.clan, defObject.name, defObject.level, defObject.features, defObject.hairСolor, defObject.beard, defObject.tits, defObject.sex, defObject.health, defObject.power, defObject.attackRange, defObject.damage, defObject.specDamage, defObject.chanceSpecDamage, defObject.defence, defObject.speed, defObject.canFly, defObject.flySpeed, defObject.canBeInvisible, defObject.invisible, defObject.canJump, defObject.canTeleport, defObject.canShoot, defObject.canFreeze, defObject.canHealing, defObject.healingMaxPoint, defObject.hasVampBite, defObject.lookForTrouble, defObject.x, defObject.y, heroes.length));
-                console.log('Це новенький Вампір');
-                console.log(heroes[heroes.length-1]);
-
-            }
-        }
-
-        numberOfHero = heroes.length;
-        numberOfLivingHero++;
-
-        initHeroOnMap(heroes[heroes.length-1],heroes.length-1);
-        personsHistoryDB.personsSave(heroes[heroes.length-1].heroID,'Hero '+ heroes[heroes.length-1].name +' was succesfull created ');
-        personsDB.savePerson(heroes[heroes.length-1]);
-        return 'Hero '+ heroes[heroes.length-1].name +' was succesfull creates ';
-
-
-        // console.dir(heroes[heroes.length - 1]);
     }
+
+    numberOfHero = heroes.length;
+    numberOfLivingHero++;
+
+    initHeroOnMap(heroes[heroes.length-1],heroes.length-1);
+    personsHistoryDB.personsSave(heroes[heroes.length-1].heroID,'Hero '+ heroes[heroes.length-1].name +' was succesfull created ');
+    personsDB.savePerson(heroes[heroes.length-1]);
+    return { text: 'Hero '+ heroes[heroes.length-1].name +' was succesfull created '};
+
+
+    // console.dir(heroes[heroes.length - 1]);
 };
+
 module.exports.start= start;
 
 module.exports.heroArray = function(antiCaching) {

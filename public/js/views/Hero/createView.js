@@ -16,16 +16,19 @@ define([
 
         defaultPropertyChecked: function (){
             console.log('defaultPropertyChecked');
+            $( ".hiddenByDefault" ).css( "display", "none" );
+
         },
 
         ownPropertyChecked: function (){
             console.log('ownPropertyChecked');
+            $( ".hiddenByDefault" ).css( "display", "table-cell" );
         },
 
 
         initialize: function () {
             console.log('createView initialize');
-           this.render();
+            this.render();
 
         },
 
@@ -34,34 +37,75 @@ define([
             console.log('Save Button pressed');
             var el = this.$el;
             var model = new HeroModel();
+            var data ={}
+
+            if (el.find('#defaultProperty')[0].checked) {
+
+                data.defaultProperty = true;
+                data.name = el.find('#name').val();
+                data.clan = el.find('#clan')[0].checked ? 'X-Men' : 'Vampires';
+                //console.log(el.find('#clan'));
+                //console.log(el.find('#name'));
+
+                data.x = +el.find('#x').val();
+                data.y = +el.find('#y').val();
+
+            }
+            else {
+                data.defaultProperty = false;
+                data.name = el.find('#name').val();
+                data.clan = el.find('#clan')[0].checked ? 'X-Men' : 'Vampires';
+                data.features  = el.find('#features').val();
+                data.hairСolor =el.find('#hairСolor').val();
+                data.beard = el.find('#beard').val();
+                data.tits = el.find('#tits').val();
+                data.sex = el.find('#sex')[0].checked ? 'Man' : 'Woman';
+                data.health = +el.find('#health').val();
+                //data.maxHealth = el.find('#maxHealth').val();
+                data.power = +el.find('#power').val();
+                data.attackRange =  +el.find('#attackRange').val();
+                data.damage =  +el.find('#damage').val();
+                data.specDamage =  +el.find('#specDamage').val();
+                data.chanceSpecDamage =  +el.find('#chanceSpecDamage').val();
+                //data.defence = el.find('#defence').val();
+                data.speed = +el.find('#speed').val();
+                data.canFly = el.find('#canFly')[0].checked;
+                data.flySpeed = +el.find('#flySpeed').val();
+                data.canBeInvisible = el.find('#canBeInvisible')[0].checked;
+                data.invisible = el.find('#invisible')[0].checked;
+                data.canJump = el.find('#canJump')[0].checked;
+                data.canTeleport = el.find('#canTeleport')[0].checked;
+                data.canShoot= el.find('#canShoot')[0].checked;
+                data.canFreeze = el.find('#canFreeze')[0].checked;
+                data.isFreeze = el.find('#isFreeze')[0].checked;
+                data.isFly = el.find('#isFly')[0].checked;
+                data.canHealing = el.find('#canHealing')[0].checked;
+                data.healingMaxPoint = +el.find('#healingMaxPoint').val();
+                data.hasVampBite = el.find('#hasVampBite')[0].checked;
+                data.lookForTrouble = el.find('#lookForTrouble')[0].checked;
+                data.x = +el.find('#x').val();
+                data.y = +el.find('#y').val();
+                //data.nextDestinationPointX = +el.find('#nextDestinationPointX').val();
+                //data.nextDestinationPointY = +el.find('#nextDestinationPointY').val();
 
 
+            }
 
+            console.log(data);
+            model.save(data, {
+                success: function(model, response){
+                    //Backbone.history.fragment = '';
+                    //Backbone.history.navigate('index', {trigger: true});
+                    //console.log(response);
+                    console.log('Success created')
+                    alert(response.text);
 
-            var name = el.find('#name').val();
-            var clan = el.find('#clan')[0].checked ? 'X-Men':'Vampires';
-            //console.log(el.find('#clan'));
-            //console.log(el.find('#name'));
-
-            var x = el.find('#x').val();
-            var y = el.find('#y').val();
-
-            var data = {
-                name: name,
-                clan : clan,
-                x : x,
-                y : y,
-                };
-console.log(data);
-            //model.save(data, {
-            //    success: function(model){
-            //        Backbone.history.fragment = '';
-            //        Backbone.history.navigate('jsGroup/User', {trigger: true});
-            //    },
-            //    error: function(err, xhr, model){
-            //        alert(xhr);
-            //    }
-            //});
+                },
+                error: function(err, xhr, model, response){
+                    console.log('Error created')
+                    alert(response);
+                }
+            });
         },
         //var UserSchema = new Schema({
         //    name: String,
@@ -111,7 +155,7 @@ console.log(data);
 
         render: function () {
             var templateHtml = this.template();
-           // console.log(templateHtml);
+            // console.log(templateHtml);
             console.log('createView render');
             this.$el.html(this.template());
 
@@ -134,19 +178,19 @@ console.log(data);
             //    }
             //});
 
-    //        this.$el = $(templateHtml).dialog({
-    //            width: '900px',
-    //            modal: true,
-    //            buttons: [{
-    //                text: "Ok", click: function () {
-    //                    $(this).dialog("close");
-    //                }
-    //            }]
-    //        });
-    //
+            //        this.$el = $(templateHtml).dialog({
+            //            width: '900px',
+            //            modal: true,
+            //            buttons: [{
+            //                text: "Ok", click: function () {
+            //                    $(this).dialog("close");
+            //                }
+            //            }]
+            //        });
+            //
             return this;
         }
-   });
+    });
 
     return mainView;
 });

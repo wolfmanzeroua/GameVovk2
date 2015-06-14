@@ -17,14 +17,14 @@ var myDbSocket;
 
 
 
-app.get('/', function(req, res){
-    // res.sendfile('./public/battlefield.html');
-    res.sendfile('./dataBaseUI.html');
-});
-
-app.get('/img/:file', function(req, res){
-    res.sendfile('./img/' + req.params.file);
-});
+//app.get('/', function(req, res){
+//    // res.sendfile('./public/battlefield.html');
+//    res.sendfile('./dataBaseUI.html');
+//});
+//
+//app.get('/img/:file', function(req, res){
+//    res.sendfile('./img/' + req.params.file);
+//});
 
 io.on('connection', function(socket) {
     mySocket = socket;
@@ -38,7 +38,7 @@ io.on('connection', function(socket) {
         console.log('Інтреіейс БД підключено');
         var obj = historyLog.historyLogFindLog(0,socket);
         var obj2 = persons.findPerson(1,socket);
-        var obj2 = persons.findPerson(1,socket);
+       // var obj2 = persons.findPerson(1,socket);
         //console.log('_____',obj);
         //socket.emit('showLog', obj)
     });

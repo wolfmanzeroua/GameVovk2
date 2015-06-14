@@ -8,6 +8,42 @@ var bodyparser = require('body-parser');
 
 module.exports = function(app) {
 
+    app.use(bodyparser.json());
+    //app.use(bodyparser.urlencoded({extended: true}));
+
+    app.post('/createHero/', function(req, res, next){
+        var body = req.body;
+        var gameResponse= {};
+        //var body = req.body;
+        console.log('POST: /createHero/', body);
+       // console.log(body.name, body.clan, +body.x, +body.y);
+
+        gameResponse = myGame.heroCreate(body);
+
+        if ('err' in gameResponse) {
+           res.status(406).send(gameResponse.err)
+       }
+        else {
+            res.status(200).send(gameResponse);
+        }
+
+        //var user = new UserMode(body);
+        //
+        //user.save(function(err, user){
+        //    if(err){
+        //        return next(err);
+        //    }
+        //
+        //    res.status(200).send(user);
+        });
+
+
+
+
+
+
+
+
     //  app.use(bodyparser.json());
 
     //app.use(bodyparser.urlencoded({extended: true}));
