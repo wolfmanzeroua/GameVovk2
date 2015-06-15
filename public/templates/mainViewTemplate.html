@@ -2,7 +2,7 @@
     <img src="img/shapka.jpg" align="middle" >
     <div style="position: absolute; width:100px;height: 100px;   margin: auto;   overflow:visible; z-index:101;
  top: 300px; left: 45%; bottom: auto; right: auto;">
-        <img onclick=" postToIframe({startBloodyBattle: true}, 'http://localhost:3030/startGame/', 'myIframe');" src="img/start.png" onmouseover="this.style.cursor='pointer'" >
+        <img id="startGame" data-hash=" postToIframe({startBloodyBattle: true}, 'http://localhost:3030/startGame/', 'myIframe');" src="img/start.png" onmouseover="this.style.cursor='pointer'" >
     </div>
 
     <div id ="vs" style="position: absolute; width:200px;height: 200px;   margin: auto;   overflow:visible; z-index:98;
@@ -21,18 +21,19 @@
 
         TYPE of GAME:
         <br>
-        <input type="radio" name="typeOfGame" id="typeOfGameDm" onchange="changeTypeOfGame()" value="X-Men" checked="checked"> Deathmatch
-        <input type="radio" name="typeOfGame" id="typeOfGameVs" onchange="changeTypeOfGame()" value="Vampires" >X-Men versus Vampires
+        <input type="radio" name="typeOfGame" id="typeOfGameDm"  value="Deathmatch" checked="checked"> Deathmatch
+        <input type="radio" name="typeOfGame" id="typeOfGameVs"  value="Versus" >X-Men versus Vampires
     </span>
     </div>
 
 </div>
 
-<div id="topBar" style="width: 1024px; clear: both; ">
+<div id="topBar" style=" width: 1024px;">
 
 </div>
 
-<div id="forMap" style="width: 1024px; clear: both; display: none">
+<div id="forMap" style="width: 1024px; display: none">
+
 
 </div>
 

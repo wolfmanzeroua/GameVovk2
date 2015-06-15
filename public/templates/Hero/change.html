@@ -4,15 +4,15 @@
         <table>
             <tr><th>Heroes picture</th> <th>The list of properties</th>       <th>Input, set properties</th>      <th>Description of properties</th></tr>
             <tr> <td rowspan="33" width="200px" style="vertical-align: top">
-                <img src="./img/noAvatar.png"></td> <td style="color: red"><b> CHOOSE HERO </b></td> <td style="color: red; text"><b>
-                <select style="color: red; font-weight: bold">
-                <option value="Wolverine">Wolverine</option>
-                <option value="Dracula">Dracula</option>
-                </select>  </b></td>       <td style="color: red"><b>With choice will boot  data from server </b></td></tr>
+                <img src="./img/noAvatar.png"></td> <td style="color: red"><b> CHOOSE HERO </b></td> <td style="color: red;"><b>
+                <select id = "heroSelect" style="color: red; font-weight: bold">
+                <!--<option value="Wolverine">Wolverine</option>-->
+                <!--<option value="Dracula">Dracula</option>-->
+                </select>  </b></td>       <td style="color: red"><b>With choice will load  data from server </b></td></tr>
 
             <tr><td><b> clan:</b></td> <td nowrap>
-                <input type="radio" name="clan" id="clan1" onchange="changeSeting()" value="true"  checked="X-Men">X-Men
-                <input type="radio" name="clan" id="clan2" onchange="changeSeting()" value="Vampires" >Vampires</td>       <td>There are two clans of heroes X-Men and Vamoires. Make your choice</td></tr>
+                <input type="radio" name="clan" id="clan1" onchange="changeSeting()" value="true"  checked>X-Men
+                <input type="radio" name="clan" id="clan2" onchange="changeSeting()" value="false" >Vampires</td>       <td>There are two clans of heroes X-Men and Vamoires. Make your choice</td></tr>
 
             <tr><td><b>name:</b></td>       <td><input type="text" name="name" size="20" maxlength="20" required></td>      <td> Input new Hero name. Note: Wolverine, Sweetdeath,Dracula has own default settings</td></tr>
             <tr><td><b>features:</b></td>   <td><textarea name="features" rows="2" cols="20">he's just a cool dude</textarea></td><td> Description. Like this: can heal or recover, can fly, have six retractable claws,can drink blood etc. </td></tr>

@@ -1,7 +1,7 @@
 
 define([
     'text!templates/Hero/create.html',
-    '../../models/hero'
+    'models/hero'
 ], function (content, HeroModel) {
     var mainView = Backbone.View.extend({
         el: '#contentHolder',
@@ -37,7 +37,7 @@ define([
             console.log('Save Button pressed');
             var el = this.$el;
             var model = new HeroModel();
-            var data ={}
+            var data ={};
 
             if (el.find('#defaultProperty')[0].checked) {
 
@@ -97,12 +97,12 @@ define([
                     //Backbone.history.fragment = '';
                     //Backbone.history.navigate('index', {trigger: true});
                     //console.log(response);
-                    console.log('Success created')
+                    console.log('Success created');
                     alert(response.text);
 
                 },
                 error: function(err, xhr, model, response){
-                    console.log('Error created')
+                    console.log('Error created');
                     alert(response);
                 }
             });

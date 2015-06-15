@@ -9,6 +9,7 @@ define(/*@Parrameters dependencies*/['Backbone', 'router'], function(Backbone, R
     function init(){
         var router = new Router();
         var fragment = Backbone.history.fragment;
+
        // console.log(fragment);
 
         if(!fragment){

@@ -11,34 +11,46 @@ module.exports = function(app) {
     app.use(bodyparser.json());
     //app.use(bodyparser.urlencoded({extended: true}));
 
-    app.post('/createHero/', function(req, res, next){
+    app.post('/createHero/', function(req, res, next) {
         var body = req.body;
-        var gameResponse= {};
+        var gameResponse = {};
         //var body = req.body;
         console.log('POST: /createHero/', body);
-       // console.log(body.name, body.clan, +body.x, +body.y);
+        // console.log(body.name, body.clan, +body.x, +body.y);
 
         gameResponse = myGame.heroCreate(body);
 
         if ('err' in gameResponse) {
-           res.status(406).send(gameResponse.err)
-       }
+            res.status(406).send(gameResponse.err)
+        }
         else {
             res.status(200).send(gameResponse);
         }
+    });
+        app.post('/setGamePlay/', function (req, res, next) {
+            var body = req.body;
+            console.dir(body);
 
-        //var user = new UserMode(body);
-        //
-        //user.save(function(err, user){
-        //    if(err){
-        //        return next(err);
-        //    }
-        //
-        //    res.status(200).send(user);
+            if ('startGame' in body) {
+                res.status(200).send({text:'Game is started'});
+                 myGame.start();
+            }
+
+            if ('typeOfGame' in body) {
+                res.status(200).send({text: 'Game mode is set to: ' + myGame.gameMode(body.typeOfGame)});
+            }
+
+            if ('timeBetweenSteps' in body) {
+                res.status(200).send({text: 'timeBetweenSteps is set to' + myGame.setTimeBetweenSteps(+body.timeBetweenSteps)});
+            }
+
         });
 
+    app.get('/heroes/', function (req, res, next) {
+        //console.dir(body);
+        res.status(200).send( myGame.heroArray(0));
 
-
+    });
 
 
 

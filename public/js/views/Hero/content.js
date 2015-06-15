@@ -6,7 +6,7 @@
  */
 define([
     'text!templates/User/content.html',
-    'collections/users'
+    '../../collections/heroes'
 ], function (content, UserCollection) {
     var mainView = Backbone.View.extend({
         el: '#contentHolder',

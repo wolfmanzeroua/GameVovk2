@@ -4,20 +4,108 @@
 define([
     'text!templates/mainViewTemplate.html',
     'views/batlefieldView',
-    'views/topBarView'
+    'views/topBarView',
+    'models/gamePlayModel'
 
-], function (mainTemplate, batlefieldView, topBarView) {
+], function (mainTemplate, batlefieldView, topBarView, gamePlayControl) {
     var mainView = Backbone.View.extend({
         el: '#content',
 
         template: _.template(mainTemplate),
 
         events: {
-            'click #showMap' : 'showMapClicked'
+            'click #showMap' : 'showMapClicked',
+            'click #startGame': 'sendStartGame',
+            'click #typeOfGameDm': 'sendTypeOfGameDm',
+            'click #typeOfGameVs':  'sendTypeOfGameVs',
+            'change #gameSped': 'sendGameSpeed'
         },
 
         initialize: function () {
             this.render();
+        },
+
+        sendStartGame: function(){
+            console.log('startGame clicked');
+            var model = new gamePlayControl();
+            var data ={
+                startGame: true
+            };
+            model.save(data, {
+                success: function(model, response){
+                    //  console.log('Success send Start Game')
+                    console.log(response.text);
+
+                },
+                error: function(err, xhr, model, response){
+                    console.log('Error sending');
+                    alert(response);
+                }
+            });
+
+        },
+
+        sendTypeOfGameDm: function(){
+            console.log('TypeOfGameDm clicked');
+            //clanVsClan
+            var model = new gamePlayControl();
+            var data ={
+                typeOfGame: 'Deathmatch'
+            };
+            model.save(data, {
+                success: function(model, response){
+                    //  console.log('Success send Start Game')
+                    console.log(response.text);
+
+                },
+                error: function(err, xhr, model, response){
+                    console.log('Error sending');
+                    alert(response);
+                }
+            });
+
+        },
+
+        sendTypeOfGameVs: function(){
+            console.log('TypeOfGameVs clicked');
+            var model = new gamePlayControl();
+            var data ={
+                typeOfGame: 'clanVsClan'
+            };
+            model.save(data, {
+                success: function(model, response){
+                    //  console.log('Success send Start Game')
+                    console.log(response.text);
+
+                },
+                error: function(err, xhr, model, response){
+                    console.log('Error sending');
+                    alert(response);
+                }
+            });
+
+        },
+
+        sendGameSpeed: function(){
+            console.log('GameSpeed changed');
+            var model = new gamePlayControl();
+            var interval = $('#gameSped').val();
+            //console.log('interval is set to: ' +interval );
+            var data ={
+                timeBetweenSteps: interval
+            };
+            model.save(data, {
+                success: function(model, response){
+                    //  console.log('Success send Start Game')
+                    console.log(response.text);
+
+                },
+                error: function(err, xhr, model, response){
+                    console.log('Error sending');
+                    alert(response);
+                }
+            });
+
         },
 
         showMapClicked: function(){
@@ -32,7 +120,7 @@ define([
 
             }
 
-            console.log(check);
+            console.log('showMapClicked checked',check);
 
         },
 

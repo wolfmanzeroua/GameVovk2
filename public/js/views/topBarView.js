@@ -26,7 +26,7 @@ define([
             e.stopPropagation();
 
             var targetEl = $(e.target);
-            console.log(targetEl);
+          //  console.log(targetEl);
 
             var hash = targetEl.data('hash');
             //console.log(hash);
@@ -38,7 +38,8 @@ define([
 
         goToChangeProperties: function(e){
             e.preventDefault();
-            console.log(targetEl);
+            e.stopPropagation();
+           // console.log(targetEl);
 
             var targetEl = $(e.target);
             var hash = targetEl.data('hash');
@@ -50,7 +51,8 @@ define([
 
         goToShowDatabase: function(e){
             e.preventDefault();
-            console.log(targetEl);
+            e.stopPropagation();
+           // console.log(targetEl);
 
             var targetEl = $(e.target);
             var hash = targetEl.data('hash');

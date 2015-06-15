@@ -17,6 +17,18 @@ db.once('open', function (callback) {
      //updatePerson(body);
 });
 
+fetchHeroes = function(heroNumber,socket) {
+    UserMode = db.model('Persons', UserSchema);
+    //  console.log('_________________',heroNumber,'____________updateHeroList() ____');
+
+    for (var id = 0; id < heroNumber; id++) {
+        UserMode.findOne({heroID: id}, function (err, doc) {
+            socket.emit('updateHeroList', doc);
+            // console.log('______________________________________________________ Hero Added ________________________________________________________');
+        });
+    }
+};
+
 updateHeroList = function(heroNumber,socket) {
     UserMode = db.model('Persons', UserSchema);
     //  console.log('_________________',heroNumber,'____________updateHeroList() ____');
