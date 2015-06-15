@@ -53,7 +53,7 @@ define([
             if(this.contentView){
                 this.contentView.undelegateEvents();
             }
-            console.log('createHero');
+            console.log('createHero clicked');
             this.contentView = new createView();
 
          },
@@ -63,7 +63,7 @@ define([
             if(this.contentView){
                 this.contentView.undelegateEvents();
             }
-            console.log('changeProperties');
+            console.log('changeProperties clicked');
             this.contentView = new changeView();
 
 
@@ -73,7 +73,7 @@ define([
             if(this.contentView){
                 this.contentView.undelegateEvents();
             }
-            console.log('showDatabase');
+            console.log('showDatabase clicked');
             this.contentView = new databaseView();
 
         }

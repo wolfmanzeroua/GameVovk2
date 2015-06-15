@@ -5,7 +5,7 @@ define([
     'text!templates/topBarTemplate.html',
     'views/Hero/createView'
 ], function (topBarTemplate, createView) {
-    var mainView = Backbone.View.extend({
+    var topBarView = Backbone.View.extend({
         el: '#topBar',
 
         template: _.template(topBarTemplate),
@@ -23,10 +23,10 @@ define([
         goToCreateHero: function(e){
 
             e.preventDefault();
-            //e.stopPropagation();
+            e.stopPropagation();
 
             var targetEl = $(e.target);
-            //console.log(targetEl);
+            console.log(targetEl);
 
             var hash = targetEl.data('hash');
             //console.log(hash);
@@ -38,6 +38,7 @@ define([
 
         goToChangeProperties: function(e){
             e.preventDefault();
+            console.log(targetEl);
 
             var targetEl = $(e.target);
             var hash = targetEl.data('hash');
@@ -49,6 +50,7 @@ define([
 
         goToShowDatabase: function(e){
             e.preventDefault();
+            console.log(targetEl);
 
             var targetEl = $(e.target);
             var hash = targetEl.data('hash');
@@ -68,5 +70,5 @@ define([
         }
     });
 
-    return mainView;
+    return topBarView;
 });
