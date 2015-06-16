@@ -49,7 +49,6 @@ define([
             this.history.fetch({
                 success: function(model){
 
-
                     d = self.history.toJSON();
                     console.log('History model loaded: ',  self.history);
                     console.log('History model loaded: ', d);

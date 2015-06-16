@@ -245,34 +245,15 @@
                 if (type == 4) return 'SkyBlue';
 
             }
-            //$('#messages').append($('<li>').text(msg));
-            //console.dir(msg);
-            //console.log(msg.fіgura);
             if(msg.fіgura == 1) {
-                //малюємо трикутник
-                //console.log('трикутник')
-                //   console.dir(msg);
-                addTriangleToSvg(setColor(msg.type),msg.x1,600 - msg.y1, msg.x2,600 - msg.y2,msg.x3,600 - msg.y3);
-
+                 addTriangleToSvg(setColor(msg.type),msg.x1,600 - msg.y1, msg.x2,600 - msg.y2,msg.x3,600 - msg.y3);
             }
-
             if(msg.fіgura == 2) {
-                //малюємо прямокутник
-                //console.log('прямокутник')
-                //   console.dir(msg);
-
-                addRectangleToSvg(setColor(msg.type),msg.x1,600 - msg.y1, msg.x2,600 - msg.y2,msg.x3,600 - msg.y3, msg.x4,600 - msg.y4);
-
+               addRectangleToSvg(setColor(msg.type),msg.x1,600 - msg.y1, msg.x2,600 - msg.y2,msg.x3,600 - msg.y3, msg.x4,600 - msg.y4);
             }
 
             if(msg.fіgura == 3) {
-                //малюємо еліпс
-                // addElipseToSvg(color,x,y,rx,ry)
-                //           console.dir(msg);
-                //   console.dir(msg);
-                addElipseToSvg(setColor(msg.type),msg.cx,600 - msg.cy, msg.rx, msg.ry);
-
-
+               addElipseToSvg(setColor(msg.type),msg.cx,600 - msg.cy, msg.rx, msg.ry);
             }
             // console.log(JSON.parse(msg));
         });

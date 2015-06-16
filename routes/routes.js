@@ -3,6 +3,7 @@ var express = require('express');
 var myGame = require('../index.js');
 var bodyparser = require('body-parser');
 var historyLog = require('../modules/mongoDbClient.js');
+var myLocation = require('../modules/location.js');
 
 
 
@@ -16,7 +17,7 @@ module.exports = function(app) {
         var body = req.body;
         var gameResponse = myGame.heroCreate(body);
 
-         console.log('POST: /createHero/', body);
+        console.log('POST: /createHero/', body);
 
 
         if ('err' in gameResponse) {
@@ -36,32 +37,32 @@ module.exports = function(app) {
 
 
         if ('err' in gameResponse) {
-           res.status(406).send(gameResponse.err)
+            res.status(406).send(gameResponse.err)
         }
         else {
-           res.status(200).send(gameResponse);
+            res.status(200).send(gameResponse);
         }
     });
 
 
     app.post('/setGamePlay/', function (req, res, next) {
-            var body = req.body;
-            console.dir(body);
+        var body = req.body;
+        console.dir(body);
 
-            if ('startGame' in body) {
-                res.status(200).send({text:'Game is started'});
-                 myGame.start();
-            }
+        if ('startGame' in body) {
+            res.status(200).send({text:'Game is started'});
+            myGame.start();
+        }
 
-            if ('typeOfGame' in body) {
-                res.status(200).send({text: 'Game mode is set to: ' + myGame.gameMode(body.typeOfGame)});
-            }
+        if ('typeOfGame' in body) {
+            res.status(200).send({text: 'Game mode is set to: ' + myGame.gameMode(body.typeOfGame)});
+        }
 
-            if ('timeBetweenSteps' in body) {
-                res.status(200).send({text: 'timeBetweenSteps is set to' + myGame.setTimeBetweenSteps(+body.timeBetweenSteps)});
-            }
+        if ('timeBetweenSteps' in body) {
+            res.status(200).send({text: 'timeBetweenSteps is set to' + myGame.setTimeBetweenSteps(+body.timeBetweenSteps)});
+        }
 
-        });
+    });
 
     app.get('/heroes/', function (req, res, next) {
         //console.dir(body);
@@ -72,9 +73,67 @@ module.exports = function(app) {
     app.get('/heroesHistory/:id', function (req, res, next) {
         //console.dir(req.params.id);
         historyLog.historyLogFindLog(req.params.id, res);
-       // res.status(200).send({text:'Hello World'});
+        // res.status(200).send({text:'Hello World'});
 
     });
+
+    app.get('/obstacles/', function (req, res, next) {
+        var obstacles=[];
+        var obstaclesCount=0;
+        var _fig;
+        //console.dir(req.params.id);
+        //historyLog.historyLogFindLog(req.params.id, res);
+        // res.status(200).send({text:'Hello World'});
+        for (var i = myLocation.triangle.length - 1; i >= 0; i--) {
+            _fig = myLocation.triangle[i];
+            obstacles[obstaclesCount] = {
+                'fіgura': 1,
+                "type": _fig.type,
+                "x1": _fig[1].x,
+                "y1": _fig[1].y,
+                "x2": _fig[2].x,
+                "y2": _fig[2].y,
+                "x3": _fig[3].x,
+                "y3": _fig[3].y
+            };
+            obstaclesCount++;
+        }
+
+        // прямокутники
+        for (var i = myLocation.rectangle.length - 1; i >= 0; i--) {
+            _fig = myLocation.rectangle[i];
+            obstacles[obstaclesCount] = {
+                'fіgura': 2,
+                'type': _fig.type,
+                'x1': _fig[1].x,
+                'y1': _fig[1].y,
+                'x2': _fig[1].x,
+                'y2': _fig[2].y,
+                'x3': _fig[2].x,
+                'y3': _fig[2].y,
+                'x4': _fig[2].x,
+                'y4': _fig[1].y
+            };
+            obstaclesCount++;
+        }
+
+        // еліпс
+        for (var i = myLocation.ellipse.length - 1; i >= 0; i--) {
+            _fig = myLocation.ellipse[i];
+            obstacles[obstaclesCount] =  {
+                'fіgura': 3,
+                'type': _fig.type,
+                'cx': _fig.x,
+                'cy': _fig.y,
+                'rx': _fig.rX,
+                'ry': _fig.rY
+            };
+            obstaclesCount++;
+        }
+console.log(obstacles);
+ res.status(200).send({array: obstacles});
+    });
+
 
 
 

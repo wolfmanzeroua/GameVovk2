@@ -198,8 +198,9 @@ function Location(mapMaxX, mapMaxY, windX1, windX2, windY1, windY2, windPower, g
         this.ellipse.push(new Ellipses('Озеро',4, 1, 420, 310, 40, 60));
         this.ellipse.push(new Ellipses('Озеро',4, 1, 620, 380, 30, 60));
         this.ellipse.push(new Ellipses('Болото', 2, 2, 40, 240, 30, 100));
-        this.ellipse.push(new Ellipses('Озеро',4, 1, 680, 140, 30, 60));
         this.ellipse.push(new Ellipses('Ліс', 1, 2, 690, 140, 40, 60));
+        this.ellipse.push(new Ellipses('Озеро',4, 1, 680, 140, 30, 60));
+
 
         ellipseCount = this.ellipse.length;
 

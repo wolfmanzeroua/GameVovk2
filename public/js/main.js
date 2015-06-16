@@ -4,6 +4,7 @@ require.config({
         jQueryUi: './libs/jqueryui/jquery-ui',
         Underscore: './libs/underscore/underscore',
         Backbone: './libs/backbone/backbone',
+        D3: './libs/D3/D3',
         views: './views',
         models: './models',
         collections: './collections',
