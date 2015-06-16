@@ -2,6 +2,7 @@ var express = require('express');
 //var app = express.Router();
 var myGame = require('../index.js');
 var bodyparser = require('body-parser');
+var historyLog = require('../modules/mongoDbClient.js');
 
 
 
@@ -65,6 +66,13 @@ module.exports = function(app) {
     app.get('/heroes/', function (req, res, next) {
         //console.dir(body);
         res.status(200).send( myGame.heroArray(0));
+
+    });
+
+    app.get('/heroesHistory/:id', function (req, res, next) {
+        //console.dir(req.params.id);
+        historyLog.historyLogFindLog(req.params.id, res);
+       // res.status(200).send({text:'Hello World'});
 
     });
 

@@ -38,6 +38,7 @@ define([
             var el = this.$el;
             var model = new HeroModel();
             var data ={};
+            var self = this;
 
             if (el.find('#defaultProperty')[0].checked) {
 
@@ -94,11 +95,12 @@ define([
             console.log(data);
             model.save(data, {
                 success: function(model, response){
-                    //Backbone.history.fragment = '';
-                    //Backbone.history.navigate('index', {trigger: true});
+                    Backbone.history.fragment = '';
+                    Backbone.history.navigate('index', {trigger: true});
                     //console.log(response);
                     console.log('Success created');
                     alert(response.text);
+                   // self.$el.html("");
 
                 },
                 error: function(err, xhr, model, response){

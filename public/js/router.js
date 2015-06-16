@@ -4,9 +4,10 @@ define([
     'views/mainView',
     'views/Hero/createView',
     'views/Hero/changeView',
-    'views/databaseView'
+    'views/databaseView',
+    'views/indexView'
 
-], function (Backbone, mainView,createView,changeView, databaseView ) {
+], function (Backbone, mainView,createView,changeView, databaseView, indexView ) {
     var Router = Backbone.Router.extend({
 
         mainView: null,
@@ -45,6 +46,7 @@ define([
             if (!this.mainView) {
                 this.mainView = new mainView();
             }
+            new indexView();
         console.log('index');
         },
 

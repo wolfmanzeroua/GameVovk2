@@ -820,7 +820,7 @@ module.exports.heroCreate = function(savedHero) {
 module.exports.start= start;
 
 module.exports.heroArray = function(antiCaching) {
-    console.log(heroes);
+   // console.log(heroes);
     if (heroes) return heroes;
     if (!heroes) return 1;
 

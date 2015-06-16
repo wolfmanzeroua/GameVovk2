@@ -20,9 +20,9 @@ define([
 
 
 
-            this.collection =  new HeroesCollection();
-            //this.collection.bind('reset', this.render, this);
-            this.collection.bind('reset', this.render, this);
+            Window.collection =  new HeroesCollection();
+            //Window.collection.bind('reset', this.render, this);
+            Window.collection.bind('reset', this.render, this);
 
 
         },
@@ -30,7 +30,8 @@ define([
         heroSelected: function() {
             console.log('Selected heroID:',  $('#heroSelect').val());
             if ($('#heroSelect').val()!='none') {
-                var hero = this.collection.at($('#heroSelect').val()).toJSON();
+                var hero = Window.collection.at($('#heroSelect').val()).toJSON();
+
                 $('#name').val(hero.name);
                 hero.clan == 'X-Men' ? $('#clan')[0].checked = true : $('#clan2')[0].checked = true;
                 $('#features').val(hero.features);
@@ -79,6 +80,7 @@ define([
             var el = this.$el;
             var model = new HeroModel();
             var data ={};
+            var self= this;
 
             data.name = el.find('#name').val();
             data.clan = el.find('#clan')[0].checked ? 'X-Men' : 'Vampires';
@@ -117,13 +119,15 @@ define([
             data.heroID = +el.find('#heroID').val();
 
             console.log('SaveChangeButton pressed');
+
             model.save(data, {patch:true,
                 success: function(model, response){
-                    //Backbone.history.fragment = '';
-                    //Backbone.history.navigate('index', {trigger: true});
+                    Backbone.history.fragment = '';
+                    Backbone.history.navigate('index', {trigger: true});
                     //console.log(response);
                     console.log('Success patched');
                     alert('Success patched');
+                    //self.$el.html("");
 
                 },
                 error: function(err, xhr, model){
@@ -131,20 +135,21 @@ define([
                     alert(xhr.responseText);
                 }
             });
+
         },
 
         render: function () {
 
             console.log('ChangeView render started');
 
-            console.log('Loaded collections:',this.collection);
+            console.log('Loaded collections:',Window.collection);
 
-            //console.log('Loaded collections',this.collection.toJSON());
+            //console.log('Loaded collections',Window.collection.toJSON());
 
 
             this.$el.html(this.template());
 
-            this.collection.each( function(item){
+            Window.collection.each( function(item){
 
                 console.log('hero: ',item.attributes.name);
                 $('#heroSelect')
@@ -153,14 +158,6 @@ define([
                         .text(item.attributes.name));
             });
 
-            //this.collection.forEach( function(item){
-            //               var hero =  item;
-            //               console.log('hero',hero);
-            //               $('#heroSelect')
-            //                   .append($("<option></option>")
-            //                       .attr("value",hero.heroID)
-            //                       .text(hero.name));
-            //           });
 
 
 

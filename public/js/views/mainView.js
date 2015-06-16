@@ -5,9 +5,10 @@ define([
     'text!templates/mainViewTemplate.html',
     'views/batlefieldView',
     'views/topBarView',
-    'models/gamePlayModel'
+    'models/gamePlayModel',
+    'collections/heroes'
 
-], function (mainTemplate, batlefieldView, topBarView, gamePlayControl) {
+], function (mainTemplate, batlefieldView, topBarView, gamePlayControl,HeroesCollection) {
     var mainView = Backbone.View.extend({
         el: '#content',
 
@@ -23,6 +24,13 @@ define([
 
         initialize: function () {
             this.render();
+            var interval = $('#gameSped').val();
+
+            //clearInterval(gameSpedTimer);
+            Window.gameSpedTimer = setInterval(function () {
+                    console.log(interval);
+                Window.collection =  new HeroesCollection();
+                 }, interval);
         },
 
         sendStartGame: function(){
@@ -90,6 +98,12 @@ define([
             console.log('GameSpeed changed');
             var model = new gamePlayControl();
             var interval = $('#gameSped').val();
+
+            clearInterval(Window.gameSpedTimer);
+            Window.gameSpedTimer = setInterval(function () {
+                console.log(interval);
+            }, interval);
+
             //console.log('interval is set to: ' +interval );
             var data ={
                 timeBetweenSteps: interval

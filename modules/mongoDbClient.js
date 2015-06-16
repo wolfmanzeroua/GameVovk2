@@ -36,7 +36,7 @@ function personsAddLog(id,text) {
 }
 
 
-function personsFindLog(id, socket) {
+function personsFindLog(id,res) {
 
    // console.log('************************************8');
     HistoryCollection.findOne({owner: +id}, function(err, item) {
@@ -45,7 +45,9 @@ function personsFindLog(id, socket) {
         }
         else {
             console.log('Пошук логів для героя', id, typeof(id), 'знайдено', item);
-            socket.emit('showLog', item);
+            res.status(200).send({historyArray: item });
+
+            return { historyArray: item };
         }
     });
 }

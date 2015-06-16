@@ -1,8 +1,8 @@
 
-<div style=" padding-bottom: 40px; display: table-cell; position: relative">
+<div style=" padding-bottom: 5px;  ">
 
 <div style="width: 100%;background-color: yellow; text-align: center ; opacity: 0.8; margin-top: 5px">
-       <tr><td> <span style="font-size: 25px; "><b>THIS IS THE DATABASE USER INTERFACE</b></span></td></tr>
+       <span style="font-size: 25px;"><b>THIS IS THE DATABASE USER INTERFACE</b></span></div>
     </div>
 
 
@@ -10,18 +10,19 @@
 
 
     <div style=" width: 24%; height: 600px; float: left;">
+        <img src="./img/noAvatar.png" width="100%">
         <div style =" background-color: lightsteelblue;  float: none; text-align: center; opacity: 0.8;" >
             <span style="font-size: 22px; "><b>List of Heroes</b></span>  </div>
-        <div id = "list" style =" width: auto; height: auto;   opacity: 0.8;"><b> </b></div>
+        <div id = "databaseList" style =" width: auto; height: auto;   opacity: 0.8;"><b> </b></div>
     </div>
 
-    <!--background-color: white;-->
 
-    <div style=" margin-left:0.5%; width:30%;height: 600px;  float: left;  background-color: #FAF5F5;    opacity: 0.8;">
+
+    <div style=" margin-left:0.5%; width:30%;height: 600px;  float: left;  background-color: #FAF5F5;    opacity: 0.8; padding-bottom: 40px">
         <div style="width: 100%;background-color: lightsteelblue; text-align: center ; ">
             <b><span id = "properties" style="font-size: 22px; ">Hero properties</span></b>
         </div>
-        <div id="propertyList" style=" background-color: #FAF5F5;   opacity: 0.8; font-size:10pt;"></div>
+        <div id="propertyList" style=" background-color: #FAF5F5;   opacity: 0.8; font-size:11pt;"></div>
 
         <br>
 
@@ -33,112 +34,13 @@
             <b><span  id = "history" style="font-size: 22px; ">Hero history</span></b>
         </div>
 
-        <div id="historyLog" style=" background-color: #FAF5F5;   opacity: 0.8; font-size:10pt;"></div>
+        <div id="historyLog" style=" background-color: #FAF5F5;   opacity: 0.8; font-size:11pt;"></div>
 
 
     </div>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!JavaScript!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 
-<section style="clear: both;">
-    <!--<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>-->
-    <!--<script src="http://code.jquery.com/jquery-1.11.1.js"></script>-->
-    <!--<script>-->
-
-        <!--// http://habrahabr.ru/post/37595/-->
-        <!--var socket = io();-->
-        <!--var heroNumber=0;-->
-
-        <!--socket.emit('connectDBUI',{'t':'123'});-->
-        <!--//        socket.on()-->
-
-        <!--socket.on('showLog', function(msg){-->
-            <!--showLog(msg);-->
-            <!--//console.log(msg);-->
-        <!--});-->
-
-        <!--socket.on('showHeroProperty', function(msg){-->
-            <!--showHeroProperty(msg);-->
-        <!--});-->
-
-        <!--socket.on('updateHeroList', function(msg){-->
-            <!--updateHeroList(msg);-->
-        <!--});-->
-
-        <!--function showLog(msg) {-->
-            <!--var heroDiv = document.getElementById("historyLog");-->
-
-            <!--heroDiv.innerHTML = msg.log.join('<br>');-->
-            <!--console.log('спроба записати в ДіВ масив з абзацами',msg);-->
-        <!--}-->
-
-        <!--function showHeroProperty(hero) {-->
-
-            <!--var heroDiv = document.getElementById("propertyList");-->
-            <!--var str = "";-->
-
-            <!--for(var k in hero) {-->
-                <!--str += "<b>"+ k+": </b>"+ hero[k]+"<br>";-->
-            <!--}-->
-            <!--heroDiv.innerHTML = str;-->
-            <!--// console.log('спроба записати в проперті властивості героя',hero);-->
-            <!--document.getElementById("properties").innerHTML = hero.name + " property";-->
-            <!--document.getElementById("history").innerHTML = hero.name + " history";-->
-        <!--}-->
-
-
-        <!--function updateHeroList(hero) {-->
-
-            <!--heroNumber = hero.heroID;-->
-            <!--// console.log('Оновлення списку Дів взяо ІД',"list" + hero.name + heroNumber);-->
-            <!--var heroDiv = document.getElementById("list" + hero.name + heroNumber);-->
-            <!--var areaColor = '#0A0EF2';-->
-
-            <!--// console.dir(hero);-->
-            <!--//console.log("" + hero.name + heroNumber);-->
-
-            <!--// Обновляэмо героя в DIV Геро ліст-->
-
-            <!--if (!heroDiv) {-->
-                <!--if (hero.clan == 'Vampires') {-->
-                    <!--areaColor = 'red';-->
-                <!--}-->
-
-                <!--// Добавляємо героя в DIV Геро ліст-->
-                <!--var newDiv = document.createElement("div");-->
-                <!--newDiv.setAttribute("id", "list" + hero.name + heroNumber);-->
-                <!--newDiv.setAttribute("class", "list");-->
-                <!--newDiv.style.color = areaColor;-->
-                <!--newDiv.title="" + heroNumber;-->
-                <!--//newDiv.onmouseover  = function(){alert(this.id)};-->
-                <!--newDiv.onmouseover  = function() {-->
-                    <!--this.style.cursor = 'pointer';-->
-                <!--};-->
-                <!--newDiv.onclick  = function() {-->
-                    <!--socket.emit('getHeroInfo',this.title);-->
-                    <!--console.log('Запросив інфо по ',this.title);-->
-
-                <!--};-->
-
-                <!--var node = document.createTextNode(heroNumber + " " + hero.name + "\u2764" + hero.health + " (" + hero.x + "," + hero.y + ")");-->
-                <!--newDiv.appendChild(node);-->
-                <!--document.getElementById('list').appendChild(newDiv);-->
-
-                <!--if (hero.health <= 0) {-->
-                    <!--newDiv.style.color = "black";-->
-                    <!--newDiv.innerHTML = "\u2620 " +  heroNumber + " " + hero.name +  "\u2764" + hero.health + " (" + hero.x + "," + hero.y + ")";-->
-
-                <!--}-->
-            <!--}-->
-            <!--else {-->
-                <!--heroDiv.innerHTML =  heroNumber + " " + hero.name + "\u2764" + hero.health + " (" + hero.x + "," + hero.y + ")";-->
-
-                <!--if (hero.health <= 0) {-->
-                    <!--heroDiv.style.color = "black";-->
-                    <!--heroDiv.innerHTML = "\u2620 " +  heroNumber + " " + hero.name +  "\u2764" + hero.health + " (" + hero.x + "," + hero.y + ")";-->
-                <!--}-->
-            <!--}-->
-        <!--}-->
-    <!--</script>-->
+<section style="clear: both; padding-bottom: 40px; margin-bottom: 40px">
 </section>
 </div>
