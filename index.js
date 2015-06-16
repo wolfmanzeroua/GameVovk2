@@ -458,12 +458,12 @@ vector.scalar = function (x, y, x2, y2) {
 
 
 
-function checkHero(heroName) {
+function checkHero(heroID) {
 
     var isFind;
 
     for (var i = heroes.length - 1; i >= 0; i--) {
-        if (heroes[i].name == heroName) {
+        if (heroes[i].heroID == heroID) {
             isFind = heroes[i];
         }
     }
@@ -668,17 +668,18 @@ module.exports.setToFly = function(heroName,type) {
 
 module.exports.newSettings = function(newSettingsOfHero) {
     var heroName = newSettingsOfHero.name;
-    var isFind = checkHero(heroName);
+    var heroID = newSettingsOfHero.heroID;
+    var isFind = checkHero(newSettingsOfHero.heroID);
     var logChanges='';
     if (!isFind) {
-        console.log('Була спроба змінити маршрут неіснуючого героя з іменем', heroName);
-        return 'Sorry but there is no hero that has name:' + heroName;
+        console.log('Була спроба змінити маршрут неіснуючого героя з ID', heroID);
+        return {err: 'Sorry but there is no hero that has heroID:' + heroID};
     }
     else {
 
         var logic = 0;
         if ('nextDestinationPointX' in newSettingsOfHero && myLocation.validatePoint(newSettingsOfHero.nextDestinationPointX, newSettingsOfHero.nextDestinationPointY) > 0) {
-            return 'Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(newSettingsOfHero.nextDestinationPointX, newSettingsOfHero.nextDestinationPointY);
+            return {err:  'Sorry but point with these coordinates corresponds obstacle type ' + myLocation.validatePoint(newSettingsOfHero.nextDestinationPointX, newSettingsOfHero.nextDestinationPointY)};
         }
         else {
             for (var k in newSettingsOfHero) {
@@ -710,7 +711,7 @@ module.exports.newSettings = function(newSettingsOfHero) {
             console.dir(isFind);
             personsHistoryDB.personsAddLog(isFind.heroID, isFind.name + ' received next changes : ' + logChanges);
             personsDB.updatePerson(isFind);
-            return heroName + ' received next changes : ' + logChanges;
+            return {text: heroName + ' received next changes : ' + logChanges};
         }
     }
 };

@@ -3,10 +3,10 @@
 
         <table>
             <tr><th>Heroes picture</th> <th>The list of properties</th>       <th>Input, set properties</th>      <th>Description of properties</th></tr>
-            <tr> <td rowspan="33" width="200px" style="vertical-align: top">
+            <tr> <td rowspan="34" width="200px" style="vertical-align: top">
                 <img src="./img/noAvatar.png"></td> <td style="color: red"><b> CHOOSE HERO </b></td> <td style="color: red;"><b>
                 <select id = "heroSelect" style="color: red; font-weight: bold">
-                <option value="Wolverine">..Empty..</option>
+                    <option value="none">..Empty..</option>
 
                 </select>  </b></td>       <td style="color: red"><b>With choice will load  data from server </b></td></tr>
 
@@ -97,6 +97,7 @@
 
             <tr><td><b>X: </b></td><td> <input type="number" disabled name="x1" id="x" min="0" max="800"  onKeyDown="" onchange="" value="200" step="10" size ="4" style="width: 50px"> </td>    <td>An important property. Current X-coordinate.</td></tr>
             <tr><td><b>Y: </b></td><td> <input type="number" disabled name="x1" id="y" min="0" max="600"  onKeyDown="" onchange="" value="200" step="10" width="80" size ="4" style="width: 50px"> </td>    <td>An important property. Current Y-coordinate.</td></tr>
+            <tr><td><b>heroID: </b></td><td> <input type="number" disabled name="heroID" id="heroID" min="0" max="20" value="-1" width="80" size ="4" style="width: 50px"> </td>    <td>An important property. Current unique Hero number.</td></tr>
 
             <!--<tr><td class = "myClass"><b>PathMapStep:</b></td><td class = "myClass"> 0-->
             <!--<tr><td class = "myClass"><b>walkedAllWay: </b></td><td class = "myClass">false-->
@@ -114,7 +115,7 @@
     border-radius:6px; -moz-border-radius:5px; -khtml-border-radius:10px; background-color:yellow; opacity: 0.8">
             <div id="saveChangesBtn" onmouseover="this.style.cursor='pointer'">
         <span style="font-family:Arial;font-size:20px;font-weight:bold;color:#000000; text-shadow: 1px 1px white;">
-        Save new Heroes Properties
+        Buy new Changes and save Hero
         </span>
             </div>
         </div>

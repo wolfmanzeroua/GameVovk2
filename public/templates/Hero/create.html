@@ -12,7 +12,20 @@
                 <input type="radio" name="clan" id="clan"  value="true"  checked="X-Men">X-Men
                 <input type="radio" name="clan" id="clan2"  value="Vampires" >Vampires</td>       <td>There are two clans of heroes X-Men and Vamoires. Make your choice</td></tr>
 
-            <tr><td><b>name:</b></td>       <td><input type="text" name="name" id="name" size="20" maxlength="20" required></td>      <td> Input new Hero name. Note: Wolverine, Sweetdeath,Dracula has own default settings</td></tr>
+            <tr><td><b>name:</b></td>       <td>
+
+            <input id = "name"  type="text" name="browser" list="setHeroesList" value="" />
+            <datalist id="setHeroesList">
+                <option value="Wolverine" />
+                <option value="Iceman" />
+                <option value="Storm" />
+                <option value="Cyclops"/>
+                <option value="Sweetdeath" />
+                <option value="Dracula" />
+                <option value="MegaVamp" />
+            </datalist>
+            </td>      <td> Input new Hero name. Note: Wolverine, Sweetdeath,Dracula has own default settings</td></tr>
+
             <tr><td class = "hiddenByDefault"><b>features:</b></td>   <td class = "hiddenByDefault"><textarea name="features" id="features" rows="2" cols="20">he's just a cool dude</textarea></td><td class = "hiddenByDefault"> Description. Like this: can heal or recover, can fly, have six retractable claws,can drink blood etc. </td></tr>
             <tr><td class = "hiddenByDefault"><b>hairСolor:</b></td>  <td class = "hiddenByDefault"><input type="text" name="name" id="hairСolor" size="20" maxlength="20" value="black"></td><td class = "hiddenByDefault"> Description. Like this: black. </td></tr>
             <tr><td class = "hiddenByDefault"><b>beard:</b></td>      <td class = "hiddenByDefault"><input type="text" name="name" id="beard" size="20" maxlength="20" value="cool"></td>  <td class = "hiddenByDefault"> Description. Like this: small, cool. </td></tr>

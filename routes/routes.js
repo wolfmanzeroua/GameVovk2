@@ -13,12 +13,10 @@ module.exports = function(app) {
 
     app.post('/createHero/', function(req, res, next) {
         var body = req.body;
-        var gameResponse = {};
-        //var body = req.body;
-        console.log('POST: /createHero/', body);
-        // console.log(body.name, body.clan, +body.x, +body.y);
+        var gameResponse = myGame.heroCreate(body);
 
-        gameResponse = myGame.heroCreate(body);
+         console.log('POST: /createHero/', body);
+
 
         if ('err' in gameResponse) {
             res.status(406).send(gameResponse.err)
@@ -27,7 +25,25 @@ module.exports = function(app) {
             res.status(200).send(gameResponse);
         }
     });
-        app.post('/setGamePlay/', function (req, res, next) {
+
+    app.patch('/createHero/:id', function(req, res, next) {
+        var body = req.body;
+        var id = req.params.id;
+        var gameResponse = myGame.newSettings(body);
+
+        console.log('PATCH: /createHero/'+id, body);
+
+
+        if ('err' in gameResponse) {
+           res.status(406).send(gameResponse.err)
+        }
+        else {
+           res.status(200).send(gameResponse);
+        }
+    });
+
+
+    app.post('/setGamePlay/', function (req, res, next) {
             var body = req.body;
             console.dir(body);
 
