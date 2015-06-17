@@ -25,24 +25,13 @@ define([
         },
 
         initialize: function () {
+
+
             this.collection =  new HeroesCollection();
             this.collection.bind('reset',this.updateBatlefieldMap, this);
-
-            this.gameSpedTimer = setInterval(function () {
-                console.log('timer:',interval);
-
-                self.collection.fetch({
-                    context:this,
-                    reset: true
-                });
-
-                //  self.updateBatlefieldMap();
-
-            }, interval);
-
             this.render();
-            var interval = $('#gameSped').val();
-            var self = this;
+
+          //  var self = this;
 
             //clearInterval(gameSpedTimer);
 
@@ -116,8 +105,8 @@ define([
             var model = new gamePlayControl();
             var interval = $('#gameSped').val();
 
-            clearInterval(Window.gameSpedTimer);
-            Window.gameSpedTimer = setInterval(function () {
+            clearInterval(this.gameSpedTimer);
+            this.gameSpedTimer = setInterval(function () {
                 console.log('timer:',interval);
 
                 self.collection.fetch({
@@ -256,11 +245,26 @@ define([
         },
 
         render: function () {
+            var self = this;
                         //$(#content).html();
             this.$el.html(this.template());
 
             new topBarView();
             new batlefieldView();
+
+            var interval = $('#gameSped').val();
+            this.gameSpedTimer = setInterval(function () {
+                console.log('timer:',interval);
+
+                self.collection.fetch({
+                    context:this,
+                    reset: true
+                });
+
+                //  self.updateBatlefieldMap();
+
+            }, interval);
+
 
 
 

@@ -104,8 +104,8 @@ define([
 
                 },
                 error: function(err, xhr, model, response){
-                    console.log('Error created');
-                    alert(response);
+                    console.log('Error created',xhr);
+                    alert(xhr.responseText);
                 }
             });
         },

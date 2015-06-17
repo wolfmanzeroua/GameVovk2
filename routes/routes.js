@@ -66,7 +66,21 @@ module.exports = function(app) {
 
     app.get('/heroes/', function (req, res, next) {
         //console.dir(body);
-        res.status(200).send( myGame.heroArray(0));
+       var tempArray = myGame.heroArray(0).slice();
+        var responseArray =[];
+        // видалення із обєкта героя лишнього масива
+        //console.dir(responseArray);
+        //console.dir(responseArray.length);
+
+        for (var i = tempArray.length-1; i>=0; i--){
+            responseArray[i] ={};
+            for (var k in tempArray[i]) {
+                responseArray[i][k] = tempArray[i][k];
+                            }
+            delete responseArray[i].caсhePath;
+        }
+
+        res.status(200).send( responseArray);
 
     });
 

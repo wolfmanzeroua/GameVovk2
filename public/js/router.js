@@ -58,6 +58,13 @@ define([
             console.log('createHero clicked');
             this.contentView = new createView();
 
+            // анімація переїзду до елемента
+            if (navigator.userAgent.search("Safari") >= 0 ) {
+                $('body').animate({scrollTop: $('#contentHolder').offset().top}, 1100);
+            } else {
+                $('html').animate({scrollTop: $('#contentHolder').offset().top}, 1100);
+            };
+
          },
 
         changeProperties: function () {
@@ -68,6 +75,12 @@ define([
             console.log('changeProperties clicked');
             this.contentView = new changeView();
 
+            // анімація переїзду до елемента
+            if (navigator.userAgent.search("Safari") >= 0 ) {
+                $('body').animate({scrollTop: $('#contentHolder').offset().top}, 1100);
+            } else {
+                $('html').animate({scrollTop: $('#contentHolder').offset().top}, 1100);
+            };
 
         },
 
@@ -77,6 +90,13 @@ define([
             }
             console.log('showDatabase clicked');
             this.contentView = new databaseView();
+
+            // анімація переїзду до елемента
+            if (navigator.userAgent.search("Safari") >= 0 )  {
+                $('body').animate({scrollTop: $('#contentHolder').offset().top}, 1100);
+            } else {
+                $('html').animate({scrollTop: $('#contentHolder').offset().top}, 1100);
+            };
 
         }
     });
