@@ -60,6 +60,9 @@ define([
 
         sendTypeOfGameDm: function(){
             console.log('TypeOfGameDm clicked');
+            $('#dethmatch').css('visibility', 'visible');
+            $('#vs').css('visibility', 'hidden');
+
             //clanVsClan
             var model = new gamePlayControl();
             var data ={
@@ -81,6 +84,8 @@ define([
 
         sendTypeOfGameVs: function(){
             console.log('TypeOfGameVs clicked');
+            $('#dethmatch').css('visibility', 'hidden');
+            $('#vs').css('visibility', 'visible');
             var model = new gamePlayControl();
             var data ={
                 typeOfGame: 'clanVsClan'
