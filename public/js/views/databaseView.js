@@ -15,9 +15,9 @@ define([
 
         initialize: function(){
             console.log('DatabaseView Inialized');
-            Window.collection =  new HeroesCollection();
+            //Window.collection =  new HeroesCollection();
             //Window.collection.bind('reset', this.render, this);
-            Window.collection.bind('reset', this.render, this);
+           this.render();
 
         },
         changePointer: function(e){
@@ -28,7 +28,7 @@ define([
         showHeroInfo: function(e){
 
             var id = $(e.target).attr('data-hash');
-            var hero = Window.collection.at(id).toJSON();
+            var hero = Window.heroCollection[id];
             var str = "";
             var d;
             var self = this;
@@ -72,6 +72,7 @@ define([
             this.$el.html(this.template());
             this.updateHeroList()
         },
+
         updateHeroList: function(){
 
             var heroDiv;
@@ -79,8 +80,9 @@ define([
             var textContent;
             var heroNumber;
             var hero;
-            Window.collection.each( function(item){
-                hero = item.toJSON();
+
+            for (var i = Window.heroCollection.length-1; i>=0; i--){
+                hero = Window.heroCollection[i];
                 areaColor = '#0A0EF2';
 
                 console.log('hero: ',hero.name);
@@ -132,7 +134,7 @@ define([
 
                 }
 
-            });
+            };
 
 
 

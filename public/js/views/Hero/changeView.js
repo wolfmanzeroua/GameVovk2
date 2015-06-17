@@ -20,9 +20,9 @@ define([
 
 
 
-            Window.collection =  new HeroesCollection();
+           // Window.collection =  new HeroesCollection();
             //Window.collection.bind('reset', this.render, this);
-            Window.collection.bind('reset', this.render, this);
+           this.render();
 
 
         },
@@ -30,7 +30,7 @@ define([
         heroSelected: function() {
             console.log('Selected heroID:',  $('#heroSelect').val());
             if ($('#heroSelect').val()!='none') {
-                var hero = Window.collection.at($('#heroSelect').val()).toJSON();
+                var hero = Window.heroCollection[$('#heroSelect').val()];
 
                 $('#name').val(hero.name);
                 hero.clan == 'X-Men' ? $('#clan')[0].checked = true : $('#clan2')[0].checked = true;
@@ -139,27 +139,26 @@ define([
         },
 
         render: function () {
+            var hero;
 
             console.log('ChangeView render started');
 
-            console.log('Loaded collections:',Window.collection);
+            console.log('Loaded collections:',Window.heroCollection);
 
             //console.log('Loaded collections',Window.collection.toJSON());
 
 
             this.$el.html(this.template());
 
-            Window.collection.each( function(item){
+            for (var i = Window.heroCollection.length-1; i>=0; i--){
+                hero = Window.heroCollection[i];
 
-                console.log('hero: ',item.attributes.name);
+                console.log('hero: ',hero.name);
                 $('#heroSelect')
                     .append($("<option></option>")
-                        .attr("value",item.attributes.heroID)
-                        .text(item.attributes.name));
-            });
-
-
-
+                        .attr("value",hero.heroID)
+                        .text(hero.name));
+            };
 
             return this;
         }

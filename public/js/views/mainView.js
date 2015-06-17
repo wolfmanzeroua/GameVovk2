@@ -25,14 +25,28 @@ define([
         },
 
         initialize: function () {
+            this.collection =  new HeroesCollection();
+            this.collection.bind('reset',this.updateBatlefieldMap, this);
+
+            this.gameSpedTimer = setInterval(function () {
+                console.log('timer:',interval);
+
+                self.collection.fetch({
+                    context:this,
+                    reset: true
+                });
+
+                //  self.updateBatlefieldMap();
+
+            }, interval);
+
             this.render();
             var interval = $('#gameSped').val();
+            var self = this;
 
             //clearInterval(gameSpedTimer);
-            Window.gameSpedTimer = setInterval(function () {
-                console.log('timer:',interval);
-                Window.collection =  new HeroesCollection();
-            }, interval);
+
+
         },
 
         sendStartGame: function(){
@@ -97,6 +111,7 @@ define([
         },
 
         sendGameSpeed: function(){
+            var self= this;
             console.log('GameSpeed changed');
             var model = new gamePlayControl();
             var interval = $('#gameSped').val();
@@ -104,6 +119,12 @@ define([
             clearInterval(Window.gameSpedTimer);
             Window.gameSpedTimer = setInterval(function () {
                 console.log('timer:',interval);
+
+                self.collection.fetch({
+                    context:this,
+                    reset: true
+                });
+
             }, interval);
 
             //console.log('interval is set to: ' +interval );
@@ -124,6 +145,100 @@ define([
 
         },
 
+        updateBatlefieldMap: function() {
+            Window.heroCollection = this.collection.toJSON();
+
+            console.log('BatlefieldMap Updating...');
+            var heroDiv;
+            var areaColor;
+            var textContent;
+            var heroNumber;
+            var hero;
+            console.log('BatlefieldMap Updating...', Window.heroCollection);
+
+            for (var i = Window.heroCollection.length-1; i>=0; i--){
+                hero = Window.heroCollection[i];
+                areaColor = '#0A0EF2';
+
+                console.log('hero: ',hero.name);
+
+                heroNumber = hero.heroID;
+                heroDiv = $("#batlefieldList" + heroNumber);
+                areaColor = '#0A0EF2';
+                console.log("#batlefieldList" + heroNumber);
+                console.log(heroDiv);
+                //console.log("" + hero.name + heroNumber);
+
+                // Обновляэмо героя в DIV Геро ліст
+
+
+                if (hero.clan == 'Vampires') {
+                    areaColor = 'red';
+                }
+
+
+                //    // Добавляємо героя в DIV Геро ліст
+                textContent = heroNumber + " " + hero.name + "\u2764" + hero.health + " (" + hero.x + "," + hero.y + ")";
+
+                //console.log(textContent);
+                // $("#databaseList").append("<div> </div>"). attr("id", "list" + hero.name + heroNumber).attr("class", "list").css({"color": areaColor}).attr("data-hash", "" + heroNumber).text(textContent);
+
+                if (hero.health <= 0) {
+                    textContent = "\u2620 " + textContent;
+                    areaColor = 'black';
+                }
+
+                if (!heroDiv.length) {
+                    $("<div> </div>").
+                        attr("id", "batlefieldList" + heroNumber).
+                        attr("class", "batlefieldList").css({"color": areaColor}).
+                        attr("data-hash", "" + heroNumber).
+                        text(textContent).
+                        //   mouseover(function() {this.style.cursor = 'pointer';}).
+                        appendTo("#batlefieldList");
+
+                    D3.select("#mySvg")
+                        .append("circle")
+                        .attr("cx",  hero.x)
+                        .attr("id", "C" + hero.name + heroNumber)
+                        .attr("cy", 600 - hero.y)
+                        .attr("r",  hero.attackRange)
+                        .style("fill", areaColor);
+
+                    //var c1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    //c1.setAttribute("cx", hero.x + "px");
+                    //c1.setAttribute("cy",(600 - hero.y) + "px");
+                    //c1.setAttribute("r", hero.attackRange + "px");
+                    //c1.setAttribute("id", "" + hero.name + heroNumber);
+                    //c1.setAttribute("fill", areaColor);
+                    //c1.setAttribute("opacity", "0.5");
+
+
+                }
+
+                else {
+                    $("#batlefieldList" + heroNumber).
+                        // attr("id", "DbList" + heroNumber).
+                        attr("class", "batlefieldList").
+                        css({"color": areaColor}).
+                        attr("data-hash", "" + heroNumber).
+                        text(textContent);
+
+                    D3.select("#C" + hero.name + heroNumber)
+                        .attr("cx",  hero.x)
+                        .attr("cy", 600 - hero.y)
+                        .attr("r",  hero.attackRange)
+                        .style("fill", areaColor);
+                    //   mouseover(function() {this.style.cursor = 'pointer';}).
+
+                }
+
+            };
+
+            return this;
+
+        },
+
         showMapClicked: function(){
             var el = this.$el;
             var check = el.find('#showMap')[0].checked;
@@ -141,73 +256,14 @@ define([
         },
 
         render: function () {
-            var d,_d;
-            var self = this;
-            //$(#content).html();
+                        //$(#content).html();
             this.$el.html(this.template());
 
             new topBarView();
             new batlefieldView();
-            this.mapObstacles = new obstaclesOnMap();
-            this.mapObstacles .fetch({
-
-                success: function(model){
-                    _d = self.mapObstacles.toJSON();
-                    d = _d.array;
-                    console.log('Obstacles loaded: ', d);
-                    console.log('Obstacles loaded: ', d.length);
-
-                    // Нарешті, добрався до D3 ... не годно бути!... всім пристібнути паски безбеки!!! :)
-
-                    for (var i = d.length-1; i>=0; i--) {
-                        function setColor(type) {
-                            /* Тип перешкод, type
-                             * 1 - Ліс
-                             * 2 - Болото
-                             * 3 - Гора
-                             * 4 - Озеро
-                             */
-
-                            if (type == 1) return 'LightGreen';
-                            if (type == 2) return 'Tan';
-                            if (type == 3) return 'DimGray';
-                            if (type == 4) return 'SkyBlue';
-
-                        }
-
-                        if (d[i].fіgura == 1) {
-                            // addTriangleToSvg(setColor(d[i].type), d[i].x1, 600 - d[i].y1, d[i].x2, 600 - d[i].y2, d[i].x3, 600 - d[i].y3);
-                        }
-                        if (d[i].fіgura == 2) {
-                            //addRectangleToSvg(setColor(d[i].type), d[i].x1, 600 - d[i].y1, d[i].x2, 600 - d[i].y2, d[i].x3, 600 - d[i].y3, d[i].x4, 600 - d[i].y4);
-                            D3.select("#mySvg")
-                                .append("rect")
-                                .attr("x", d[i].x1)
-                                .attr("y",  600 - d[i].y1)
-                                .attr("width",  d[i].x2)
-                                .attr("height",  600 - d[i].y2)
-                        .style("fill", setColor(d[i].type));
-                        }
-
-                        if (d[i].fіgura == 3) {
-                            //addElipseToSvg(setColor(d[i].type), d[i].cx, 600 - d[i].cy, d[i].rx, d[i].ry);
-                            D3.select("#mySvg")
-                                .append("ellipse")
-                                .attr("cx",  d[i].cx)
-                                .attr("cy", 600 - d[i].cy)
-                                .attr("rx",  d[i].rx)
-                                .attr("ry", d[i].ry)
-                                .style("fill", setColor(d[i].type));
-                            //console.log(d[i]);
-                        }
-                    }
 
 
-                },
-                error: function(err, xhr, model){
-                    alert(xhr);
-                }
-            });
+
 
             return this;
         }

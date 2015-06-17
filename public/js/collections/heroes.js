@@ -1,6 +1,7 @@
 define([
-    'models/hero'
-], function(heroModel){
+    'models/hero',
+    'views/mainView'
+], function(heroModel,mainView){
     var Heroes = Backbone.Collection.extend({
         model: heroModel,
 
