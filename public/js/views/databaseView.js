@@ -21,7 +21,9 @@ define([
 
         },
         changePointer: function(e){
-            var id = $(e.target).css({"cursor":"pointer"});
+            $(e.target).css({"cursor":"pointer"});
+
+
             //console.log('Over');
         },
 
