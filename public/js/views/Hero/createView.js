@@ -11,7 +11,28 @@ define([
         events: {
             'click #saveBtn' : 'saveUser',
             'click #defaultProperty':'defaultPropertyChecked',
-            'click #ownProperty':'ownPropertyChecked'
+            'click #ownProperty':'ownPropertyChecked',
+            'change #inputImg':'loadImg'
+
+        },
+        loadImg: function(){
+
+            //var file    = $('#inputImg').files[0];
+            var file    = document.querySelector('input[type=file]').files[0]; //sames as here
+            var reader  = new FileReader();
+
+            reader.onloadend = function () {
+                $('#img').attr('src',reader.result);
+                //Window.img = reader.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file); //reads the data as a URL
+                //console.log(file);
+                //console.log( reader);
+            } else {
+               // preview.src = "";
+            }
         },
 
         defaultPropertyChecked: function (){
@@ -100,7 +121,7 @@ define([
                     //console.log(response);
                     console.log('Success created');
                     alert(response.text);
-                   // self.$el.html("");
+                    // self.$el.html("");
 
                 },
                 error: function(err, xhr, model, response){
