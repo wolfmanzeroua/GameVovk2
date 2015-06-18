@@ -2,9 +2,10 @@
 define([
     'text!templates/Hero/change.html',
     'models/hero',
-    'collections/heroes'
+    'collections/avatars'
 
-], function (content, HeroModel,HeroesCollection) {
+
+], function (content, HeroModel,HeroesAvatars) {
     var mainView = Backbone.View.extend({
         el: '#contentHolder',
 
@@ -12,25 +13,67 @@ define([
 
         events: {
             'click #saveChangesBtn' : 'saveChanges',
-            'change #heroSelect' : 'heroSelected'
+            'change #heroSelect' : 'heroSelected',
+            'change #inputImg':'loadImg'
+        },
+
+        loadImg: function(){
+
+            var file    = document.querySelector('input[type=file]').files[0]; //sames as here
+            var reader  = new FileReader();
+
+            reader.onloadend = function () {
+                $('#imgChange').attr('src',reader.result);
+            };
+
+            if (file) {
+                reader.readAsDataURL(file); //reads the data as a URL
+
+            } else {
+
+            }
         },
 
         initialize: function () {
+            var self =this;
             console.log('changeView initialize');
 
 
+            this.avatarCollection =  new HeroesAvatars();
+            this.avatarCollection.fetch({
+                success: function(model){
 
-           // Window.collection =  new HeroesCollection();
+                    //d = self.avatarCollection.toJSON();
+                    console.log('Avatars loaded: ',  self.avatarCollection);
+                    // console.log('History model loaded: ', d);
+                    self.render();
+                },
+                error: function(err, xhr, model){
+                    alert(xhr);
+                }
+            });
             //Window.collection.bind('reset', this.render, this);
-           this.render();
 
 
         },
 
         heroSelected: function() {
+            var avatarCollection = this.avatarCollection.toJSON();
             console.log('Selected heroID:',  $('#heroSelect').val());
             if ($('#heroSelect').val()!='none') {
+
                 var hero = Window.heroCollection[$('#heroSelect').val()];
+
+                var findOwnerId;
+                var id = $('#heroSelect').val();
+                for (var i =avatarCollection.length-1; i>=0; i--){
+                    if (avatarCollection[i].owner == id) {
+                        findOwnerId = i;
+                        //  console.log('-------------------------------------------id:',id,' i: ',i);
+
+                    }
+                }
+                $('#imgChange').attr('src',avatarCollection[findOwnerId].avatar);
 
                 $('#name').val(hero.name);
                 hero.clan == 'X-Men' ? $('#clan')[0].checked = true : $('#clan2')[0].checked = true;
@@ -50,6 +93,8 @@ define([
                 $('#speed').val(hero.speed);
                 hero.canFly ? $('#canFly')[0].checked = true : $('#canFly2')[0].checked = true;
                 $('#flySpeed').val(hero.flySpeed);
+                $('#level').text(hero.level);
+                console.log(hero.level);
                 hero.canBeInvisible ? $('#canBeInvisible')[0].checked = true : $('#canBeInvisible2')[0].checked = true;
                 hero.invisible ? $('#invisible')[0].checked = true : $('#invisible2')[0].checked = true;
                 hero.canJump ? $('#canJump')[0].checked = true : $('#canJump2')[0].checked = true;
@@ -82,6 +127,8 @@ define([
             var data ={};
             var self= this;
 
+            data.avatar = el.find('#imgChange').attr('src');
+            console.log('Change form avatar: ',data.avatar);
             data.name = el.find('#name').val();
             data.clan = el.find('#clan')[0].checked ? 'X-Men' : 'Vampires';
             data.features  = el.find('#features').val();
@@ -112,8 +159,8 @@ define([
             data.healingMaxPoint = +el.find('#healingMaxPoint').val();
             data.hasVampBite = el.find('#hasVampBite')[0].checked;
             data.lookForTrouble = el.find('#lookForTrouble')[0].checked;
-            data.x = +el.find('#x').val();
-            data.y = +el.find('#y').val();
+            //data.x = +el.find('#x').val();
+            //data.y = +el.find('#y').val();
             data.nextDestinationPointX = +el.find('#nextDestinationPointX').val();
             data.nextDestinationPointY = +el.find('#nextDestinationPointY').val();
             data.heroID = +el.find('#heroID').val();

@@ -47,7 +47,7 @@ define([
                 this.mainView = new mainView();
             }
             new indexView();
-        console.log('index');
+            console.log('index');
         },
 
         createHero: function () {
@@ -65,7 +65,7 @@ define([
                 $('html').animate({scrollTop: $('#contentHolder').offset().top}, 1100);
             };
 
-         },
+        },
 
         changeProperties: function () {
 

@@ -26,7 +26,7 @@ define([
             e.stopPropagation();
 
             var targetEl = $(e.target);
-          //  console.log(targetEl);
+            //  console.log(targetEl);
 
             var hash = targetEl.data('hash');
             //console.log(hash);
@@ -39,7 +39,7 @@ define([
         goToChangeProperties: function(e){
             e.preventDefault();
             e.stopPropagation();
-           // console.log(targetEl);
+            // console.log(targetEl);
 
             var targetEl = $(e.target);
             var hash = targetEl.data('hash');
@@ -52,7 +52,7 @@ define([
         goToShowDatabase: function(e){
             e.preventDefault();
             e.stopPropagation();
-           // console.log(targetEl);
+            // console.log(targetEl);
 
             var targetEl = $(e.target);
             var hash = targetEl.data('hash');
@@ -60,7 +60,7 @@ define([
 
             Backbone.history.navigate(hash, {trigger: true});
         },
-                //create: function(e){
+        //create: function(e){
         //    new createView();
         //},
 

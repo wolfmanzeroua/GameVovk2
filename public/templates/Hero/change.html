@@ -3,8 +3,10 @@
 
         <table>
             <tr><th>Heroes picture</th> <th>The list of properties</th>       <th>Input, set properties</th>      <th>Description of properties</th></tr>
-            <tr> <td rowspan="34" width="200px" style="vertical-align: top">
-                <img src="./img/noAvatar.png"></td> <td style="color: red"><b> CHOOSE HERO </b></td> <td style="color: red;"><b>
+            <tr> <td rowspan="35" width="200px" style="vertical-align: top">
+                <img id="imgChange" src="./img/noAvatar.png" width="198px">
+                <input id="inputImg" type="file" style="width: 150px">
+            </td> <td style="color: red"><b> CHOOSE HERO </b></td> <td style="color: red;"><b>
                 <select id = "heroSelect" style="color: red; font-weight: bold">
                     <option value="none">..Empty..</option>
 
@@ -25,7 +27,7 @@
                 <input type="radio" name="sex" id="sex2"  value="false" >Woman</td>        <td class = "myClass"> *** </td></tr>
 
             <tr><td class = "myClass"><b>health:</b></td>     <td class = "myClass"><input type="number" name="health" id="health" min="70" max="300" onKeyDown="" onchange="" value="100" step="10" size ="4" style="width: 50px"></td>  <td class = "myClass">An important property. For People normal grading 90-120. In Vampire depending on the class 150-200. </td></tr>
-            <!--<tr><td class = "myClass"><b>maxHealth: </b></td> <td class = "myClass">100</td></tr>-->
+            <!--<tr><td class = "myClass"><b>maxHealth: </b></td> <td class = "myClass" id="maxHealth" >100</td></tr> <td class = "myClass" >100</td></tr>-->
             <tr><td class = "myClass"><b>power:</b></td>      <td class = "myClass"><input type="number" name="power" id="power" min="1" max="7" onKeyDown="" onchange="" value="2" step="1" size ="4" style="width: 50px"></td>  <td class = "myClass">An important property. For People normal grading 1-3. In Vampire depending on the class 2-5. </td></tr>
             <tr><td class = "myClass"><b>attackRange:</b></td><td class = "myClass"><input type="number" name="attackRange" id="attackRange" min="1" max="10" onKeyDown="" onchange="" value="4" step="1" size ="4" style="width: 50px"></td>  <td class = "myClass">An important property. For People normal grading 3-4. In Vampire depending on the class 3-6. </td></tr>
             <tr><td class = "myClass"><b>damage:</b></td>     <td class = "myClass"><input type="number" name="damage" id="damage" min="1" max="30" onKeyDown="" onchange="" value="10" step="1" size ="4" style="width: 50px"></td>  <td class = "myClass">An important property. For People normal grading 8-11. In Vampire depending on the class 8-20. </td></tr>
@@ -89,7 +91,7 @@
                 <input type="radio" name="hasVampBite" id="hasVampBite"  value="true"  checked="checked"> True
                 <input type="radio" name="hasVampBite" id="hasVampBite2"  value="false" > False </td>     <td class = "myClass">An important property. Vampires can drink blood and healing health. </td></tr>
 
-            <!--<tr><td class = "myClass"><b>level:</b></td><td class = "myClass"> 1-->
+            <tr><td class = "myClass"><b>level:</b></td><td class = "myClass" ><span id = "level">000 </span></td> <td class = "myClass">Current hero level</td>
 
             <tr><td class = "myClass"><b>lookForTrouble:</b></td><td class = "myClass">
                 <input type="radio" name="lookForTrouble" id="lookForTrouble"  value="true"  checked="checked"> True

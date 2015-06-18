@@ -1,6 +1,3 @@
-/**
- * Created by Roman on 25.05.2015.
- */
 
 define(/*@Parrameters dependencies*/['Backbone', 'router'], function(Backbone, Router){
 
@@ -10,7 +7,7 @@ define(/*@Parrameters dependencies*/['Backbone', 'router'], function(Backbone, R
         var router = new Router();
         var fragment = Backbone.history.fragment;
 
-       // console.log(fragment);
+        // console.log(fragment);
 
         if(!fragment){
             Backbone.history.start({silent: true});
@@ -24,6 +21,6 @@ define(/*@Parrameters dependencies*/['Backbone', 'router'], function(Backbone, R
 
 
     return {
-       init: init
+        init: init
     }
 });

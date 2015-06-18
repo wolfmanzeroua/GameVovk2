@@ -14,7 +14,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
     console.log('Mongoose is connected too');
     //savePerson();
-     //updatePerson(body);
+    //updatePerson(body);
 });
 
 fetchHeroes = function(heroNumber,socket) {
@@ -80,6 +80,8 @@ updatePerson = function(hero) {
     });
 
 };
+
+
 
 findPerson = function(id, socket) {
     UserMode = db.model('Persons', UserSchema);

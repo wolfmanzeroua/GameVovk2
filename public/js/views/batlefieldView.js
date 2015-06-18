@@ -24,7 +24,7 @@ define([
                         var _d = self.mapObstacles.toJSON();
                         var d = _d.array;
                         console.log('Obstacles loaded: ', d);
-                        console.log('Obstacles loaded: ', d.length);
+                        //console.log('Obstacles loaded: ', d.length);
 
                         // Нарешті, добрався до D3 ... не годно бути!... всім пристібнути паски безбеки!!! :)
 

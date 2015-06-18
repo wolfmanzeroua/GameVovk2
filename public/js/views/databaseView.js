@@ -1,36 +1,65 @@
 define([
     'text!templates/databaseViewTemplate.html',
     'collections/heroes',
-    'models/heroesHistory'
-],function(content, HeroesCollection, heroesHistory){
+    'models/heroesHistory',
+    'collections/avatars'
+],function(content, HeroesCollection, heroesHistory,HeroesAvatars){
     var databaseView = Backbone.View.extend({
 
         el: '#contentHolder',
         events: {
             'click .DbList': 'showHeroInfo',
-            'mouseover .DbList': 'changePointer'
+            'mouseover .DbList': 'changePointer',
+            'mouseout .DbList': 'clearDecoration'
         },
 
         template: _.template(content),
 
         initialize: function(){
+            var self = this;
             console.log('DatabaseView Inialized');
-            //Window.collection =  new HeroesCollection();
-            //Window.collection.bind('reset', this.render, this);
-           this.render();
+
+            this.avatarCollection =  new HeroesAvatars();
+            this.avatarCollection.fetch({
+                success: function(model){
+                    console.log('Avatars loaded: ',  self.avatarCollection);
+                    self.render();
+                },
+                error: function(err, xhr, model){
+                    alert(xhr);
+                }
+            });
+            //this.render();
 
         },
+        clearDecoration:function(e) {
+            $(e.target).css({"background-color":"white"});
+        },
+
         changePointer: function(e){
             $(e.target).css({"cursor":"pointer"});
+            $(e.target).css({"background-color":"#d3d3d3"});
 
-
-            //console.log('Over');
         },
 
         showHeroInfo: function(e){
+            var avatarCollection = this.avatarCollection.toJSON();
 
             var id = $(e.target).attr('data-hash');
+            var findOwnerId;
+            for (var i =avatarCollection.length-1; i>=0; i--){
+                if (avatarCollection[i].owner == id) {
+                    findOwnerId = i;
+                    // console.log('-------------------------------------------id:',id,' i: ',i);
+
+                }
+            }
             var hero = Window.heroCollection[id];
+            Window.avatarCollection =avatarCollection;
+            //var heroAvatar =  avatarCollection[id].avatar;
+            $('#imgDB').attr('src',avatarCollection[findOwnerId].avatar);
+
+
             var str = "";
             var d;
             var self = this;
@@ -53,7 +82,7 @@ define([
 
                     d = self.history.toJSON();
                     console.log('History model loaded: ',  self.history);
-                    console.log('History model loaded: ', d);
+                    //console.log('History model loaded: ', d);
 
                     $("#historyLog").text("");
                     $("#historyLog").append(d.historyArray.log.join('<br>'));

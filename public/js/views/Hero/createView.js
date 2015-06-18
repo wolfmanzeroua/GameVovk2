@@ -31,7 +31,7 @@ define([
                 //console.log(file);
                 //console.log( reader);
             } else {
-               // preview.src = "";
+                // preview.src = "";
             }
         },
 
@@ -71,9 +71,11 @@ define([
 
                 data.x = +el.find('#x').val();
                 data.y = +el.find('#y').val();
-
+                data.avatar = el.find('#img').attr('src');
             }
+
             else {
+                data.avatar = el.find('#img').attr('src');
                 data.defaultProperty = false;
                 data.name = el.find('#name').val();
                 data.clan = el.find('#clan')[0].checked ? 'X-Men' : 'Vampires';

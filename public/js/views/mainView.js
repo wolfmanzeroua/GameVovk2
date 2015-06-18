@@ -31,7 +31,7 @@ define([
             this.collection.bind('reset',this.updateBatlefieldMap, this);
             this.render();
 
-          //  var self = this;
+            //  var self = this;
 
             //clearInterval(gameSpedTimer);
 
@@ -40,6 +40,7 @@ define([
 
         sendStartGame: function(){
             console.log('startGame clicked');
+            alert('startGame clicke');
             var model = new gamePlayControl();
             var data ={
                 startGame: true
@@ -148,7 +149,7 @@ define([
             var textContent;
             var heroNumber;
             var hero;
-            console.log('BatlefieldMap Updating...', Window.heroCollection);
+            // console.log('BatlefieldMap Updating...', Window.heroCollection);
 
             for (var i = Window.heroCollection.length-1; i>=0; i--){
                 hero = Window.heroCollection[i];
@@ -251,7 +252,7 @@ define([
 
         render: function () {
             var self = this;
-                        //$(#content).html();
+            //$(#content).html();
             this.$el.html(this.template());
 
             new topBarView();

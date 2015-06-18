@@ -669,6 +669,9 @@ module.exports.setToFly = function(heroName,type) {
 module.exports.newSettings = function(newSettingsOfHero) {
     var heroName = newSettingsOfHero.name;
     var heroID = newSettingsOfHero.heroID;
+
+    // видалення аватара
+
     var isFind = checkHero(newSettingsOfHero.heroID);
     var logChanges='';
     if (!isFind) {
@@ -686,27 +689,32 @@ module.exports.newSettings = function(newSettingsOfHero) {
 
                 // преобразуватор типів відповідно до типу паттерна . на ці граблі сьогодні не наступимо :)
 
-                if (typeof (isFind[k]) == 'number') {
-                    isFind[k] = +newSettingsOfHero[k];
-                    logic = 1;
+                if (k != 'avatar') {
+                    if (typeof (isFind[k]) == 'number') {
+                        isFind[k] = +newSettingsOfHero[k];
+                        logic = 1;
+                    }
+                    if (typeof (isFind[k]) == 'boolean') {
+                        isFind[k] = !!newSettingsOfHero[k];
+                        logic = 1;
+                    }
+                    if (logic == 0) isFind[k] = newSettingsOfHero[k];
+
+                    // тру або фалсе - розморозити...
+                    if (k == 'isFreeze')  isFind.freezeStepLeft = isFind[k] ? 1000 : 0;
+                    if (k == 'nextDestinationPointX') {
+                        isFind.walkedAllWay = false;
+                        isFind.caсhePath = [];
+                    }
+
+
+                    //logChanges += ' ' + k + ' = ' + isFind[k] + typeof (isFind[k]);
+                    logChanges += ' ' + k + ' = ' + isFind[k];
+
                 }
-                if (typeof (isFind[k]) == 'boolean') {
-                    isFind[k] = !!newSettingsOfHero[k];
-                    logic = 1;
+                else {
+                    logChanges += ' ' + k  + ' was changing  ';
                 }
-                if (logic == 0) isFind[k] = newSettingsOfHero[k];
-
-                // тру або фалсе - розморозити...
-                if (k == 'isFreeze')  isFind.freezeStepLeft = isFind[k] ? 1000 : 0;
-                if (k == 'nextDestinationPointX') {
-                    isFind.walkedAllWay = false;
-                    isFind.caсhePath = [];
-                }
-
-
-                //logChanges += ' ' + k + ' = ' + isFind[k] + typeof (isFind[k]);
-                logChanges += ' ' + k + ' = ' + isFind[k];
-
             }
             console.dir(isFind);
             personsHistoryDB.personsAddLog(isFind.heroID, isFind.name + ' received next changes : ' + logChanges);
@@ -717,6 +725,7 @@ module.exports.newSettings = function(newSettingsOfHero) {
 };
 
 module.exports.heroCreate = function(savedHero) {
+
 
     if (savedHero.defaultProperty) {
         var name = savedHero.name;
@@ -820,7 +829,7 @@ module.exports.heroCreate = function(savedHero) {
 module.exports.start= start;
 
 module.exports.heroArray = function(antiCaching) {
-   // console.log(heroes);
+    // console.log(heroes);
     if (heroes) return heroes;
     if (!heroes) return 1;
 

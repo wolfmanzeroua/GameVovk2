@@ -8,6 +8,7 @@ var myLocation = require('../modules/location.js');
 
 
 
+
 module.exports = function(app) {
 
     app.use(bodyparser.json());
@@ -24,9 +25,19 @@ module.exports = function(app) {
             res.status(406).send(gameResponse.err)
         }
         else {
+            /// якщо героя створило, записати малюнок в базу
+            historyLog.AvatarSave(myGame.heroArray(0).length-1, body.avatar);
             res.status(200).send(gameResponse);
         }
     });
+
+    app.get('/heroAvatars/', function (req, res, next) {
+        var body = req.body;
+        historyLog.GetsAvatars(res);
+
+
+    });
+
 
     app.patch('/createHero/:id', function(req, res, next) {
         var body = req.body;
@@ -40,6 +51,11 @@ module.exports = function(app) {
             res.status(406).send(gameResponse.err)
         }
         else {
+            //замынити картинку.
+
+            historyLog.updateAvatars(id, body.avatar);
+            console.log('patch Avatar for:',id, body.avatar);
+
             res.status(200).send(gameResponse);
         }
     });
@@ -66,7 +82,7 @@ module.exports = function(app) {
 
     app.get('/heroes/', function (req, res, next) {
         //console.dir(body);
-       var tempArray = myGame.heroArray(0).slice();
+        var tempArray = myGame.heroArray(0).slice();
         var responseArray =[];
         // видалення із обєкта героя лишнього масива
         //console.dir(responseArray);
@@ -76,7 +92,7 @@ module.exports = function(app) {
             responseArray[i] ={};
             for (var k in tempArray[i]) {
                 responseArray[i][k] = tempArray[i][k];
-                            }
+            }
             delete responseArray[i].caсhePath;
         }
 
@@ -144,8 +160,8 @@ module.exports = function(app) {
             };
             obstaclesCount++;
         }
-console.log(obstacles);
- res.status(200).send({array: obstacles});
+        console.log(obstacles);
+        res.status(200).send({array: obstacles});
     });
 
 
