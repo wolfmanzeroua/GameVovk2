@@ -151,6 +151,8 @@ define([
             var hero;
             // console.log('BatlefieldMap Updating...', Window.heroCollection);
 
+            $(numberOfHeroes).text(Window.heroCollection.length);
+
             for (var i = Window.heroCollection.length-1; i>=0; i--){
                 hero = Window.heroCollection[i];
                 areaColor = '#0A0EF2';
